@@ -1,0 +1,17 @@
+version: '3.3'
+services:
+  db:
+    build: ./db/MYSQL
+    #restart: always
+    container_name: db_mysql
+    environment:
+      - TZ=Asia/Seoul
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+      - MYSQL_USER=${DB_USER_ID}
+      - MYSQL_PASSWORD=${DB_USER_PASSWORD}
+    ports:
+      # 로컬:컨테이너
+      - '3306:3306'
+    volumes:
+      - ./db/MYSQL/res/data/:/var/lib/mysql
