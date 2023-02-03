@@ -1,0 +1,123 @@
+.vcTmp{
+    position: absolute;
+    z-index: 1000;
+}
+
+.video_conference_container{
+    width: 100vw;
+    height: 100vh;
+    background: #0d0d0d;
+    display: grid;
+    grid-template-columns: 70% 30%;
+}
+
+.video_conference_left{
+    display: grid;
+    grid-template-rows: 20% 75% 5%;
+}
+
+.video_conference_mine{
+    display: flex;
+    justify-content: center;
+}
+
+.video_conference_mine_screen{
+    /* width: calc(190px*1.5); */
+    height: Calc(100px*1.5);
+    background: #1a1a1a;
+    margin: auto;
+}
+
+.video_conference_oppnent{
+    display: flex;
+    justify-content: center;
+}
+
+.video_conference_oppnent_screen{
+    height: calc(100px*6.7);
+    /* width: calc(190px*6.7); */
+    background: #1a1a1a;
+    margin: auto;
+}
+
+
+
+.video_conference_right{
+    display: flex;
+    flex-direction: column;
+    justify-content:space-around;
+}
+
+.video_conference_chat_content_ul{
+    margin:auto;
+    width: 90%;
+    height: 80%;
+    border-radius: 10px;
+    background: #1a1a1a;
+}
+
+.video_conference_chat_container{
+    width: 100%;
+    height: 150px;
+    display: flex;
+    justify-content: center;
+}
+
+.video_conference_chat_input{    
+    width: 90%;
+    height: 80%;
+    background: #1a1a1a;
+    color: #ffffff;
+}
+
+
+.video_conference_footer{
+    display: flex;
+    justify-content: center;
+    color: #ffffff;
+    line-height: 40px;
+}
+
+.video_conference_button_container{
+    width: 400px;
+    height: 40px;
+    display: flex;
+    justify-content: space-around;
+}
+
+.video_conference_button{    
+    width: 120px;
+    height: 40px;
+    border: solid 1px #a6a6a6;
+    border-radius: 40px;
+
+    display: flex;
+    justify-content: space-around;
+    
+}
+
+.video_conference_button:hover{
+    background: #363636;
+}
+
+.video_conference_button > img{
+    margin: auto;
+}
+
+.video_conference_cancel{
+    background: #DB1F2E;
+    width: 40px;
+    height: 40px;
+    border: solid 1px #a6a6a6;
+    border-radius: 40px;
+    display: flex;
+    justify-content: center;
+}
+
+.video_conference_cancel:hover{
+    background: #db1f2fbc;
+}
+
+.video_conference_cancel > img{
+    margin: auto;
+}

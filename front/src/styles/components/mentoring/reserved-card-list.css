@@ -1,0 +1,71 @@
+/* 카드 리스트 요소 전체를 감싸는 컨테이너 */
+.reserved_card_list_container{
+    width: 1600px;
+    height: 620px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    
+    border: dotted 1px #dadada;
+    border-radius: 15px;
+}
+
+/* 카드리스트를 감싸는 컨테이너 */
+.reserved_card_list_inner_container{
+    /* box-sizing: border-box; */
+    margin:0px;
+    width: 1600px;
+    height: 560px;
+
+    display: flex;
+    justify-content: space-around;
+
+    background: #FFFFFF;
+}
+
+/* 제목이 들어가는 헤더 */
+.reserved_card_list_header{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    color: #FFFFFF;
+
+    width: 1600px;
+    height: 60px;
+
+
+    background: #031059;
+    border-radius: 13px;
+}
+
+/* 헤더 내용 텍스트 */
+.header_text{
+    text-align: center;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+/* 좌 우 화살표를 담는 컨테이너 */
+.reserved_card_list_arrow{
+    width: 80px;
+    height: 560px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    align-items: center;
+}
+.reserved_card_list_arrow:hover{
+    cursor: pointer;
+}
+
+
+
+/* 카드들을 담는 컨테이너 */
+.reserved_card_container{
+    width: 1480px;
+    height: 560px;
+    display: flex;
+}

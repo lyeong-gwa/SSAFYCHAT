@@ -1,0 +1,28 @@
+.applying_card_widget{
+    position: relative;
+    display: grid;
+
+    grid-template-rows: 1fr 30px 70px;
+
+    align-items: center;
+    padding-left: 30px;
+    padding-top: 20px;
+    width: 280px;
+    height: 180px;
+
+    border-radius: 30px;
+
+    background-color: #031059;
+}
+
+.applying_card_text{
+    font-family: 'Do Hyeon';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 25px;
+    line-height: 100%;
+    /* identical to box height, or 25px */
+
+
+    color: #FFFFFF;
+}

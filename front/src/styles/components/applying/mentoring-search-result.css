@@ -1,0 +1,23 @@
+.result_component {
+    position: relative;
+    display: grid;
+    overflow: auto;
+
+    grid-template-columns: repeat(4, 1fr);
+    grid-auto-rows: 300px;
+
+    width: 1400px;
+    height: 800px;
+
+    border: 1px solid black;
+    border-radius: 50px;
+
+}
+
+.result_component_card{
+    position: relative;
+    display: grid;
+
+    align-items: center;
+    justify-content: center;
+}
