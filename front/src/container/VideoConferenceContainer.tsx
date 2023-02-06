@@ -8,7 +8,6 @@ const muteBtn = document.getElementById("mute") as HTMLButtonElement;
 const cameraBtn = document.getElementById("camera") as HTMLVideoElement;
 const camerasSelect = document.getElementById("cameras") as HTMLSelectElement;
 const call = document.getElementById("call") as HTMLDivElement;
-console.log(muteBtn);
 
 if(call != null){
     call.hidden = true;
@@ -73,10 +72,12 @@ function handleMuteClick() {
         .forEach((track : any) => (track.enabled = !track.enabled));
     
     if (!muted) {
-        muteBtn.innerText = "Unmute";
+        const childs = muteBtn.children;
+        childs[1].innerHTML = "음소거 해제"
         muted = true;
     } else {
-        muteBtn.innerText = "Mute";
+        const childs = muteBtn.children;
+        childs[1].innerHTML = "음소거"
         muted = false;
     } 
     
@@ -88,10 +89,12 @@ function handleCameraClick() {
     
     if(cameraBtn != null){
         if (cameraOff) {
-            cameraBtn.innerText = "Turn Camera Off";
+            const childs = cameraBtn.children;
+            childs[1].innerHTML = "비디오 중지"
             cameraOff = false;
         } else {
-            cameraBtn.innerText = "Turn Camera On";
+            const childs = cameraBtn.children;
+            childs[1].innerHTML = "비디오 시작"
             cameraOff = true;
         }
     }
@@ -220,9 +223,9 @@ function VideoConferenceContainer(props : any){
                     <input placeholder="roomCode"></input><br></br>
                     <button>입력</button>
                 </form>
-                    <button id="mute">Mute</button>
+                    {/* <button id="mute">Mute</button>
                     <button id="camera">Turn Camera Off</button>
-                    <select id="cameras"></select>
+                    <select id="cameras"></select> */}
             </div>
              <div id="call"> 
                  <div id="myStream">
@@ -244,8 +247,12 @@ function VideoConferenceContainer(props : any){
 
                 {/* 상대의 비디오 화면을 담을 컨테이너 */}
                 <div className="video_conference_oppnent">
+                    {/* 
+                        여기 id 이름 이상해
+                    */}
+
                     {/* 상대의 비디오 화면 */}
-                    <video  className="video_conference_oppnent_screen" autoPlay playsInline>
+                    <video id="peerFace" className="video_conference_oppnent_screen" autoPlay playsInline>
 
                     </video>
                 </div>
@@ -253,21 +260,18 @@ function VideoConferenceContainer(props : any){
                 {/* 각종 버튼을 담는 컨테이너 */}
                 <div className="video_conference_footer">
                     <div className="video_conference_button_container">
-                        <div className="video_conference_button">
+                        <div  id="camera" className="video_conference_button">
                             <img src="img/camera-on.png" alt="camera"></img>
-                            <span>카메라</span>
+                            <span className="buttonText">비디오 중지</span>
                             <img src="img/arrow-down.png" alt="arrow-donwn"></img>
                         </div>
-                        <div className="video_conference_button">
+                        <div id="mute" className="video_conference_button">
                             <img src="img/audio-microphone-on.png" alt="mic"></img>
-                            <span>마이크</span>
+                            <span className="buttonText">음소거</span>
                             <img src="img/arrow-down.png" alt="arrow-donwn"></img>
                         </div>
-                        {/* 화면 공유는 구현이 쉽지 않을 것으로 보인다 */}
-                        {/* <div className="video_conference_button">
-                            <img src="img/share-screen.png" alt="recording"></img>
-                            <span></span>
-                        </div> */}
+                        <select id="cameras"></select>
+                        
                         <div className="video_conference_cancel">
                             <img src="img/cancel.png" alt="recording"></img>
                         </div>

@@ -10,7 +10,7 @@ function CardList(props : any){
 
     for(let i = startIdx; i < startIdx+4&&props.cardList.length; ++i){
         let t = props.cardList[i];
-        cards.push(<ReservationCard key={i} drag={props.drag} info={[t[0],t[1],t[2],t[3]]}></ReservationCard>)
+        cards.push(<ReservationCard key={i} drag={props.drag} init={props.init} info={[t[0],t[1],t[2],t[3]]}></ReservationCard>)
     }
 
     return (
@@ -30,7 +30,6 @@ function CardList(props : any){
                     if(0 < startIdx){
                         setIdx(startIdx-1);
                     }
-                    console.log(startIdx);
                 }}>
                 <ArrowButton text="<"></ArrowButton>
             </div>
@@ -46,7 +45,6 @@ function CardList(props : any){
                     if(startIdx+4 < props.cardList.length){
                         setIdx(startIdx+1);
                     }
-                    console.log(startIdx);
                 }}>
                 <ArrowButton text=">"></ArrowButton>
             </div>

@@ -7,6 +7,13 @@ function dragCard(event : any, elemClassName : string){
     //     return false;
     // }
 
+    const classList = elem.classList;
+    for(let i = 0; i < classList.length; i++){
+        if(classList[i] === "enter_meeting_button"){
+            return;
+        }
+    }
+
     // 드래그
     let onDrag = true;
 
@@ -51,11 +58,12 @@ function dragCard(event : any, elemClassName : string){
     document.addEventListener('mousemove', onMouseMove);
 
     container.onmouseleave = function(){
-        if(onDrag){
-            alert("삭제합니다");
-            // **********************
-            // 이 곳에 기능을 넣어야 함
-            // **********************
+        if(onDrag){            
+            if(window.confirm("삭제합니까")){
+                // **********************
+                // 이 곳에 기능을 넣어야 함
+                // **********************
+            }
             onDrag = false;
         }
     }

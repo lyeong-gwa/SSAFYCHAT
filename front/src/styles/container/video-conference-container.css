@@ -79,21 +79,25 @@
 }
 
 .video_conference_button_container{
-    width: 400px;
+    width: 50%;
     height: 40px;
     display: flex;
     justify-content: space-around;
 }
 
 .video_conference_button{    
-    width: 120px;
+    width: 20%;
     height: 40px;
     border: solid 1px #a6a6a6;
     border-radius: 40px;
 
     display: flex;
     justify-content: space-around;
-    
+
+    -webkit-user-select:none;
+    -moz-user-select:none;
+    -ms-user-select:none;
+    user-select:none
 }
 
 .video_conference_button:hover{

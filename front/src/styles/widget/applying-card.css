@@ -7,19 +7,21 @@
     align-items: center;
     padding-left: 30px;
     padding-top: 20px;
-    width: 280px;
-    height: 180px;
+    width: 220px;
+    height: 150px;
 
     border-radius: 30px;
 
     background-color: #031059;
+
+    cursor: pointer;
 }
 
 .applying_card_text{
     font-family: 'Do Hyeon';
     font-style: normal;
     font-weight: 400;
-    font-size: 25px;
+    font-size: 20px;
     line-height: 100%;
     /* identical to box height, or 25px */
 

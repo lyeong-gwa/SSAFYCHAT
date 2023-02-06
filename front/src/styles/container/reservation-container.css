@@ -9,3 +9,7 @@
     justify-content: space-around;
     margin:0 auto;
 }
+
+.canceled_card_list{
+    pointer-events: none;
+}

@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router";
 import "../../styles/components/mentoring/reserved-list.css"
 
 function dragItem(event : any){
@@ -13,11 +14,12 @@ function dragItem(event : any){
     let onDrag = true;
 
     container.onmouseleave = function(){
-        if(onDrag){
-            // **********************
-            // 이 곳에 기능을 넣어야 함
-            // **********************
-            alert("삭제합니다");
+        if(onDrag){            
+            if(window.confirm("삭제합니까")){
+                // **********************
+                // 이 곳에 기능을 넣어야 함
+                // **********************
+            }
             onDrag = false;
         }
     }
@@ -44,7 +46,7 @@ function ReservedListItem(props : any){
             <td>김도원</td>
             <td>7전8기</td>
             <td>ssafy@ssafy.com</td>
-            <td><div className="reserved_list_enter_button" onClick={(event)=>{
+            <td><div className="reserved_list_enter_button enter_meeting_button" onClick={(event)=>{
                 props.func(event);
             }} >입장</div></td>
         </tr>
@@ -56,6 +58,8 @@ function enterMeeting(event : any){
 }
 
 function ReservedList(props : any){
+    const navigate = useNavigate();
+    
     return (
         <div className="reserved_list_container">
             <div className="reserved_list_header">
@@ -72,14 +76,17 @@ function ReservedList(props : any){
                     </tr>
                 </thead>
                 <tbody className="reserved_list_tbody">
-                    <ReservedListItem func={(event : any)=>{
-                        enterMeeting(event);
+                    <ReservedListItem func={()=>{
+                        navigate("/meeting");
+                        alert('입장합니다.');
                     }}></ReservedListItem>
-                    <ReservedListItem func={(event : any)=>{
-                        enterMeeting(event);
+                    <ReservedListItem func={()=>{
+                        navigate("/meeting");
+                        alert('입장합니다.');
                     }}></ReservedListItem>
-                    <ReservedListItem func={(event : any)=>{
-                        enterMeeting(event);
+                    <ReservedListItem func={()=>{
+                        navigate("/meeting");
+                        alert('입장합니다.');
                     }}></ReservedListItem>
                 </tbody>
             </table>

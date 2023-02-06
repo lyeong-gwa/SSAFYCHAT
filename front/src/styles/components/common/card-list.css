@@ -1,22 +1,22 @@
 /* 카드 리스트 요소 전체를 감싸는 컨테이너 */
 .card_list_container{    
 
-    width: 1600px;
-    height: 320px;
+    width: 1200px;
+    height: 260px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     border: dotted 1px #dadada;
     border-radius: 15px;
-    margin-top: 300px;
+    margin-top: 100px;
 }
 
 /* 리스트 내부 해더와 카드리스트를 감싸는 컨테이너 */
 .card_list_inner_container{
     /* box-sizing: border-box; */
     margin:0px;
-    width: 1600px;
-    height: 260px;
+    width: 1200px;
+    height: 220px;
     border-radius: 15px;
     display: flex;
     justify-content: space-around;
@@ -31,8 +31,8 @@
     color: #FFFFFF;
     gap: 1px;
 
-    width: 1600px;
-    height: 60px;
+    width: 1200px;
+    height: 40px;
 
 
     background: #031059;
@@ -51,7 +51,7 @@
 /* 좌 우 화살표를 담는 컨테이너 */
 .card_list_arrow{
     width: 80px;
-    height: 260px;
+    height: 220px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -88,7 +88,7 @@
 /* 카드들을 담는 컨테이너 */
 .card_container{
     width: 1480px;
-    height: 260px;
+    height: 220px;
     display: flex;
 }
 /* 카드 바깥 */
