@@ -7,6 +7,7 @@ import javax.persistence.*;
 import java.sql.Timestamp;
 
 @Getter
+@Setter
 @ToString
 @AllArgsConstructor
 @RequiredArgsConstructor
@@ -41,13 +42,15 @@ public class CompleteMentoring {
     @Column(nullable = false)
     private int score;
 
+    private String reviewTitle;
+
     @Column(columnDefinition = "TEXT")
     private String reviewContent;
 
-    @Column
+    @Column(columnDefinition = "int default '0'")
     private int reviewWidth;
 
-    @Column
+    @Column(columnDefinition = "int default '0'")
     private int reviewHeight;
 
     @Column(columnDefinition = "BOOLEAN", nullable = false)

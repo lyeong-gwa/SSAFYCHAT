@@ -4,17 +4,13 @@ import com.ssafychat.domain.member.repository.MemberRepository;
 import com.ssafychat.domain.member.dto.PossibleMentoringDto;
 import com.ssafychat.domain.member.model.Member;
 import com.ssafychat.domain.mentoring.dto.*;
-import com.ssafychat.domain.mentoring.model.CancelMentoring;
-import com.ssafychat.domain.mentoring.model.MentoringDate;
+import com.ssafychat.domain.mentoring.model.*;
 import com.ssafychat.domain.mentoring.repository.*;
-import com.ssafychat.domain.mentoring.model.ApplyMentoring;
-import com.ssafychat.domain.mentoring.model.Mentoring;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -37,24 +33,27 @@ public class MentoringServiceImpl implements MentoringService {
     @Autowired
     private CompleteMentoringRepository completeMentoringRepository;
 
+    @Autowired
+    private ReportRepository reportRepository;
+
     @Override
     public List<Mentoring> findMentoring(){
         return mentoringRepository.findAll();
     }
 
 
-    @Transactional
-    public ApplyMentoring toEntity(ApplyMentoringDto applyMentoringDto){
-
-        Optional<Member> memberOptional = memberRepository.findById(applyMentoringDto.getMenteeUid());
-        Member member = memberOptional.get();
-        return ApplyMentoring.builder()
-                .applyMentoringId(applyMentoringDto.getApplyMentoringId())
-                .mentee(member)
-                .job(applyMentoringDto.getJob())
-                .company(applyMentoringDto.getCompany())
-                .build();
-    }
+//    @Transactional
+//    public ApplyMentoring toEntity(ApplyMentoringDto applyMentoringDto){
+//
+//        Optional<Member> memberOptional = memberRepository.findById(applyMentoringDto.getMenteeUid());
+//        Member member = memberOptional.get();
+//        return ApplyMentoring.builder()
+//                .applyMentoringId(applyMentoringDto.getApplyMentoringId())
+//                .mentee(member)
+//                .job(applyMentoringDto.getJob())
+//                .company(applyMentoringDto.getCompany())
+//                .build();
+//    }
     @Override
     @Transactional
     public void applyMentoring(ApplyMentoring applyMentoring) {
@@ -198,36 +197,190 @@ public class MentoringServiceImpl implements MentoringService {
     }
 
     @Override
-    public List<Integer> ranking() {
-        // 일주일 전 계산 로직
-        LocalDateTime localNow = LocalDateTime.now();
-        Timestamp now = Timestamp.valueOf(localNow);
-        System.out.println(now);
-        LocalDateTime localMinus7Days = localNow.minusDays(7);
-        Timestamp minus7Days = Timestamp.valueOf(localMinus7Days);
-        System.out.println(minus7Days);
-        return new ArrayList<>();
+    public Member[] ranking() {
+
+        List<Integer> rankerIds = completeMentoringRepository.findRanking();
+        Member[] rankers = new Member[3];
+        for (int i = 0; i < 3; i++) {
+            rankers[i] = memberRepository.findByUserIdForRanker(rankerIds.get(i));
+        }
+        return rankers;
     }
 
     @Override
     public MainInfoDto mainInfo() {
-        // completeMentoring 수
-        System.out.println(completeMentoringRepository.completeMentoringCount());
-//        System.out.println(completeMentoringRepository.countByCompleted(true));
-        // Member에서 role이 mentor인 수
-        System.out.println(memberRepository.countByRole("role_mentor"));
-        // Member에서 role이 mentee인 수
-        System.out.println(memberRepository.countByRole("role_mentee"));
-        // ranking 상위 3명 정보 : 미완
-        
-
         MainInfoDto mainInfoDto = MainInfoDto.builder()
-                .completeMentoringNum(completeMentoringRepository.completeMentoringCount())
-                .mentorNum(memberRepository.countByRole("role_mentor"))
-                .menteeNum(memberRepository.countByRole("role_mentee"))
+                .completeMentoringCount(completeMentoringRepository.completeMentoringCount())
+                .mentorCount(memberRepository.countByRole("role_mentor"))
+                .menteeCount(memberRepository.countByRole("role_mentee"))
+                .rankers(ranking())
                 .build();
 
         return mainInfoDto;
+    }
+
+    @Override
+    @Transactional
+    public void insertApplyMentoringAndMentoringDate(Member mentee, ApplyMentoringDto applyMentoringDto) {
+        // applyMentoring 테이블에 job, company, mentee 빌딩해서 insert 후
+        ApplyMentoring applyMentoring = ApplyMentoring.builder()
+                .mentee(mentee)
+                .company(applyMentoringDto.getCompany())
+                .job(applyMentoringDto.getJob())
+                .build();
+        ApplyMentoring savedApplyMentoring = applyMentoringRepository.save(applyMentoring);
+        // applyMentoring id 반환 받아서
+        // date 테이블에 time과 applyMentoring id 배열 크기만큼 반복하면서 insert
+        for (Timestamp time : applyMentoringDto.getTimes()) {
+            MentoringDate mentoringDate = MentoringDate.builder()
+                    .applyMentoring(savedApplyMentoring)
+                    .time(time)
+                    .build();
+            mentoringDateRepository.save(mentoringDate);
+        }
+    }
+
+    @Override
+    public List<RollingPaperDto> getRollingPaper(Member mentor) {
+        // completeMentoring에서 userId == mentor_uid인 데이터 조회
+        List<CompleteMentoring> completeMentorings = completeMentoringRepository.findByMentor(mentor);
+        // rollingPaperDto에 담아서 반환
+        List<RollingPaperDto> rollingPapers = new ArrayList<>();
+        for (CompleteMentoring completeMentoring : completeMentorings) {
+            RollingPaperDto rollingPaper = RollingPaperDto.builder()
+                    .completeMentoringId(completeMentoring.getCompleteMentoringId())
+                    .reviewTitle(completeMentoring.getReviewTitle())
+                    .reviewContent(completeMentoring.getReviewContent())
+                    .reviewHeight(completeMentoring.getReviewHeight())
+                    .reviewWidth(completeMentoring.getReviewWidth())
+                    .reviewSelected(completeMentoring.getReviewSelected())
+                    .build();
+            rollingPapers.add(rollingPaper);
+        }
+        return rollingPapers;
+    }
+
+    @Override
+    public void updateRollingPaper(RollingPaperDto rollingPaperDto) {
+        // 서비스에서 rollingPaperDto 정보 completeMentoring 엔티티에 담아서 update
+        CompleteMentoring completeMentoring = completeMentoringRepository.findByCompleteMentoringId(rollingPaperDto.getCompleteMentoringId());
+        completeMentoring.setReviewTitle(rollingPaperDto.getReviewTitle());
+        completeMentoring.setReviewContent(rollingPaperDto.getReviewContent());
+        completeMentoring.setReviewSelected(rollingPaperDto.getReviewSelected());
+        completeMentoring.setReviewWidth(rollingPaperDto.getReviewWidth());
+        completeMentoring.setReviewHeight(rollingPaperDto.getReviewHeight());
+        completeMentoringRepository.save(completeMentoring);
+    }
+
+    @Override
+    public void addReviewAndScore(ReviewAndScoreDto reviewAndScoreDto) {
+        CompleteMentoring completeMentoring = completeMentoringRepository.findByCompleteMentoringId(reviewAndScoreDto.getCompleteMentoringId());
+        completeMentoring.setReviewTitle(reviewAndScoreDto.getReviewTitle());
+        completeMentoring.setReviewContent(reviewAndScoreDto.getReviewContent());
+        completeMentoring.setScore(reviewAndScoreDto.getScore());
+        completeMentoringRepository.save(completeMentoring);
+    }
+
+    @Override
+    public List<ApplyMentoringViewDto> getApplyMentoringList(int userId) {
+        List<ApplyMentoringViewDto> appliedMentoringList = new ArrayList<>();
+        List<ApplyMentoring> applyMentoringList = applyMentoringRepository.findByMentee_UserId(userId);
+
+        for(int i=0; i< applyMentoringList.size(); i++){
+
+            ApplyMentoring applyMentoring = applyMentoringList.get(i);
+            MentoringDateDto mentoringDateDto = MentoringDateDto.builder().
+                    applyMentoringId(applyMentoring.getApplyMentoringId()).build();
+
+            List<MentoringDate> mentoringDateList = mentoringDateRepository.
+                    findByApplyMentoring_ApplyMentoringId(mentoringDateDto.getApplyMentoringId());
+            List<Timestamp> mentoringDateTimes = new ArrayList<>();
+
+            for (MentoringDate mentoringDate : mentoringDateList) {
+                mentoringDateTimes.add(mentoringDate.getTime());
+            }
+            appliedMentoringList.add(
+                    ApplyMentoringViewDto.builder()
+                            .applyMentoringId(applyMentoring.getApplyMentoringId())
+                            .menteeUid(applyMentoring.getMentee().getUserId())
+                            .job(applyMentoring.getJob())
+                            .company(applyMentoring.getCompany())
+                            .times(mentoringDateTimes)
+                            .build()
+            );
+        }
+
+
+        return appliedMentoringList;
+    }
+
+    @Override
+    public List<MentoringListForMenteeDto> getMatchedMentoringList(int userId) {
+        //멘토 정보 가져오기 고려
+        List<MentoringListForMenteeDto> matchedMentoringList =  new ArrayList<>();
+        List<Mentoring> mentoringList = mentoringRepository.findByMentee_UserId(userId);
+
+        for (int i = 0; i < mentoringList.size(); i++) {
+            Mentoring mentoring = mentoringList.get(i);
+            Member mentor = mentoring.getMentor();
+
+            matchedMentoringList.add(
+                    MentoringListForMenteeDto.builder()
+                            .mentoringId(mentoring.getMentoringId())
+                            .name(mentor.getName())
+                            .job(mentoring.getJob())
+                            .company(mentoring.getCompany())
+                            .time(mentoring.getTime())
+                            .build()
+            );
+        }
+
+        return matchedMentoringList;
+    }
+
+    @Override
+    public List<CanceledMentoringListDto> getCancledMentoringList(int userId) {
+
+        List<CanceledMentoringListDto> canceledMentoringListForMentee = new ArrayList<>();
+        List<CancelMentoring> cancelMentoringList = cancelMentoringRepository.findByMentee_UserId(userId);
+
+        for(int i=0; i<cancelMentoringList.size(); i++){
+            CancelMentoring cancelMentoring = cancelMentoringList.get(i);
+
+            canceledMentoringListForMentee.add(
+                    CanceledMentoringListDto.builder()
+                            .cancelMentoringId(cancelMentoring.getCancelMentoringId())
+                            .job(cancelMentoring.getJob())
+                            .company(cancelMentoring.getCompany())
+                            .time(cancelMentoring.getTime())
+                            .build()
+            );
+        }
+
+        return canceledMentoringListForMentee;
+    }
+
+    @Override
+    public void reportBadUser(Member reporter, int completeMentoringId, String reason) {
+        // 완료 테이블 정보 불러와서
+        CompleteMentoring completeMentoring = completeMentoringRepository.findByCompleteMentoringId(completeMentoringId);
+        // reported = mentee와 mentor 중 member가 아닌 사람
+        Member reported = null;
+        if (completeMentoring.getMentor().getUserId() == reporter.getUserId()){
+            reported = completeMentoring.getMentee();
+        } else {
+            reported = completeMentoring.getMentor();
+        }
+        // insert
+        Report report = Report.builder()
+                .reporter(reporter.getUserId())
+                .reported(reported.getUserId())
+                .reason(reason)
+                .completeMentoring(completeMentoring)
+                .build();
+        reportRepository.save(report);
+        System.out.println(report);
+
     }
 
 }

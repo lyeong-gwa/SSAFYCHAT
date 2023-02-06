@@ -32,13 +32,7 @@ public class MentoringController {
         return mentoringService.findMentoring();
     }
 
-    @GetMapping("/weekly-rankers") // 최근 7일동안 멘토링 수가 가장 높은 3명의 정보를 반환한다.
-    public ResponseEntity<?> weeklyRankers() {
-        // complete_mentoring에서 mentor_id로 검색한 count 상위 3명
-        mentoringService.ranking();
 
-        return new ResponseEntity<>("weekly-rankers", HttpStatus.OK);
-    }
     @GetMapping("/main-info")
     public ResponseEntity<?> mainInfo() {
         MainInfoDto mainInfoDto = mentoringService.mainInfo();
@@ -50,19 +44,44 @@ public class MentoringController {
         List<PossibleMentoringDto> possibleMentorings = mentoringService.getPossibleMentoringList(job, belong);
         return new ResponseEntity<>(possibleMentorings, HttpStatus.OK);
     }
+//    @PostMapping("/apply")
+//    public ResponseEntity<String> applyMentoring(ApplyMentoringDto applyMentoringDto, HttpServletRequest request) {
+//
+//        ApplyMentoring applyMentoring = mentoringService.toEntity(applyMentoringDto);
+//
+//        //applyMentoringRepository
+//        mentoringService.applyMentoring(applyMentoring);
+//        return new ResponseEntity<String>("apply", HttpStatus.CREATED);
+//    }
     @PostMapping("/apply")
+    @Transactional
     public ResponseEntity<String> applyMentoring(ApplyMentoringDto applyMentoringDto, HttpServletRequest request) {
-
-        ApplyMentoring applyMentoring = mentoringService.toEntity(applyMentoringDto);
-
-        //applyMentoringRepository
-        mentoringService.applyMentoring(applyMentoring);
+        Member mentee = (Member) request.getAttribute("USER");
+        // 서비스에 user와 applyMentoringDto(job, company, times) 넘긴다.
+        System.out.println(applyMentoringDto);
+        mentoringService.insertApplyMentoringAndMentoringDate(mentee, applyMentoringDto);
         return new ResponseEntity<String>("apply", HttpStatus.CREATED);
-
     }
+
     @GetMapping("/reservation")
-    public ResponseEntity<?> reservationMentoring() {
-        return new ResponseEntity<String>("reservation", HttpStatus.OK);
+    public ResponseEntity<?> reservationMentoring(HttpServletRequest request) {
+
+        Member user = (Member) request.getAttribute("USER");
+        int userId = user.getUserId();
+
+        List<ApplyMentoringViewDto> appliedMentoringList = mentoringService.getApplyMentoringList(userId);
+
+        List<MentoringListForMenteeDto> matchedMentoringList = mentoringService.getMatchedMentoringList(userId);
+
+        List<CanceledMentoringListDto> canceledMentoringListForMentee = mentoringService.getCancledMentoringList(userId);
+
+        CheckMentoringReservationForMenteeDto checkMentoringListForMentee =
+                CheckMentoringReservationForMenteeDto.builder()
+                        .appliedList(appliedMentoringList).matchedList(matchedMentoringList)
+                                .cancledList(canceledMentoringListForMentee).build();
+
+
+        return new ResponseEntity<>(checkMentoringListForMentee, HttpStatus.OK);
     }
 
     @DeleteMapping("/cancel/appointment") // 멘토가 멘토링을 취소
@@ -128,9 +147,34 @@ public class MentoringController {
         return new ResponseEntity<>(mentoring, HttpStatus.OK);
     }
     @GetMapping("/review")
-    public ResponseEntity<?> reviewRollingPaper() {
-        return new ResponseEntity<String>("review", HttpStatus.OK);
+    public ResponseEntity<?> getReviewRollingPaper(HttpServletRequest request) {
+        // 멤버 정보로 해당 후기 가져오기
+        Member mentor = (Member) request.getAttribute("USER");
+//        List<RollingPaperDto> rollingPapers = mentoringService.getRollingPaper(mentor);
+        return new ResponseEntity<>(mentoringService.getRollingPaper(mentor), HttpStatus.OK);
     }
+    @PatchMapping("/review")
+    public ResponseEntity<?> moveReviewRollingPaper(RollingPaperDto rollingPaperDto) {
+        // 후기 좌표 변경 혹은 선택 여부 변경
+        mentoringService.updateRollingPaper(rollingPaperDto);
+        return new ResponseEntity<>("review", HttpStatus.OK);
+    }
+
+    @PostMapping("/review")
+    public ResponseEntity<?> postReviewAndScore(ReviewAndScoreDto reviewAndScoreDto) {
+        // 후기 입력해서 completeMentoring update
+        mentoringService.addReviewAndScore(reviewAndScoreDto);
+        return new ResponseEntity<>("review and score", HttpStatus.OK);
+    }
+    @PostMapping("/report")
+    public ResponseEntity<?> postReport(HttpServletRequest request, int completeMentoringId, String reason) {
+        Member reporter = (Member) request.getAttribute("USER");
+
+        mentoringService.reportBadUser(reporter, completeMentoringId, reason);
+        return new ResponseEntity<>("report", HttpStatus.OK);
+    }
+
+
 
 
 }

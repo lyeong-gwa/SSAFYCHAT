@@ -11,5 +11,7 @@ public interface ApplyMentoringRepository extends JpaRepository<ApplyMentoring, 
     List<ApplyMentoring> findByJobAndCompany(String job, String belong);
     ApplyMentoring findByApplyMentoringId(int applyMentoringId);
     int deleteApplyMentoringByApplyMentoringId(int applyMentoringId);
+    List<ApplyMentoring> findByMentee_UserId(int userId);
+
 
 }

@@ -8,8 +8,8 @@ import lombok.Data;
 @Builder
 public class MainInfoDto {
 
-    private Long completeMentoringNum;
-    private Long mentorNum;
-    private Long menteeNum;
+    private Long completeMentoringCount;
+    private Long mentorCount;
+    private Long menteeCount;
     private Member[] rankers;
 }

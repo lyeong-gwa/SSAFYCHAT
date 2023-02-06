@@ -3,6 +3,7 @@ package com.ssafychat.domain.member.repository;
 import com.ssafychat.domain.member.dto.PossibleMentoringDto;
 import com.ssafychat.domain.member.model.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -14,4 +15,7 @@ public interface MemberRepository extends JpaRepository<Member, Integer> {
     Optional<Member> findByUserId(int user_id);
     List<PossibleMentoringDto> findDistinctByJobAndBelong(String job, String belong);
     Long countByRole(String role);
+
+    @Query(value = "select * from member where user_id = :userId", nativeQuery = true)
+    Member findByUserIdForRanker(int userId);
 }

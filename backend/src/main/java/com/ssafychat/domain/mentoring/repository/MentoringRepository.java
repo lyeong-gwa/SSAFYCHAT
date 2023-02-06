@@ -1,5 +1,6 @@
 package com.ssafychat.domain.mentoring.repository;
 
+import com.ssafychat.domain.member.model.Member;
 import com.ssafychat.domain.mentoring.model.Mentoring;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,4 +17,9 @@ public interface MentoringRepository extends JpaRepository<Mentoring, Integer> {
 
     Mentoring findByMentoringId(int mentoringId);
     void deleteMentoringByMentoringId(int mentoringId);
+
+    List<Mentoring> findByMentee(Member member);
+    List<Mentoring> findByMentor(Member member);
+
+    List<Mentoring> findByMentee_UserId(int userId);
 }

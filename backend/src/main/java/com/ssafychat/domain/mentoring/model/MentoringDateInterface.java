@@ -5,5 +5,5 @@ import java.sql.Timestamp;
 
 public class MentoringDateInterface implements Serializable {
     private Timestamp time;
-    private ApplyMentoring applyMentoring;
+    private int applyMentoring;
 }

@@ -1,10 +1,8 @@
 package com.ssafychat.domain.mentoring.service;
 
 import com.ssafychat.domain.member.dto.PossibleMentoringDto;
-import com.ssafychat.domain.mentoring.dto.ApplyMentoringDto;
-import com.ssafychat.domain.mentoring.dto.ApplyMentoringForMentorDto;
-import com.ssafychat.domain.mentoring.dto.MainInfoDto;
-import com.ssafychat.domain.mentoring.dto.MatchMentoringForMentorDto;
+import com.ssafychat.domain.member.model.Member;
+import com.ssafychat.domain.mentoring.dto.*;
 import com.ssafychat.domain.mentoring.model.ApplyMentoring;
 import com.ssafychat.domain.mentoring.model.Mentoring;
 
@@ -15,7 +13,7 @@ public interface MentoringService {
 
     List<Mentoring> findMentoring();
 
-    ApplyMentoring toEntity(ApplyMentoringDto applyMentoringDto);
+//    ApplyMentoring toEntity(ApplyMentoringDto applyMentoringDto);
 
     void applyMentoring(ApplyMentoring applyMentoring);
 
@@ -31,8 +29,26 @@ public interface MentoringService {
     Mentoring deleteMentoring(int mentoringId);
     void insertCancelMentoring(int canceler, String reason, Mentoring mentoring);
 
-    List<Integer> ranking();
+    Member[] ranking();
 
     MainInfoDto mainInfo();
+
+    void insertApplyMentoringAndMentoringDate(Member mentee, ApplyMentoringDto applyMentoringDto);
+
+    List<RollingPaperDto> getRollingPaper(Member mentor);
+    void updateRollingPaper(RollingPaperDto rollingPaperDto);
+
+    void addReviewAndScore(ReviewAndScoreDto reviewAndScoreDto);
+
+    void reportBadUser(Member reporter, int completeMentoringId, String reason);
+
+    List<ApplyMentoringViewDto> getApplyMentoringList(int userId);
+
+    List<MentoringListForMenteeDto> getMatchedMentoringList(int userId);
+
+    List<CanceledMentoringListDto> getCancledMentoringList(int userId);
+
+
+
 
 }
