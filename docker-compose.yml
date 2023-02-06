@@ -3,15 +3,61 @@ services:
   db:
     build: ./db/MYSQL
     #restart: always
+    env_file:
+      - ./db/MYSQL/mysql.env
     container_name: db_mysql
     environment:
       - TZ=Asia/Seoul
-      - MYSQL_DATABASE=${MYSQL_DATABASE}
-      - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
-      - MYSQL_USER=${DB_USER_ID}
-      - MYSQL_PASSWORD=${DB_USER_PASSWORD}
     ports:
       # 로컬:컨테이너
-      - '3306:3306'
+      - '3333:3306'
     volumes:
       - ./db/MYSQL/res/data/:/var/lib/mysql
+
+  backend_spring:
+    build: ./backend
+    env_file:
+      - ./backend/backend.env
+    container_name: backend_spring
+    ports:
+      - '8080:8080'
+    volumes:
+      - ./backend:/srv/docker-server
+       #&& java -jar /srv/docker-server/build/libs/backend-0.0.1-SNAPSHOT.jar
+
+  backend_signaling_server:
+    build: ./backend_chatting
+    container_name: backend_signaling_server
+    ports:
+      - '8000:8000'
+    volumes:
+      - ./backend_chatting:/srv/docker-server
+
+  front_node:
+    build: ./front
+    container_name: front_node
+    env_file:
+      - ./front/front.env
+    ports:
+      - '3000:3000'
+    volumes:
+      - ./front:/srv/docker-server
+
+  nginx:
+    image: nginx:1.15-alpine
+    restart: unless-stopped
+    volumes:
+      - ./data/nginx:/etc/nginx/conf.d
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
+    ports:
+      - "80:80"
+      - "443:443"
+    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+  certbot:
+    image: certbot/certbot
+    restart: unless-stopped
+    volumes:
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"

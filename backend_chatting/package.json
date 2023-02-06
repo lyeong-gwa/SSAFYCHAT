@@ -6,7 +6,8 @@
   "author": "",
   "license": "ISC",
   "scripts": {
-    "dev": "nodemon"
+    "dev": "nodemon",
+    "start": "nodemon"
   },
   "devDependencies": {
     "@babel/cli": "^7.20.7",
