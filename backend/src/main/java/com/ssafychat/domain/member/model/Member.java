@@ -2,7 +2,6 @@ package com.ssafychat.domain.member.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -36,7 +35,7 @@ public class Member implements UserDetails {
 
     private int totalScore;
 
-    @Column(columnDefinition = "VARCHAR(50)", nullable = false)
+    @Column(columnDefinition = "VARCHAR(50)", nullable = false, unique = true)
     private String email;
 
     //나중에 JsonProperty 어노테이션 추가
@@ -46,7 +45,7 @@ public class Member implements UserDetails {
     @Column(columnDefinition = "VARCHAR(10)", nullable = false)
     private String social;
 
-    @Column(columnDefinition = "VARCHAR(10)", nullable = false)
+    @Column(columnDefinition = "VARCHAR(10)", nullable = false, unique = true)
     private String studentNumber;
 
     @Column(columnDefinition = "VARCHAR(1000)")

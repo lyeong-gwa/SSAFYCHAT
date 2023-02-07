@@ -15,7 +15,6 @@ import java.util.Date;
 public class CancelMentoring {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int cancelMentoringId;
 
     @ManyToOne

@@ -62,7 +62,23 @@ public class MentoringServiceImpl implements MentoringService {
     }
 
     public List<PossibleMentoringDto> getPossibleMentoringList(String job, String belong) {
-        return memberRepository.findDistinctByJobAndBelong(job, belong);
+        if (job.equals("") && belong.equals("")){
+            // 전체 목록 조회
+//            System.out.println(memberRepository.getAllJobAndBelong("싸피", ""));
+            return memberRepository.getAllJobAndBelong("싸피", "");
+        } else if (job.equals("") && !belong.equals("")) {
+            // belong으로 조회
+//            System.out.println(memberRepository.findDistinctByBelong(belong));
+            return memberRepository.findDistinctByBelong(belong);
+        } else if (!job.equals("") && belong.equals("")) {
+            // job으로 조회
+            System.out.println(memberRepository.findDistinctByJob(job));
+            return memberRepository.findDistinctByJob(job);
+        } else {
+            // job & belong으로 조회
+//            System.out.println(memberRepository.findDistinctByJobAndBelong(job, belong));
+            return memberRepository.findDistinctByJobAndBelong(job, belong);
+        }
     }
 
     @Override
@@ -161,6 +177,7 @@ public class MentoringServiceImpl implements MentoringService {
         // applyMentoring에서 job, company, mentee_uid를 가져온다.
         // time을 넣는다.
         Mentoring mentoring = Mentoring.builder()
+                .mentoringId(applyMentoring.getApplyMentoringId())
                 .mentor(memberRepository.findByUserId(userId).get())
                 .mentee(applyMentoring.getMentee())
                 .job(applyMentoring.getJob())
@@ -185,6 +202,7 @@ public class MentoringServiceImpl implements MentoringService {
     @Override
     public void insertCancelMentoring(int canceler, String reason, Mentoring mentoring) {
         CancelMentoring cancelMentoring = CancelMentoring.builder()
+                .cancelMentoringId(mentoring.getMentoringId())
                 .mentor(mentoring.getMentor())
                 .mentee(mentoring.getMentee())
                 .company(mentoring.getCompany())
@@ -382,5 +400,7 @@ public class MentoringServiceImpl implements MentoringService {
         System.out.println(report);
 
     }
+
+
 
 }

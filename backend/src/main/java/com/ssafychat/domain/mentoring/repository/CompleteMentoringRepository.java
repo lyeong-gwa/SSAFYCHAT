@@ -23,7 +23,7 @@ public interface CompleteMentoringRepository extends JpaRepository<CompleteMento
 
     @Query("select count(*) " +
             "from CompleteMentoring " +
-            "where completed = true")
+            "where completed = 1")
     Long completeMentoringCount();
 
     List<CompleteMentoring> findByMentee(Member mentee);

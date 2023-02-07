@@ -49,6 +49,4 @@ public interface MentoringService {
     List<CanceledMentoringListDto> getCancledMentoringList(int userId);
 
 
-
-
 }

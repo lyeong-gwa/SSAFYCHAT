@@ -14,6 +14,14 @@ public interface MemberRepository extends JpaRepository<Member, Integer> {
     Optional<Member> findByEmail(String email);
     Optional<Member> findByUserId(int user_id);
     List<PossibleMentoringDto> findDistinctByJobAndBelong(String job, String belong);
+    List<PossibleMentoringDto> findDistinctByJob(String job);
+    List<PossibleMentoringDto> findDistinctByBelong(String belong);
+
+    @Query("select distinct new com.ssafychat.domain.member.dto.PossibleMentoringDto(job, belong) " +
+            "from Member " +
+            "where belong not in (:ssafy, :blank)")
+    List<PossibleMentoringDto> getAllJobAndBelong(String ssafy, String blank);
+
     Long countByRole(String role);
 
     @Query(value = "select * from member where user_id = :userId", nativeQuery = true)

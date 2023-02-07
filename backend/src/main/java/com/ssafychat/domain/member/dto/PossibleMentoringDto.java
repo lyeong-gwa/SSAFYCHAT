@@ -2,10 +2,10 @@ package com.ssafychat.domain.member.dto;
 
 import lombok.*;
 
-@AllArgsConstructor
 @Builder
 @Data
-public class PossibleMentoringDto {
+@AllArgsConstructor
+public class PossibleMentoringDto /*implements PossibleMentoringDtoInterface*/ {
 
     private String job;
     private String belong;
