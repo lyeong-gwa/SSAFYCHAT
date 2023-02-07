@@ -1,0 +1,15 @@
+.applying_search {
+    margin-top: 75px;
+    margin-bottom: 25px;
+    position: relative;
+    display: grid;
+    align-items: center;
+    justify-content: center;
+}
+
+.applying_result {
+    position: relative;
+    display: grid;
+    align-items: center;
+    justify-content: center;
+}

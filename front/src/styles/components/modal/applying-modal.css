@@ -1,0 +1,150 @@
+/* modal창 외부화면 */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+   
+/* modal창 */
+.modal_body {
+  position: absolute;
+  display: grid;
+
+  grid-template-rows: 60px 1fr;
+
+  width: 900px;
+  height: 700px;
+  text-align: center;
+  background-color: rgb(255, 255, 255);
+  border-radius: 10px;
+  box-shadow: 0 2px 3px 0 rgba(34, 36, 38, 0.15);
+}
+
+.modal_header{
+  position: relative;
+  display: grid;
+
+  padding-right: 15px;
+  border-start-start-radius: 10px;
+  border-start-end-radius: 10px;
+  justify-content: right;
+  background-color: #023E73;
+}
+
+
+#modal_close_btn {
+  position: relative;
+  border: none;
+  color: #FFFFFF;
+  background-color: transparent;
+  font-size: 20px;
+}
+  
+#modal-close-btn:hover {
+  cursor: pointer;
+}
+
+.modal_content{
+  position: relative;
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+}
+
+.modal_content_calendar_box{
+  position: relative;
+  display: grid;
+
+  align-items: center;
+  justify-content: center;
+}
+
+.modal_content_calendar{
+  position: relative;
+  display: grid;
+
+  width: 360px;
+  height: 400px;
+
+  background: #023E73;
+  border-radius: 14px;
+}
+
+.modal_content_select{
+  position: relative;
+  display: grid;
+
+  grid-template-rows: 160px 300px 60px 1fr;
+}
+
+.modal_content_selected_date{
+  position: relative;
+  display: grid;
+
+  grid-template-columns: 110px 100px 110px 50px 50px;
+  align-items: end;
+  justify-content: center;
+}
+
+/* 버튼이 눌렸을 때 */
+.modal_content_time_btn_clicked{
+  position: relative;
+  display: grid;
+
+  align-items: center;
+
+  width: 100px;
+  height: 40px;
+
+  background: #023E73;
+  border-radius: 10px;
+  box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+/* 버튼이 눌리지 않았을 때 */
+.modal_content_time_btn{
+  position: relative;
+  display: grid;
+
+  align-items: center;
+  width: 100px;
+  height: 40px;
+
+  background: #031059;
+  border-radius: 10px;
+  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+}
+
+.modal_content_time_text{
+  font-size: 20px;
+  color: #FFFFFF;
+}
+.modal_content_day{
+  font-family: 'Lato';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 100px;
+  line-height: 120px;
+  /* identical to box height */
+  
+  text-align: center;
+  
+  color: #A6A6A6;
+}
+
+.modal_content_month_year{
+  font-family: 'Lato';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 24px;
+  text-align: center;
+  
+  color: #A6A6A6;
+}

@@ -1,0 +1,10 @@
+.calendar_component {
+  position: relative;
+  display: grid;
+  width: 600px;
+  height: 600px;
+  background-color: #a6a6a6;
+  border-radius: 50px;
+
+  text-align: center;
+}

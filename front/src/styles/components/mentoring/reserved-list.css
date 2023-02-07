@@ -1,0 +1,59 @@
+/* 
+<div className="reserved_list_container">
+<div className="reserved_list_header">
+나는 헤더
+</div>
+<table className="reserved_list_table"> */
+.reserved_list_container{
+    width: 1600px;
+    border: dotted 1px #dadada;
+    border-radius: 15px;
+}
+
+.reserved_list_header{
+    background: #031059;
+    height: 60px;
+    line-height: 60px;
+    color: white;
+    text-align: center;
+    border-radius: 15px 15px 0 0;
+    font-size: 16px;
+}
+
+.reserved_list_table{
+    width: 1600px; 
+    border-collapse: collapse;  
+    font-size: 15px;
+}
+
+.reserved_list_thead{
+    
+}
+
+.reserved_list_tbody{
+    
+}
+.reserved_list_tr_head{
+    text-align: center;
+    border: dotted 1px #dadada;
+    border-top: none;
+    border-radius: 15px;
+    height: 45px;
+    background: #f8f8f8;
+}
+.reserved_list_tr_body{
+    text-align: center;
+    border: dotted 1px #dadada;
+    border-top: none;
+    border-radius: 15px;
+    height: 65px;
+}
+.reserved_list_tr_body:hover{
+    background: #dadada;
+}
+
+.reserved_list_enter_button{
+    /* background: #031059;
+    height: 40px;
+    width: 80px; */
+}
