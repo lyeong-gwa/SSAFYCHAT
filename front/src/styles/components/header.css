@@ -1,0 +1,105 @@
+.header{
+    position: relative;
+    width: 1197px;
+    height: 54px;
+    left: calc(50% - 1197px/2 - 14.5px);
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+
+.header_name{
+    position: absolute;
+    width: 237px;
+    height: 50px;
+    left: 0px;
+    top: 2px;
+    
+    font-style: normal;
+    font-weight: 400;
+    font-size: 30px;
+    line-height: 125%;
+    /* identical to box height, or 50px */
+    
+    display: flex;
+    align-items: center;
+    
+    color: #031059;
+}
+
+.navbar{
+    position: relative;
+    width: 300px;
+    height: 54px;
+    left: 880px;
+}
+
+span {
+    padding-left: 10px;
+    padding-right: 10px;
+    display: inline-block;
+    line-height: 54px;
+}
+
+span>a {
+  text-decoration: none;
+  color: #0D0D0D;
+}
+
+.dropdown{
+  position : relative;  
+  width: 120px;
+  margin: 0px;
+  
+}
+
+.dropbtn_image{
+    position: relative;
+    top: 6px;
+    width: 25px; 
+    height: 25px; 
+    background-image: url("../../assets/profile.png");
+    background-size: cover;
+}
+
+.dropbtn_icon{
+    width: 0; 
+    height: 0; 
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+    border-top: 5px solid #0D0D0D;
+}
+
+.dropbtn{
+  width :160px;
+  height: 0;
+  cursor : pointer;
+}
+.dropdown_content{
+  /* border: 1px solid;
+  border-color: #0D0D0D; */
+  box-shadow: 2px 2px 5px 1px gray;
+  display : none;
+  position : absolute;
+  z-index : 1; /*다른 요소들보다 앞에 배치*/
+  font-weight: 400;
+  background-color: #FFFFFF;
+  min-width : 160px;
+}
+
+.dropdown_content a{
+  text-align: center;
+  display : block;
+  text-decoration : none;
+  color : rgb(37, 37, 37);
+  font-size: 15px;
+  padding : 12px 20px;
+}
+
+.dropdown_content a:hover{
+  background-color : #D9D9D9
+}
+
+.dropdown:hover .dropdown_content {
+  display: block;
+}

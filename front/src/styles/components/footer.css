@@ -1,0 +1,17 @@
+.footer{
+  position: relative;
+}
+
+.logo {
+  position: relative;
+    top: 2px;
+    
+    font-style: normal;
+    font-weight: 400;
+    font-size: 30px;
+    line-height: 125%;
+}
+
+.copy_right{
+  color: #A6A6A6;
+}
