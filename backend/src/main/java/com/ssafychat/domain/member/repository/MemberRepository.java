@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @Repository
 public interface MemberRepository extends JpaRepository<Member, Integer> {
-    Optional<Member> findByEmail(String email);
+    Member findByEmail(String email);
     Optional<Member> findByUserId(int user_id);
     List<PossibleMentoringDto> findDistinctByJobAndBelong(String job, String belong);
     List<PossibleMentoringDto> findDistinctByJob(String job);

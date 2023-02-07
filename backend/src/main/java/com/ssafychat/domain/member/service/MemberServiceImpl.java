@@ -37,16 +37,19 @@ public class MemberServiceImpl implements MemberService {
 
     //유효성 검사 적용안함, 기능구현까지 -> 나중에 검사하는 로직도 필요
     @Override
-    public boolean registUser(MemberDto member_info) {
-        Optional<Member> check_member = memberRepository.findByEmail(member_info.getEmail());
-        if(check_member.isEmpty()){
+    public boolean registUser(MemberDto memberInfo) {
+//        Optional<Member> checkMember = memberRepository.findByEmail(memberInfo.getEmail());
+        Member checkMember = memberRepository.findByEmail(memberInfo.getEmail());
+
+//        if(checkMember.isEmpty()){
+        if(checkMember == null){
             Member regist_user = Member.builder().
-                    job(member_info.getJob()).
-                    belong(member_info.getBelong()).
-                    name(member_info.getName()).
-                    email(member_info.getEmail()).
-                    password(bcryptPasswordEncoder.encode(member_info.getPassword())).
-                    studentNumber(member_info.getStudent_number()).
+                    job(memberInfo.getJob()).
+                    belong(memberInfo.getBelong()).
+                    name(memberInfo.getName()).
+                    email(memberInfo.getEmail()).
+                    password(bcryptPasswordEncoder.encode(memberInfo.getPassword())).
+                    studentNumber(memberInfo.getStudent_number()).
                     social("싸피").
                     role("role_mentee").
                     build();
@@ -57,15 +60,16 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public Map<String,String> loginUser(MemberDto member_info) {
-        Optional<Member> check_member = memberRepository.findByEmail(member_info.getEmail());
+    public Map<String,String> loginUser( String email, String password) {
 
-        if(bcryptPasswordEncoder.matches(member_info.getPassword(),check_member.get().getPassword())){
-            String access_token = this.createToken(check_member.get());
+        Member checkMember = memberRepository.findByEmail(email);
+
+        if(checkMember != null && bcryptPasswordEncoder.matches(password, checkMember.getPassword())){
+            String access_token = this.createToken(checkMember);
             Map<String,String> info = new HashMap<>();
-            info.put("accessToken",access_token);
-            info.put("refreshToken",check_member.get().getRefreshToken());
-            info.put("name",check_member.get().getName());
+            info.put("accessToken", access_token);
+            info.put("refreshToken", checkMember.getRefreshToken());
+            info.put("name",checkMember.getName());
             return info;
         }
         return null;
@@ -122,6 +126,26 @@ public class MemberServiceImpl implements MemberService {
                 .matchMentorings(matchMentorings)
                 .completeMentorings(completeMentorings)
                 .build();
+    }
+
+//    @Override
+//    public void saveRefreshToken(String id, String refreshToken) throws Exception {
+//        Map<String, String> map = new HashMap<String, String>();
+//        map.put("id", id);
+//        map.put("token", refreshToken);
+//        sqlSession.getMapper(MemberRepo.class).saveRefreshToken(map);
+//    }
+//
+//    @Override
+//    public Object getRefreshToken(String id) throws Exception {
+//        return sqlSession.getMapper(MemberRepo.class).getRefreshToken(id);
+//    }
+//
+    @Override // refreshtoken ""로 update
+    public void deleRefreshToken(int userId, String empty) {
+        // member 테이블 udpate
+        // userId 필요
+
     }
 
 }

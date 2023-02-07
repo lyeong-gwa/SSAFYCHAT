@@ -7,11 +7,14 @@ import com.ssafychat.domain.member.model.Member;
 import java.util.Map;
 
 public interface MemberService {
-    public boolean registUser(MemberDto member_info);
-    public Map<String,String> loginUser(MemberDto member_info);
-    public String createToken(Member member);
-    public Map<String,Object> userInfo(Member member);
+    boolean registUser(MemberDto memberInfo);
+//    Map<String,String> loginUser(MemberDto memberInfo);
+    Map<String,String> loginUser(String email, String password);
+    String createToken(Member member);
+    Map<String,Object> userInfo(Member member);
 
     MyPageDto getMypage(Member member);
+
+    void deleRefreshToken(int id, String empty);
 
 }
