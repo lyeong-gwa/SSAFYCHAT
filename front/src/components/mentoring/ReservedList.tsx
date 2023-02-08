@@ -1,5 +1,7 @@
 import { useNavigate } from "react-router";
 import "../../styles/components/mentoring/reserved-list.css"
+import { useAppDispatch } from '../../hooks/hooks'
+import { tempAddReserved } from '../../store/mentoringSlice';
 function dragItem(event : any){
     let elem = event.target;
     if(elem.className === "reserved_list_enter_button"){
@@ -56,12 +58,15 @@ function enterMeeting(event : any, navigate : any){
     navigate("/meeting");
 }
 
+
 function ReservedList(props : any){
     const navigate = useNavigate();
-    
+    const dispatch = useAppDispatch();
     return (
         <div className="reserved_list_container">
-            <div className="reserved_list_header">
+            <div className="reserved_list_header" onClick={()=>{
+                dispatch(tempAddReserved());
+            }}>
                 예약된 멘토링
             </div>
             <table className="reserved_list_table">

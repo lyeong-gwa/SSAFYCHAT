@@ -2,12 +2,14 @@ import { configureStore } from '@reduxjs/toolkit'
 import counterReducer from './counterSlice'
 import applyingReducer from './applyingSlice'
 import userReducer from './userSlice'
+import mentoringReducer from './mentoringSlice'
 
 const store = configureStore({
   reducer: {
     counter: counterReducer,
     applying: applyingReducer,
     user: userReducer,
+    mentoring: mentoringReducer,
   }
 })
 

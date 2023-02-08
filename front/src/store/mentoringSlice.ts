@@ -1,35 +1,44 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { createSlice, /*PayloadAction*/ } from '@reduxjs/toolkit'
 import type { RootState } from './store'
-import {search} from '../api/applying'
+
+interface ReservedInfo{
+    date : string,
+    name : string,
+    cardinal : Number,
+    email : string,
+    job : string,
+}
 
 // Define a type for the slice state
-interface MentoringState {
-  Mentorings: {},
+interface ReservedState {
+    reservedMentorings: Array<ReservedInfo>,
 }
 
 // Define the initial state using that type
-const initialState: MentoringState = {
-  Mentorings: []
+const initialState: ReservedState = {
+    reservedMentorings: []
 }
 
 export const MentoringSlice = createSlice({
   name: 'applying',
   initialState,
   reducers: {
-    searchMentoring: (state, action: PayloadAction<{}>) => {
-      console.log(action.payload);
-      search(
-        action.payload,
-        (data:any)=>{console.log(data);},
-        (err:any)=>{console.log(err);}
-      );
-    }
+    tempAddReserved: (state)=>{
+      const reservedInfo: ReservedInfo = {
+        date : "2020-02-12 09:19",
+        name : "김겨울",
+        cardinal : 7,
+        email : "kku@sment.com",
+        job : "백엔드",
+      }
+      state.reservedMentorings.push(reservedInfo);
+    },
   }
 })
 
-export const { searchMentoring } = MentoringSlice.actions
+export const { tempAddReserved } = MentoringSlice.actions
 
 // Other code such as selectors can use the imported `RootState` type
-export const selectCount = (state: RootState) => state.counter.value
+export const selectCount = (state: RootState) => state.applying.applyingMentorings
 
 export default MentoringSlice.reducer

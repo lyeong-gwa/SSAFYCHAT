@@ -33,7 +33,7 @@ export const ApplyingSlice = createSlice({
       search(
         action.payload,
         (data:any)=>{
-          console.log(data);
+          console.log(state.applyingMentorings);
           state.applyingMentorings = data.data;
         },
         (err:any)=>{console.log(err);}

@@ -9,9 +9,9 @@ function MentoringSearchForm (){
     const [job, setJob] = useState("");
     const dispatch = useAppDispatch();
 
-    function searchMentor(belong : string, job : string){
+    function searchMentor(company : string, job : string){
         let mentoring = {
-            belong : belong,
+            company : company,
             job : job,
         }
         dispatch(searchMentoring(mentoring));
