@@ -6,6 +6,7 @@
     flex-direction: column;
     justify-content: center;
 }
+
 /* 카드 본체 */
 .reservation_card{
     width: 244px;
@@ -23,6 +24,7 @@
     height: 35%;
     line-height: 88px;
     transform: translate(5%);
+    color: #031059;
 }
 
 .card_info{
@@ -42,7 +44,8 @@
 
 .reservation_card:hover{
     box-shadow: 0px 0px 0px #FFFFFF;
-    background: #a6a6a6;
+    background: #0d0d0d;
+    opacity: 80%;
     cursor: pointer;
 }
 
@@ -58,6 +61,12 @@
 
     position: absolute;
     z-index: 2;
+    
+    
+    -webkit-user-select:none;
+    -moz-user-select:none;
+    -ms-user-select:none;
+    user-select:none;
 
     display: none;
 }
@@ -66,4 +75,26 @@
 .reservation_card:hover > .cancel_description{
     background-color: #ffffff13;
     display: block;
+}
+
+.isNotAbleDrag:hover{
+    width: 244px;
+    height: 180px;
+    margin: 10px;
+    background-color: #d9d9d9;
+    border-radius: 20px;
+    box-shadow:  5px 5px 5px gray;    
+
+    font-family: 'Do Hyeon', sans-serif;
+    cursor:default;
+    
+    
+    -webkit-user-select:none;
+    -moz-user-select:none;
+    -ms-user-select:none;
+    user-select:none;
+}
+
+.isNotAbleDrag:hover > .cancel_description{
+    display: none;
 }

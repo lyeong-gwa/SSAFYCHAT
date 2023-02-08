@@ -3,9 +3,9 @@
 function Text(props: any){
     switch (props.item){
         case 'id':
-            return <input className="input_text" type="text" name="id" id="id" placeholder="email@email.com" />
+            return <input className="input_text" type="text" name="id" id="id" placeholder="email@email.com" onChange={(data) => props.sItem(data)} />
         case 'pwd':
-            return <input className="input_text" type="password" name="pwd" id="pwd" placeholder="your password" />
+            return <input className="input_text" type="password" name="pwd" id="pwd" placeholder="your password" onChange={(data) => props.sItem(data)} />
         case 'job':
             return <input type="text" className="input_text" name="job" id="job" placeholder="BACK-END"/>
         case 'ssafy_id':

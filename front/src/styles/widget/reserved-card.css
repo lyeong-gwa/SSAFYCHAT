@@ -16,21 +16,19 @@
     border-radius: 20px;
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
 }
 
 /* 일자 */
 .reserved_card_header{
     height: 20%;
-    font-size: 24px;
-    transform: translate(5%);
-    line-height: 80px;
+    font-size: 22px;
+    margin-left: 10px;
 }
 /* 내용 컨테이너 */
 .reserved_card_content_container{
     height: 15%;
     font-size: 16px;
-    transform: translate(5%);
+    margin-left: 10px;
     line-height: 60px;
 }
 /* 버튼 컨테이너 */
@@ -71,10 +69,22 @@
 /* 내용 */
 .reserved_card_text{
     height: 60%;
-    transform: translate(0,50%);
     color:#FFFFFF;
     
 
     background-color: #031059;
 }
+.reserved_card_header{
+    display: flex;
+    flex-direction: column;
+}
 
+.reserved_rt{
+    font-size: 14px;
+    height: 20px;
+    margin-top: 10px;
+    line-height: 40px;
+}
+.reserved_card_time{
+    height: 40px;
+}

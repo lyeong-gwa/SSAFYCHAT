@@ -1,12 +1,12 @@
 
-function dragCard(event : any, elemClassName : string){
+function dragCard(event : any, elemClassName : string, containerClassName : string, isEnterCheck : boolean){
     // 요소 가져오기
     let elem = event.target;
     // 기존의 드래그를 없애기
     // elem.ondragstart = function(){
     //     return false;
     // }
-
+    let mY = 0;
     const classList = elem.classList;
     for(let i = 0; i < classList.length; i++){
         if(classList[i] === "enter_meeting_button"){
@@ -21,10 +21,13 @@ function dragCard(event : any, elemClassName : string){
     while(elem.className !== elemClassName){
         elem = elem.parentElement;        
     }
+    elem.addEventListener("drag",()=>{
+        console.log(123)
+    })
     // 카드 아우터 요소를 가져오기
     const outer = elem.parentElement;
     // 카드 컨테이너 요소를 가져오기
-    const container = outer.parentElement;
+    const container : any = document.getElementsByClassName(containerClassName)[0];
 
     // 카드가 이동가능하게 만들기
     elem.style.position = 'absolute';
@@ -33,7 +36,7 @@ function dragCard(event : any, elemClassName : string){
     // 카드의 기존 위치 저장
     const leftPos = elem.style.left;
     const topPos = elem.style.top;
-
+    
     // 카드를 body의 자식으로
     document.body.append(elem);
 
@@ -50,36 +53,87 @@ function dragCard(event : any, elemClassName : string){
 
     // 마우스가 움직이면 카드 위치 변경하게 할 함수
     function onMouseMove(event : any){
-        // 
+        mY = event.pageY;
         moveAt(event.pageX,event.pageY);
     }
 
     // 마우스가 움직이면 함수 호출
     document.addEventListener('mousemove', onMouseMove);
-
-    container.onmouseleave = function(){
-        if(onDrag){            
-            if(window.confirm("삭제합니까")){
-                // **********************
-                // 이 곳에 기능을 넣어야 함
-                // **********************
+    if(!isEnterCheck){
+        container.onmouseleave = function(){
+            if(onDrag){            
+                if(window.confirm("삭제합니까")){
+                    // **********************
+                    // 이 곳에 기능을 넣어야 함
+                    // **********************
+                }
+                onDrag = false;
             }
+        }
+        container.onmouseover = function(){
             onDrag = false;
+        }          
+
+        //마우스 클릭 해제시 원래대로
+        elem.onmouseup = function(){
+            document.removeEventListener('mousemove',onMouseMove);
+            elem.onmouseup = null;
+            outer.append(elem);
+            elem.style.left = leftPos;
+            elem.style.top = topPos;
+            elem.style.zIndex = 'auto';
         }
     }
-    container.onmouseover = function(){
-        onDrag = false;
+    else{
+        container.onmouseleave = function(){
+            onDrag = false;
+        }
+        container.onmouseenter = function(){
+            onDrag = false;
+        }
+
+        outer.onmouseover = function(){
+            onDrag = false;
+        }
+
+        container.onmouseover = function(){
+            console.log(onDrag)
+            if(onDrag){            
+                if(window.confirm("추가합니까")){
+                    // **********************
+                    // 이 곳에 기능을 넣어야 함
+                    // **********************
+                }
+                onDrag = false;
+            }
+        }  
+
+        //마우스 클릭 해제시 원래대로
+        elem.onmouseup = function(){
+            if(mY < container.style.top)
+                console.log("마우스보다 아래에 있다")
+            if(mY < container.style.top + container.offsetHeight)
+                console.log(999);
+            // 이걸로 테스트 해보기 /////////////////////////////
+            // event.pageX, event.pageY
+
+        //     elem.style.left = pageX - elem.offsetWidth / 2 + 'px';
+        // elem.style.top = pageY - elem.offsetHeight / 2 + 'px';
+
+
+
+
+
+
+            document.removeEventListener('mousemove',onMouseMove);
+            elem.onmouseup = null;
+            outer.append(elem);
+            elem.style.left = leftPos;
+            elem.style.top = topPos;
+            elem.style.zIndex = 'auto';
+        }
     }
 
-    // 마우스클릭 해제시 원래대로
-    elem.onmouseup = function(){
-        document.removeEventListener('mousemove',onMouseMove);
-        elem.onmouseup = null;
-        outer.append(elem);
-        elem.style.left = leftPos;
-        elem.style.top = topPos;
-        elem.style.zIndex = 'auto';
-    }
 }
 
 export {dragCard};

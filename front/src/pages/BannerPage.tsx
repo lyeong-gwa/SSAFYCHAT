@@ -6,6 +6,7 @@ import { Route,Routes } from "react-router"
 import MyPageContainer from "../container/MyPageContainer"
 import ReservationContainer from "../container/ReservationContainer"
 import RollingPaper from "../components/rollingpaper/rollingpaper"
+import MentorReservationContainer from "../container/MentorReservationContainer"
 
 function BannerPage (){
     return(
@@ -16,6 +17,7 @@ function BannerPage (){
                 <Route path="/apply" element={<ApplyingContainer></ApplyingContainer>}></Route>
                 <Route path="/mypage" element={<MyPageContainer></MyPageContainer>}></Route>
                 <Route path="/mentoring" element={<ReservationContainer></ReservationContainer>}></Route>
+                <Route path="/confirm" element={<MentorReservationContainer></MentorReservationContainer>}></Route>
                 <Route path="/roll" element={<RollingPaper></RollingPaper>}></Route>
             </Routes>
             <Footer></Footer>

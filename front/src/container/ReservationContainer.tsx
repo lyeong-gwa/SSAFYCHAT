@@ -42,14 +42,9 @@ function ReservationContainer(){
     return (
         <div className="reservation_page_container">
             <div className="reservation_page_inner_container">
-                <CardList drag={dragCard} header={"신청 목록"} cardList = {cardList}></CardList>
+                <CardList drag={dragCard} header={"신청 목록"} cardList = {cardList} isAbleDrag={true} container={"card_list_container"} isEnterable={false}></CardList>
                 <ReservedCardList cardList={reCardList}></ReservedCardList>
-                <CardList drag={(event : any, tmp : string)=>{
-                    return;
-                    }} 
-                    init={(event : any)=>{
-                        event.target.style.pointerEvents = "none";
-                    }}header={"취소 목록"} cardList = {cardList}></CardList>
+                <CardList drag={(event : any, tmp : string)=>{return;}}header={"취소 목록"} cardList = {cardList}  container={"card_list_container"}  isAbleDrag={false} isEnterable={false}></CardList>
             </div>
         </div>
     )

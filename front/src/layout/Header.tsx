@@ -5,9 +5,23 @@ function Header (){
         <div className="header">
             <div className="header_name">SSAFY CHAT</div>
             <nav className="navbar">
-              <span><Link to="/">Home</Link></span>
-              <span><Link to="/banner/apply">Mentoring</Link></span>
-              <span>
+              <div className="home">
+                <Link to="/">Home</Link>
+              </div>
+              <div className="mentoring">
+                <div className="dropdown">
+                  <span className="dropbtn"> 
+                    <span>Mentoring</span>
+                  </span>
+                  <div className="dropdown_content">
+                    <Link to="/banner/apply">멘토링 신청</Link>
+                    <Link to="/banner/mentoring">예약 확인</Link>
+                    <Link to="/banner/confirm">예약 수락</Link>
+                    <Link to="/banner/roll">롤링페이퍼</Link>
+                  </div>
+                </div>
+              </div>
+              <div className="user">
                 <div className="dropdown">
                   <span className="dropbtn"> 
                   <span>
@@ -21,10 +35,9 @@ function Header (){
                   <div className="dropdown_content">
                     <Link to="/user/login">로그아웃</Link>
                     <Link to="/banner/mypage">마이페이지</Link>
-                    <Link to="/banner/roll">롤링페이퍼</Link>
                   </div>
                 </div>
-              </span>
+              </div>
             </nav>
         </div>
     )

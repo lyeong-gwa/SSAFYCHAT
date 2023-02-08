@@ -28,7 +28,14 @@
 
 .navbar{
     position: relative;
-    width: 300px;
+    display: grid;
+
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+
+    grid-template-columns: repeat(3, 1fr);
+    width: 400px;
     height: 54px;
     left: 880px;
 }

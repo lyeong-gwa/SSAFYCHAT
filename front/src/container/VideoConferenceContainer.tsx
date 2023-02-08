@@ -1,5 +1,6 @@
 import "../styles/container/video-conference-container.css"
 import io from 'socket.io-client';
+import { useNavigate } from "react-router";
 function test(){
 const socket = io(process.env.REACT_APP_SOCKET as string,{path: "/socket.io",transports:["websocket"]});
 
@@ -206,7 +207,12 @@ function handleAddStream(data : any) {
 }
 }
 
+function exit(navigate : any){
+    navigate("/banner/mentoring");
+}
+
 function VideoConferenceContainer(props : any){
+    const navigate = useNavigate();
     let first = true;
     return(
         // 회의 컨테이너 전체를 담는 컨테이너
@@ -257,19 +263,21 @@ function VideoConferenceContainer(props : any){
                 <div className="video_conference_footer">
                     <div className="video_conference_button_container">
                         <div  id="camera" className="video_conference_button">
-                            <img src="img/camera-on.png" alt="camera"></img>
+                            <img src="/img/camera-on.png" alt="camera"></img>
                             <span className="buttonText">비디오 중지</span>
-                            <img src="img/arrow-down.png" alt="arrow-donwn"></img>
+                            <img src="/img/arrow-down.png" alt="arrow-donwn"></img>
                         </div>
                         <div id="mute" className="video_conference_button">
-                            <img src="img/audio-microphone-on.png" alt="mic"></img>
+                            <img src="/img/audio-microphone-on.png" alt="mic"></img>
                             <span className="buttonText">음소거</span>
-                            <img src="img/arrow-down.png" alt="arrow-donwn"></img>
+                            <img src="/img/arrow-down.png" alt="arrow-donwn"></img>
                         </div>
                         <select id="cameras"></select>
                         
-                        <div className="video_conference_cancel">
-                            <img src="img/cancel.png" alt="recording"></img>
+                        <div className="video_conference_cancel" onClick={()=>{
+                            exit(navigate);
+                        }}>
+                            <img src="/img/cancel.png" alt="recording"></img>
                         </div>
                     </div>
                 </div>

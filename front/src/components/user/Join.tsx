@@ -1,5 +1,6 @@
 import "../../styles/components/user/sign_in_up.css";
 import TextBox from "../../widget/InputTextBox";
+import {Link} from 'react-router-dom';
 
 function Join(){
     const footer_text = {
@@ -21,7 +22,7 @@ function Join(){
                         {/* 회원가입 버튼 */}
                         <input className="submit_btn_upper draggable" type="submit" value="Sign Up" />
                         <hr className="hr_tag" />
-                        <button className="submit_btn_lower draggable" type="submit">Back</button>
+                        <Link to="/user/login" className="link-tag-none"><button className="submit_btn_lower draggable" type="submit">Back</button></Link>
                     </form>
                         {/* 뒤로가기 버튼 */}
                     <div className="login_footer draggable">

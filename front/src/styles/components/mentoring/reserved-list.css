@@ -5,7 +5,8 @@
 </div>
 <table className="reserved_list_table"> */
 .reserved_list_container{
-    width: 1600px;
+    margin: 200px 0;
+    width: 1200px;
     border: dotted 1px #dadada;
     border-radius: 15px;
 }
@@ -21,7 +22,7 @@
 }
 
 .reserved_list_table{
-    width: 1600px; 
+    width: 1200px; 
     border-collapse: collapse;  
     font-size: 15px;
 }

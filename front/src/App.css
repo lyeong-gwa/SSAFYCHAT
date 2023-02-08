@@ -37,8 +37,20 @@
   }
 } */
 
+
 @import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&display=swap');
 
 #root{  	
   font-family: 'Do Hyeon', sans-serif;
+}
+
+.link-tag-none{
+  text-decoration: none;
+}
+
+.draggable {
+  -webkit-user-select:none;
+  -moz-user-select:none;
+  -ms-user-select:none;
+  user-select:none;
 }

@@ -10,7 +10,7 @@ function TextBox(props : any){
                 <Icon item={props.item}></Icon>
             </div>
             <div className="text_text">
-                <Text item={props.item}></Text>
+                <Text item={props.item} sItem={props.sItem}></Text>
             </div>
         </div>
     )
