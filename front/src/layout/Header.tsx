@@ -13,16 +13,16 @@ function Header (){
     userInfo: any,
   }
 
-  function logout(){
+  async function logout(){
     const userInfo : UserState = {
       email : "",
       password: "",
       isLogin: false,
       userInfo: null,
     }
-    dispatch(signOut(userInfo));
+    await dispatch(signOut(userInfo));
   }
-  
+
     return (
         <div className="header">
             <div className="header_name">SSAFY CHAT</div>

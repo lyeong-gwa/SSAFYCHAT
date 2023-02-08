@@ -21,6 +21,7 @@ export const UserSlice = createSlice({
     initialState,
     reducers: {   // vuex action
         signIn: (state, action: PayloadAction<UserState>) => {
+            let tmp: boolean = false;
             login(
                 action.payload,
                 (data: any) => {
@@ -29,18 +30,22 @@ export const UserSlice = createSlice({
                         const refreshToken = data.data["refreshToken"];
                         sessionStorage.setItem("access-token", accessToken);
                         sessionStorage.setItem("refresh-token", refreshToken);
-                        console.log(accessToken)
-                        console.log(refreshToken)
-                        state = action.payload;
-                        console.log(state.isLogin);
+                        console.log("123");
+                        tmp = true;
                     }
                 },
                 (error: any) => {
                     console.log(error);
                 }
             )
+            if(tmp){
+                state = action.payload;
+                tmp = false;
+                console.log(state.isLogin);
+            }
         },
         signOut: (state, action: PayloadAction<UserState>) => {
+            let tmp: boolean = false;
             logout(
                 action.payload,
                 (data: any) => {
@@ -48,13 +53,18 @@ export const UserSlice = createSlice({
                         console.log(sessionStorage.getItem('access-token'));
                         sessionStorage.removeItem('access-token');
                         sessionStorage.removeItem('refresh-token');
-                        state = action.payload;
+                        tmp = true;
                     }
                 },
                 (error: any) => {
                     console.log(error);
                 }
             )
+            if(tmp){
+                state = action.payload;
+                tmp = false;
+                console.log(state.isLogin);
+            }
         }
     }
 })

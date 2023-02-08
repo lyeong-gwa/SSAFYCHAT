@@ -28,16 +28,9 @@ export const ApplyingSlice = createSlice({
       }
       state.applyingMentorings.push(mentoringInfo);
     },
-    searchMentoring: (state, action: PayloadAction<{}>) => {
+    searchMentoring: (state, action: PayloadAction<[]>) => {
       console.log(action.payload);
-      search(
-        action.payload,
-        (data:any)=>{
-          console.log(state.applyingMentorings);
-          state.applyingMentorings = data.data;
-        },
-        (err:any)=>{console.log(err);}
-      );
+      state.applyingMentorings = action.payload;
     }
   }
 })

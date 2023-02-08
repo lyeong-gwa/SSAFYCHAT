@@ -100,7 +100,6 @@ function Login(props: any){
                             <a className="find_pwd draggable" href="#!">Forgot ID or Password?</a>
                         </div>
                         {/* 로그인 버튼 */}
-                        <div>ss{IS_LOG_IN}</div> 
                         <Link to={IS_LOG_IN?"/":"/user/login"} className="link-tag-none"><button className="submit_btn_upper draggable" type="submit" onClick={signInBtn}>Sign In</button></Link>
                         {/* <input className="submit_btn_upper draggable" type="submit" value="Sign In" /> */}
                         <hr className="hr_tag" />

@@ -1,7 +1,9 @@
 import { useNavigate } from "react-router";
 import "../../styles/components/mentoring/reserved-list.css"
-import { useAppDispatch } from '../../hooks/hooks'
+import { useState } from "react";
+import { useAppDispatch, useAppSelector } from '../../hooks/hooks'
 import { tempAddReserved } from '../../store/mentoringSlice';
+
 function dragItem(event : any){
     let elem = event.target;
     if(elem.className === "reserved_list_enter_button"){
@@ -42,10 +44,10 @@ function ReservedListItem(props : any){
             dragItem(event);
         }}
         >
-            <td>2023.01.01</td>
-            <td>김도원</td>
-            <td>7전8기</td>
-            <td>ssafy@ssafy.com</td>
+            <td>{props.reserved.date}</td>
+            <td>{props.reserved.name}</td>
+            <td>{props.reserved.cardinal}</td>
+            <td>{props.reserved.email}</td>
             <td><div className="reserved_list_enter_button enter_meeting_button" onClick={(event)=>{
                 props.func(event);
             }} >입장</div></td>
@@ -58,10 +60,19 @@ function enterMeeting(event : any, navigate : any){
     navigate("/meeting");
 }
 
-
 function ReservedList(props : any){
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
+    const reservedList = useAppSelector(state=>state.mentoring.reservedMentorings);
+    const list = [];
+    console.log(reservedList.length);
+    for(let i = 0; i < reservedList.length; ++i){
+        list.push(<ReservedListItem key={i} reserved={reservedList[i]}  func={(event : any)=>{
+            enterMeeting(event, navigate);
+       }}></ReservedListItem> )
+    }
+
+
     return (
         <div className="reserved_list_container">
             <div className="reserved_list_header" onClick={()=>{
@@ -80,19 +91,7 @@ function ReservedList(props : any){
                     </tr>
                 </thead>
                 <tbody className="reserved_list_tbody">
-                    <ReservedListItem func={(event : any)=>{
-                         enterMeeting(event, navigate);
-                    }}></ReservedListItem>
-                    <ReservedListItem func={(event : any)=>{
-                         enterMeeting(event, navigate);
-                    }}></ReservedListItem>
-                    <ReservedListItem func={(event : any)=>{
-                         enterMeeting(event, navigate);
-                    }}></ReservedListItem>
-                    <ReservedListItem func={(event : any)=>{
-                         enterMeeting(event, navigate);
-                    }}></ReservedListItem>
-                    
+                    {list}              
                 </tbody>
             </table>
         </div>

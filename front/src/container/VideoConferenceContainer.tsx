@@ -1,6 +1,15 @@
 import "../styles/container/video-conference-container.css"
 import io from 'socket.io-client';
 import { useNavigate } from "react-router";
+
+function handleAddStream(data : any) {
+    console.log("peer가 보낸 이벤트(스트림)-> 이걸로 나랑 연락할 수 있어", data);
+    const peerFace = document.getElementById("peerFace") as HTMLVideoElement;
+    if(peerFace != null){
+        peerFace.srcObject = data.stream;
+    }
+}
+
 function test(){
 const socket = io(process.env.REACT_APP_SOCKET as string,{path: "/socket.io",transports:["websocket"]});
 
@@ -198,13 +207,13 @@ function handleIce(data : any) {
     socket.emit("ice", data.candidate, roomName);
 }
 
-function handleAddStream(data : any) {
-    console.log("peer가 보낸 이벤트(스트림)-> 이걸로 나랑 연락할 수 있어", data);
-    const peerFace = document.getElementById("peerFace") as HTMLVideoElement;
-    if(peerFace != null){
-        peerFace.srcObject = data.stream;
-    }
-}
+// function handleAddStream(data : any) {
+//     console.log("peer가 보낸 이벤트(스트림)-> 이걸로 나랑 연락할 수 있어", data);
+//     const peerFace = document.getElementById("peerFace") as HTMLVideoElement;
+//     if(peerFace != null){
+//         peerFace.srcObject = data.stream;
+//     }
+// }
 }
 
 function exit(navigate : any){
@@ -285,7 +294,13 @@ function VideoConferenceContainer(props : any){
 
             {/* 채팅창을 담을 오른쪽 컨테이너 */}
             <div className="video_conference_right">
-               
+               <div className="tmpButton" onClick={()=>{
+                    console.log("클릭됨");
+                    
+                    handleAddStream('s');
+               }}>
+                나는 임시버튼
+               </div>
                 {/* 채팅 내용을 보여줄 리스트 요소 */}
                 <ul className="video_conference_chat_content_ul">
                     <li className="video_conference_chat_content_li">

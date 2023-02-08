@@ -2,6 +2,7 @@ import '../../styles/components/applying/mentoring-search-form.css'
 import { useAppDispatch } from '../../hooks/hooks'
 import { useState } from 'react'
 import { searchMentoring, tempAddMentoring } from '../../store/applyingSlice';
+import { search } from '../../api/applying';
 
 function MentoringSearchForm (){
 
@@ -14,7 +15,13 @@ function MentoringSearchForm (){
             company : company,
             job : job,
         }
-        dispatch(searchMentoring(mentoring));
+        search(
+            mentoring,
+            (data:any)=>{
+                dispatch(searchMentoring(data.data));
+            },
+            (err:any)=>{console.log(err);}
+          );
     }
     
     return (

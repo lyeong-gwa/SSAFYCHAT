@@ -3,6 +3,17 @@
     z-index: 1000;
 }
 
+.tmpButton{
+    border: solid 2px #ffffff;
+    position: absolute;
+    z-index: 500;
+    color: #ffffff;
+}
+
+.tmpButton:hover{
+    cursor:pointer;
+}
+
 .video_conference_container{
     width: 100vw;
     height: 100vh;
