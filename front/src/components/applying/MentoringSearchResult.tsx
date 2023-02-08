@@ -2,81 +2,18 @@ import '../../styles/components/applying/mentoring-search-result.css'
 import ApplyingCard from '../../widget/ApplyingCard'
 import { useState } from 'react';
 import ApplyingModal from '../modal/ApplyingModal';
-
+import { useAppSelector } from '../../hooks/hooks';
 
 function MentoringSearchResult (){
-    // 더미 데이터 설정
-    const [count] = useState(15);
-    const [mentorings] = useState({
-        item : [{
-            belong : "카카오",
-            job : "백엔드 개발자"
-        },
-        {
-            belong : "라인",
-            job : "백엔드 개발자"
-        },
-        {
-            belong : "삼성",
-            job : "백엔드 개발자"
-        },
-        {
-            belong : "삼성",
-            job : "백엔드 개발자"
-        },
-        {
-            belong : "삼성",
-            job : "백엔드 개발자"
-        },
-        {
-            belong : "카카오",
-            job : "백엔드 개발자"
-        },
-        {
-            belong : "라인",
-            job : "백엔드 개발자"
-        },
-        {
-            belong : "삼성",
-            job : "백엔드 개발자"
-        },
-        {
-            belong : "삼성",
-            job : "백엔드 개발자"
-        },
-        {
-            belong : "삼성",
-            job : "백엔드 개발자"
-        },
-        {
-            belong : "카카오",
-            job : "백엔드 개발자"
-        },
-        {
-            belong : "라인",
-            job : "백엔드 개발자"
-        },
-        {
-            belong : "삼성",
-            job : "백엔드 개발자"
-        },
-        {
-            belong : "삼성",
-            job : "백엔드 개발자"
-        },
-        {
-            belong : "삼성",
-            job : "백엔드 개발자"
-        },
-        ]
-    });
+    const mentorings = useAppSelector(state => state.applying.applyingMentorings)
+
     // 카드리스트
     const cards = [];
     //카드 컴포넌트를 데이터 개수 만큼 리스트에 삽입
-    for (let i = 0; i < count; i++) {
+    for (let i = 0; i < mentorings.length; i++) {
         cards.push(
             <div key={i} className='result_component_card' onClick={()=> setClickCard(!clickCard)}>
-                <ApplyingCard mentoring={mentorings.item[i]}></ApplyingCard>
+                <ApplyingCard mentoring={mentorings[i]}></ApplyingCard>
             </div>
         );
     }

@@ -2,7 +2,7 @@ import "../../styles/components/user/sign_in_up.css";
 import TextBox from "../../widget/InputTextBox";
 import {Link} from 'react-router-dom';
 import {useState} from 'react';
-import { useAppDispatch } from '../../hooks/hooks'
+import { useAppSelector, useAppDispatch } from '../../hooks/hooks'
 import { signIn } from "../../store/userSlice";
 
 function emailRegexr(data: string){
@@ -13,15 +13,25 @@ function emailRegexr(data: string){
 
 function Login(props: any){
     const dispatch = useAppDispatch();
+    const IS_LOG_IN = useAppSelector(state => state.user.isLogin);
+    console.log(IS_LOG_IN)
+    interface UserState{
+        email: string,
+        password: string,
+        isLogin: boolean,
+        userInfo: any,
+    }
 
-    function signInBtn(){
+    async function signInBtn(){
         if(userId!=='' && check_email && userPwd!==''){
-            const userInfo = {
+            
+            const userInfo : UserState = {
                 email: userId,
                 password: userPwd,
                 isLogin: true,
+                userInfo: null,
             }
-            dispatch(signIn(userInfo));
+            await dispatch(signIn(userInfo));
             // await login(
             //     userInfo,
             //     (data: any) => {
@@ -50,7 +60,7 @@ function Login(props: any){
     }
 
     // 로그인, 로그아웃 여부 확인
-    const [IS_LOG_IN, setIsLogIn] = useState(false);
+    // const [IS_LOG_IN, setIsLogIn] = useState(false);
 
     let check_email: boolean = true;
 
@@ -90,6 +100,7 @@ function Login(props: any){
                             <a className="find_pwd draggable" href="#!">Forgot ID or Password?</a>
                         </div>
                         {/* 로그인 버튼 */}
+                        <div>ss{IS_LOG_IN}</div> 
                         <Link to={IS_LOG_IN?"/":"/user/login"} className="link-tag-none"><button className="submit_btn_upper draggable" type="submit" onClick={signInBtn}>Sign In</button></Link>
                         {/* <input className="submit_btn_upper draggable" type="submit" value="Sign In" /> */}
                         <hr className="hr_tag" />

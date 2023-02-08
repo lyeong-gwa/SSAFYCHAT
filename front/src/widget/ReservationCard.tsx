@@ -8,7 +8,7 @@ function ReservationCard(props : any){
                 props.drag(event,"reservation_card",props.container,props.isEnterable);            
         }}>
                 <div className = "cancel_description">
-                    리스트 바깥으로 드래그 앤 드롭하여 취소
+                    {props.hoverText}
                 </div>
                 <div className="card_name">
                     {props.info[0]}

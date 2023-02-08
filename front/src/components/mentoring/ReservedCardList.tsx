@@ -35,12 +35,12 @@ function ReservedCardList(props : any){
         {/* 카드리스트와 헤더를 감싸는 컨테이너 */}
         <div className="reserved_card_list_inner_container">
         {/* 좌 화살표 */}
-        <div className="reserved_card_list_arrow">
-            <ArrowButton text={"<"}  onMouseDown={()=>{
+        <div className="reserved_card_list_arrow"   onMouseDown={()=>{
                     if(0 < startIdx){
                         setIdx(startIdx-1);
                     }
-                }}></ArrowButton>
+                }}>
+            <ArrowButton text={"<"}></ArrowButton>
         </div>
         
         {/* 카드리스트 */}
@@ -50,12 +50,12 @@ function ReservedCardList(props : any){
 
             
         {/* 우측 화살표 */}
-        <div className="reserved_card_list_arrow">
-            <ArrowButton text={">"} onMouseDown={()=>{
+        <div className="reserved_card_list_arrow" onMouseDown={()=>{
                     if(startIdx+4 < props.cardList.length){
                         setIdx(startIdx+1);
                     }
-                }}></ArrowButton>
+                }}>
+            <ArrowButton text={">"}></ArrowButton>
         </div>
 
         </div>

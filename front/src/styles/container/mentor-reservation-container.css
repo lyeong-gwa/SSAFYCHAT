@@ -1,5 +1,6 @@
 .mentor_reservation_page_container{
     display: flex;
+    margin: 100px 0;
     width: 100%;
 }
 
@@ -8,8 +9,4 @@
     flex-direction: column;
     /* justify-content: space-around; */
     margin:0 auto;
-}
-
-.mentor_canceled_card_list{
-    pointer-events: none;
 }

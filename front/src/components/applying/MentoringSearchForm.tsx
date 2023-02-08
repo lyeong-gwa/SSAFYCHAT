@@ -1,7 +1,7 @@
 import '../../styles/components/applying/mentoring-search-form.css'
 import { useAppDispatch } from '../../hooks/hooks'
 import { useState } from 'react'
-import { searchMentoring } from '../../store/applyingSlice';
+import { searchMentoring, tempAddMentoring } from '../../store/applyingSlice';
 
 function MentoringSearchForm (){
 
@@ -22,7 +22,7 @@ function MentoringSearchForm (){
             <form className='search_form' action="#">
                 <div className="search">
                     <div className='search_image'>
-                        <img src={require('../../assets/job_input.png')} alt="job" />
+                        <img src={require('../../assets/job_input.png')} alt="job" onClick={()=>dispatch(tempAddMentoring())}/>
                     </div>
                         <input className='search_input' type="text" name='job' placeholder="직무" value={job} onChange={(e)=>{e.preventDefault();setJob(e.target.value);}}/>
                     <div className='search_icon'>

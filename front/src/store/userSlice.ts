@@ -1,17 +1,17 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import type { RootState } from "./store";
-import { login } from "../api/user";
+import { login, logout } from "../api/user";
 
 interface UserState{
-    userId: string,
-    userPwd: string,
+    email: string,
+    password: string,
     isLogin: boolean,
     userInfo: any,
 }
 
 const initialState: UserState = {
-    userId: "",
-    userPwd: "",
+    email: "",
+    password: "",
     isLogin: false,
     userInfo: null,
 }
@@ -20,10 +20,7 @@ export const UserSlice = createSlice({
     name: 'user',
     initialState,
     reducers: {   // vuex action
-        abc: (state, action: PayloadAction<boolean>) => {
-            state.isLogin = action.payload;
-        },
-        signIn: (state, action: PayloadAction<{}>) => {
+        signIn: (state, action: PayloadAction<UserState>) => {
             login(
                 action.payload,
                 (data: any) => {
@@ -34,20 +31,36 @@ export const UserSlice = createSlice({
                         sessionStorage.setItem("refresh-token", refreshToken);
                         console.log(accessToken)
                         console.log(refreshToken)
+                        state = action.payload;
+                        console.log(state.isLogin);
                     }
                 },
                 (error: any) => {
                     console.log(error);
                 }
             )
-            state.isLogin = true;
-            console.log(state.isLogin);
+        },
+        signOut: (state, action: PayloadAction<UserState>) => {
+            logout(
+                action.payload,
+                (data: any) => {
+                    if(data.status === 200){
+                        console.log(sessionStorage.getItem('access-token'));
+                        sessionStorage.removeItem('access-token');
+                        sessionStorage.removeItem('refresh-token');
+                        state = action.payload;
+                    }
+                },
+                (error: any) => {
+                    console.log(error);
+                }
+            )
         }
     }
 })
 
-export const { signIn } = UserSlice.actions;
+export const { signIn, signOut } = UserSlice.actions;
 
-export const selectCount = (state: RootState) => state.counter.value
+export const selectCount = (state: RootState) => state.user
 
 export default UserSlice.reducer

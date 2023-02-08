@@ -11,7 +11,7 @@ function MentorReservationContainer(){
         <div className="mentor_reservation_page_container">
             <div className="mentor_reservation_page_inner_container">
                 <ReservedList></ReservedList>
-                <CardList drag={dragCard} header={"신청 목록"} cardList = {cardList} isAbleDrag={true} container={"reserved_list_container"} isEnterable={true}></CardList>
+                <CardList drag={dragCard} header={"신청 목록"} cardList = {cardList} isAbleDrag={true} container={"reserved_list_container"} isEnterable={true} hoverText={"리스트에 드래그 앤 드롭하여 수락"}></CardList>
             </div>
         </div>
     )

@@ -20,7 +20,7 @@
 /* 카드리스트를 감싸는 컨테이너 */
 .reserved_card_list_inner_container{
     /* box-sizing: border-box; */
-    margin:0px;
+    margin: 0px;
     width: 1200px;
     height: 460px;
 

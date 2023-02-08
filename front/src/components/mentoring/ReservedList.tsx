@@ -62,7 +62,7 @@ function ReservedList(props : any){
     return (
         <div className="reserved_list_container">
             <div className="reserved_list_header">
-                나는 헤더
+                예약된 멘토링
             </div>
             <table className="reserved_list_table">
                 <thead>
@@ -84,6 +84,10 @@ function ReservedList(props : any){
                     <ReservedListItem func={(event : any)=>{
                          enterMeeting(event, navigate);
                     }}></ReservedListItem>
+                    <ReservedListItem func={(event : any)=>{
+                         enterMeeting(event, navigate);
+                    }}></ReservedListItem>
+                    
                 </tbody>
             </table>
         </div>

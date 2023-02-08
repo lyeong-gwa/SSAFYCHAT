@@ -7,6 +7,7 @@ function dragCard(event : any, elemClassName : string, containerClassName : stri
     //     return false;
     // }
     let mY = 0;
+    let mX = 0;
     const classList = elem.classList;
     for(let i = 0; i < classList.length; i++){
         if(classList[i] === "enter_meeting_button"){
@@ -21,9 +22,7 @@ function dragCard(event : any, elemClassName : string, containerClassName : stri
     while(elem.className !== elemClassName){
         elem = elem.parentElement;        
     }
-    elem.addEventListener("drag",()=>{
-        console.log(123)
-    })
+
     // 카드 아우터 요소를 가져오기
     const outer = elem.parentElement;
     // 카드 컨테이너 요소를 가져오기
@@ -32,7 +31,7 @@ function dragCard(event : any, elemClassName : string, containerClassName : stri
     // 카드가 이동가능하게 만들기
     elem.style.position = 'absolute';
     elem.style.zIndex = 1000;
-
+    
     // 카드의 기존 위치 저장
     const leftPos = elem.style.left;
     const topPos = elem.style.top;
@@ -54,6 +53,7 @@ function dragCard(event : any, elemClassName : string, containerClassName : stri
     // 마우스가 움직이면 카드 위치 변경하게 할 함수
     function onMouseMove(event : any){
         mY = event.pageY;
+        mX = event.pageX;
         moveAt(event.pageX,event.pageY);
     }
 
@@ -85,20 +85,18 @@ function dragCard(event : any, elemClassName : string, containerClassName : stri
         }
     }
     else{
-        container.onmouseleave = function(){
-            onDrag = false;
-        }
-        container.onmouseenter = function(){
-            onDrag = false;
-        }
-
-        outer.onmouseover = function(){
-            onDrag = false;
-        }
 
         container.onmouseover = function(){
             console.log(onDrag)
-            if(onDrag){            
+           
+        }  
+
+        //마우스 클릭 해제시 원래대로
+        elem.onmouseup = function(){
+
+            const conTop = window.pageYOffset + container.getBoundingClientRect().top;
+            const conLeft = window.pageXOffset + container.getBoundingClientRect().left;
+            if(conTop < mY && mY < conTop + container.offsetHeight && conLeft < mX && mX < conLeft + container.offsetWidth ){  
                 if(window.confirm("추가합니까")){
                     // **********************
                     // 이 곳에 기능을 넣어야 함
@@ -106,14 +104,6 @@ function dragCard(event : any, elemClassName : string, containerClassName : stri
                 }
                 onDrag = false;
             }
-        }  
-
-        //마우스 클릭 해제시 원래대로
-        elem.onmouseup = function(){
-            if(mY < container.style.top)
-                console.log("마우스보다 아래에 있다")
-            if(mY < container.style.top + container.offsetHeight)
-                console.log(999);
             // 이걸로 테스트 해보기 /////////////////////////////
             // event.pageX, event.pageY
 
@@ -131,6 +121,8 @@ function dragCard(event : any, elemClassName : string, containerClassName : stri
             elem.style.left = leftPos;
             elem.style.top = topPos;
             elem.style.zIndex = 'auto';
+
+            onDrag = false;
         }
     }
 

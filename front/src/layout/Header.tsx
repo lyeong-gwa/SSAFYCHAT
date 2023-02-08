@@ -1,6 +1,28 @@
 import "../styles/components/header.css"
 import { Link } from "react-router-dom"
+import { useAppSelector, useAppDispatch } from '../hooks/hooks'
+import { signOut } from "../store/userSlice"
+
 function Header (){
+  const dispatch = useAppDispatch();
+
+  interface UserState{
+    email: string,
+    password: string,
+    isLogin: boolean,
+    userInfo: any,
+  }
+
+  function logout(){
+    const userInfo : UserState = {
+      email : "",
+      password: "",
+      isLogin: false,
+      userInfo: null,
+    }
+    dispatch(signOut(userInfo));
+  }
+  
     return (
         <div className="header">
             <div className="header_name">SSAFY CHAT</div>
@@ -33,7 +55,7 @@ function Header (){
                     </span>
                   </span>
                   <div className="dropdown_content">
-                    <Link to="/user/login">로그아웃</Link>
+                    <Link to="/" onClick={logout}>로그아웃</Link>
                     <Link to="/banner/mypage">마이페이지</Link>
                   </div>
                 </div>
