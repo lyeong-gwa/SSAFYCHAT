@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/mentoring")
@@ -44,18 +45,10 @@ public class MentoringController {
         List<PossibleMentoringDto> possibleMentorings = mentoringService.getPossibleMentoringList(job, belong);
         return new ResponseEntity<>(possibleMentorings, HttpStatus.OK);
     }
-//    @PostMapping("/apply")
-//    public ResponseEntity<String> applyMentoring(ApplyMentoringDto applyMentoringDto, HttpServletRequest request) {
-//
-//        ApplyMentoring applyMentoring = mentoringService.toEntity(applyMentoringDto);
-//
-//        //applyMentoringRepository
-//        mentoringService.applyMentoring(applyMentoring);
-//        return new ResponseEntity<String>("apply", HttpStatus.CREATED);
-//    }
+
     @PostMapping("/apply")
     @Transactional
-    public ResponseEntity<String> applyMentoring(ApplyMentoringDto applyMentoringDto, HttpServletRequest request) {
+    public ResponseEntity<String> applyMentoring(@RequestBody ApplyMentoringDto applyMentoringDto, HttpServletRequest request) {
         Member mentee = (Member) request.getAttribute("USER");
         // 서비스에 user와 applyMentoringDto(job, company, times) 넘긴다.
         System.out.println(applyMentoringDto);
@@ -179,27 +172,27 @@ public class MentoringController {
         return new ResponseEntity<>(mentoringService.getRollingPaper(mentor), HttpStatus.OK);
     }
     @PatchMapping("/review")
-    public ResponseEntity<?> moveReviewRollingPaper(RollingPaperDto rollingPaperDto) {
+    public ResponseEntity<?> moveReviewRollingPaper(@RequestBody RollingPaperDto rollingPaperDto) {
         // 후기 좌표 변경 혹은 선택 여부 변경
         mentoringService.updateRollingPaper(rollingPaperDto);
         return new ResponseEntity<>("review", HttpStatus.OK);
     }
 
     @PostMapping("/review")
-    public ResponseEntity<?> postReviewAndScore(ReviewAndScoreDto reviewAndScoreDto) {
+    public ResponseEntity<?> postReviewAndScore(@RequestBody ReviewAndScoreDto reviewAndScoreDto) {
         // 후기 입력해서 completeMentoring update
         mentoringService.addReviewAndScore(reviewAndScoreDto);
         return new ResponseEntity<>("review and score", HttpStatus.OK);
     }
     @PostMapping("/report")
-    public ResponseEntity<?> postReport(HttpServletRequest request, int completeMentoringId, String reason) {
+    public ResponseEntity<?> postReport(HttpServletRequest request, @RequestBody Map<String, String> report) {
+        int completeMentoringId = Integer.parseInt(report.get("completeMentoringId"));
+        String reason = report.get("reason");
         Member reporter = (Member) request.getAttribute("USER");
 
         mentoringService.reportBadUser(reporter, completeMentoringId, reason);
         return new ResponseEntity<>("report", HttpStatus.OK);
     }
-
-
 
 
 }

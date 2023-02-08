@@ -176,6 +176,7 @@ public class MentoringServiceImpl implements MentoringService {
         // userId는 mentor_uid가 된다.
         // applyMentoring에서 job, company, mentee_uid를 가져온다.
         // time을 넣는다.
+        System.out.println(applyMentoring);
         Mentoring mentoring = Mentoring.builder()
                 .mentoringId(applyMentoring.getApplyMentoringId())
                 .mentor(memberRepository.findByUserId(userId).get())
