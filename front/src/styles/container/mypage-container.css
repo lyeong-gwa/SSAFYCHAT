@@ -1,0 +1,51 @@
+.mypage_container{
+    position: relative;
+    height: 2000px;
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+
+}
+
+.profile{
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.schedule{
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.my_image{
+    position: relative;
+    display: grid;
+    align-items: center;
+    justify-content: right;
+    
+}
+
+.image{
+    width: 450px;
+    height: 550px;
+    margin: 75px;
+    border-radius: 50px;
+}
+
+.my_info{
+    position: relative;
+    display: grid;
+    align-items: center;
+}
+
+.my_calendar{
+    position: relative;
+    display: grid;
+    justify-content: right;
+}
+
+.my_schedule{
+    position: relative;
+    display: grid;
+}
