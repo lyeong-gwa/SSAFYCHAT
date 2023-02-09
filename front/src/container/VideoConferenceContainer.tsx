@@ -2,7 +2,7 @@ import "../styles/container/video-conference-container.css"
 import io from 'socket.io-client';
 import { useNavigate } from "react-router";
 import { useAppSelector } from "../hooks/hooks";
-
+import {chatMessage} from "../api/chatting"
 function test(userinfo:any){
 
 const socket = io(process.env.REACT_APP_SOCKET as string,{path: "/socket.io",transports:["websocket"]});
@@ -16,14 +16,20 @@ const chattinginput = document.getElementById("video_conference_chat_input") as 
 let chattinglog: { user_id: any; message: string; Date: number; }[] = [];
 chattinginput.addEventListener("keyup",function (event) {
     if (event.keyCode === 13) {
-        const senddata = {"user_id":userinfo,"message":this.value,"Date": Date.now()};
-        myDataChannel.send(senddata);
+        const senddata = {"chat_id": 15,"user_id":userinfo,"message":this.value,"Date": Date.now()};
+        myDataChannel.send(JSON.stringify(senddata));
         chattinglog.push(senddata);
-        console.log(`${JSON.stringify(senddata)}
-            ${JSON.stringify(chattinglog)}`);
+        console.log(chattinglog);
         this.value = "";
 
         //몽고DB에 senddata + chat_id를 추가해서 전달
+        chatMessage(
+            senddata,
+            (data:any)=>{
+                console.log(data);
+            },
+            (err:any)=>{console.log(err);}
+          );
     }
     
 });
@@ -177,9 +183,8 @@ socket.on("offer", async (offer) => {
     myPeerConnection.addEventListener("datachannel", (event : any) => {
         myDataChannel = event.channel;
         myDataChannel.addEventListener("message", (event : any) =>{
-            chattinglog.push(event.data);
-            console.log(`${JSON.stringify(event.data)}
-            ${JSON.stringify(chattinglog)}`);
+            chattinglog.push(JSON.parse(event.data));
+            console.log(JSON.parse(event.data));
             }
         );
     });

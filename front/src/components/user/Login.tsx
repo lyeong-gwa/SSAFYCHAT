@@ -3,14 +3,14 @@ import TextBox from "../../widget/InputTextBox";
 import {Link, useNavigate} from 'react-router-dom';
 import {useState} from 'react';
 import { useAppSelector, useAppDispatch } from '../../hooks/hooks'
-import { changeIsLogin } from "../../store/userSlice";
+import { changeIsLogin, appendEmail, appendName, appendUserId } from "../../store/userSlice";
 import { login } from "../../api/user";
+import jwt_decode from "jwt-decode";
 
 function emailRegexr(data: string){
     const regexr = /^[0-9a-zA-Z]([-_\\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
     return data.match(regexr);
 }
-
 
 function Login(props: any){
     const dispatch = useAppDispatch();
@@ -32,7 +32,13 @@ function Login(props: any){
                         const refreshToken = data.data["refreshToken"];
                         sessionStorage.setItem("access-token", accessToken);
                         sessionStorage.setItem("refresh-token", refreshToken);
+
+                        const decoded:any = jwt_decode(accessToken);
+
                         dispatch(changeIsLogin(true));
+                        dispatch(appendEmail(userId));
+                        dispatch(appendUserId(decoded.user_id));
+                        dispatch(appendName(data.data.name));
                         navigate("/");
                     }
                 },

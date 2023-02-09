@@ -10,6 +10,7 @@ async function search(mentoring:any, success:any, fail:any) {
 }
 
 async function apply(applying:any, success:any, fail:any) {
+    api.defaults.headers["Authorization"] = "Bearer " + sessionStorage.getItem("refresh-token");
     await api.post(`/mentoring/apply`, JSON.stringify(applying))
     .then(success)
     .catch(fail);

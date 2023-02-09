@@ -21,12 +21,11 @@
     flex-direction: row;
     align-items: flex-start;
     /* padding: 32px, 64px; */
-    gap: 16px;
     isolation: isolate;
 
     position: relative;
     width: 1200px;
-    height: 100px;
+    height: 80px;
 
     background-color: #031059;
     border-radius: 20px;
@@ -38,6 +37,7 @@
     height: auto;
 }
 
+/* dashboard_header_title_p */
 .d_h_t_p{
     position: relative;
     height: 68px;
@@ -45,20 +45,16 @@
     font-style: normal;
     font-weight: 100;
     font-size: 30px;
-    line-height: 68px;
-
-    left: 50px;
-
-    margin-top: 20px;
-    margin-bottom: 20px;
+    line-height: 30px;
+    margin-left: 10px;
 }
 
 .dashboard_header_icon{
     position: relative;
     width: 59px;
     height: 59px;
-    left: 26px;
-    top: 20px;
+    left: 5px;
+    top: 10px;
 
 }
 
@@ -81,11 +77,11 @@
     position: absolute;
     width: 162.5px;
     height: 68px;
-    left: 1011px;
+    left: 1020px;
 
     flex: none;
     order: 2;
-    top: 20px;
+    top: 10px;
     flex-grow: 0;
     z-index: 2;
 }
@@ -123,4 +119,8 @@
     /* text-align: center; */
     justify-content: center;
     align-items: center;
+}
+
+.save:hover{
+    cursor: pointer;
 }

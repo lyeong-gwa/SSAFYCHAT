@@ -14,8 +14,10 @@ app.post("/chat", async(request, response)=>{
         const chat_id = request.body.chat_id;
         const user_id = request.body.user_id;
         const message = request.body.message;
+        const date = request.body.Date;
+        console.log(request.body,chat_id,user_id,message,date);
         
-        const obj_message = { "user_id" : user_id, "message": message, "Date" : Date.now()};
+        const obj_message = { "user_id" : user_id, "message": message, "Date" : date};
 
         let result = await chatting.findOneAndUpdate({"chat_id": chat_id},{ $push: { content: obj_message } },{new:true});
         if(result == null){
@@ -28,8 +30,8 @@ app.post("/chat", async(request, response)=>{
                 }
             }
         }
-        response.status(400);
-        console.log(request.body);
+        response.status(200);
+        
         response.send("success");
 });
 

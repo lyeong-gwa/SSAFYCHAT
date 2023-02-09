@@ -9,6 +9,25 @@ function ApplyingModal (props:any){
     const mentoringInfo = useAppSelector(state=>state.applying.selectedMentoring);
 
     const [value, onChange] = useState(new Date());
+
+    function numToName(month : number){
+        switch(month){
+            case 0: return 'Jan'; break;
+            case 1: return 'Feb'; break;
+            case 2: return 'Mar'; break;
+            case 3: return 'Apr'; break;
+            case 4: return 'May'; break;
+            case 5: return 'Jun'; break;
+            case 6: return 'Jul'; break;
+            case 7: return 'Aug'; break;
+            case 8: return 'Sep'; break;
+            case 9: return 'Oct'; break;
+            case 10: return 'Nov'; break;
+            case 11: return 'Dec'; break;
+            default: return 'Def'; 
+        }
+    }
+
     function closeModal() {
         props.closeModal();
     }
@@ -46,14 +65,15 @@ function ApplyingModal (props:any){
                     <div className='modal_content_select'>
                         <div className='modal_content_selected_date'>
                             <div className='modal_content_time_btn_clicked'>
-                                <div className='modal_content_time_text'>오전</div>
+                                <div className='modal_content_time_text' onClick={()=>console.log(value)
+                                }>오전</div>
                             </div>
                             <div className='modal_content_time_btn'>
                                 <div className="modal_content_time_text">오후</div>
                             </div>
-                            <div className='modal_content_day'>10</div>
-                            <div className='modal_content_month_year'>May</div>
-                            <div className='modal_content_month_year'>2023</div>
+                            <div className='modal_content_day'>{value.getDate()}</div>
+                            <div className='modal_content_month_year'>{numToName(value.getMonth())}</div>
+                            <div className='modal_content_month_year'>{value.getFullYear()}</div>
                         </div>
                         <div className='modal_content_select_box'>
                             <div className='modal_content_selected_time_am_pm'>

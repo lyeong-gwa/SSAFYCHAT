@@ -1,4 +1,4 @@
-import Calendar from '../components/common/Calendar'
+import MyPageCalendar from '../components/common/MypageCalendar'
 import MentoringList from '../components/common/MentoringList'
 import Profile from '../components/common/Profile'
 import '../styles/container/mypage-container.css'
@@ -16,7 +16,7 @@ function MyPageContainer(){
             </div>
             <div className='schedule'>
                 <div className='my_calendar'>
-                    <Calendar></Calendar>
+                    <MyPageCalendar></MyPageCalendar>
                 </div>
                 <div className='my_schedule'>
                     <MentoringList></MentoringList>

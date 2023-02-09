@@ -1,4 +1,4 @@
-import { localServer } from "./http";
+import { localServer } from "./mongo";
 
 const api = localServer();
 
