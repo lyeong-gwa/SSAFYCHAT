@@ -9,5 +9,4 @@ db.createUser({
   pwd: '$MONGO_INITDB_PASSWORD',
   roles: [{ role: 'readWrite', db: 'ssafychat' }],
 });
-db.createCollection('chatting')
 EOF
