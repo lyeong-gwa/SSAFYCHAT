@@ -3,7 +3,8 @@ import TextBox from "../../widget/InputTextBox";
 import {Link} from 'react-router-dom';
 import {useState} from 'react';
 import { useAppSelector, useAppDispatch } from '../../hooks/hooks'
-import { signIn } from "../../store/userSlice";
+import { changeIsLogin } from "../../store/userSlice";
+import { login } from "../../api/user";
 
 function emailRegexr(data: string){
     const regexr = /^[0-9a-zA-Z]([-_\\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
@@ -14,42 +15,29 @@ function emailRegexr(data: string){
 function Login(props: any){
     const dispatch = useAppDispatch();
     const IS_LOG_IN = useAppSelector(state => state.user.isLogin);
-    console.log(IS_LOG_IN)
-    interface UserState{
-        email: string,
-        password: string,
-        isLogin: boolean,
-        userInfo: any,
-    }
 
-    async function signInBtn(){
+    async function signInApi(){
         if(userId!=='' && check_email && userPwd!==''){
-            
-            const userInfo : UserState = {
+            const userInfo = {
                 email: userId,
                 password: userPwd,
-                isLogin: true,
-                userInfo: null,
             }
-            await dispatch(signIn(userInfo));
-            // await login(
-            //     userInfo,
-            //     (data: any) => {
-            //         console.log(data);
-            //         if(data.status === 200){
-            //             const accessToken = data.data["accessToken"];
-            //             const refreshToken = data.data["refreshToken"];
-            //             sessionStorage.setItem("access-token", accessToken);
-            //             sessionStorage.setItem("refresh-token", refreshToken);
-            //             console.log("ISLOGIN", IS_LOG_IN);
-            //             setIsLogIn(true);
-            //             console.log("ISLOGIN", IS_LOG_IN);
-            //         }
-            //     },
-            //     (error: any) => {
-            //         console.log(error);
-            //     }
-            // )
+            await login(
+                userInfo,
+                (data: any) => {
+                    console.log(data);
+                    if(data.status === 200){
+                        const accessToken = data.data["accessToken"];
+                        const refreshToken = data.data["refreshToken"];
+                        sessionStorage.setItem("access-token", accessToken);
+                        sessionStorage.setItem("refresh-token", refreshToken);
+                        dispatch(changeIsLogin(true));
+                    }
+                },
+                (error: any) => {
+                    console.log(error);
+                }
+            )
         }
     }
     const imgUrlGithub = "/img/Github.png"
@@ -100,7 +88,7 @@ function Login(props: any){
                             <a className="find_pwd draggable" href="#!">Forgot ID or Password?</a>
                         </div>
                         {/* 로그인 버튼 */}
-                        <Link to={IS_LOG_IN?"/":"/user/login"} className="link-tag-none"><button className="submit_btn_upper draggable" type="submit" onClick={signInBtn}>Sign In</button></Link>
+                        <Link to={IS_LOG_IN?"/":"/user/login"} className="link-tag-none"><button className="submit_btn_upper draggable" type="submit" onClick={signInApi}>Sign In</button></Link>
                         {/* <input className="submit_btn_upper draggable" type="submit" value="Sign In" /> */}
                         <hr className="hr_tag" />
                         {/* 회원가입 버튼 */}

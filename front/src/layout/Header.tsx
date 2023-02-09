@@ -1,26 +1,28 @@
 import "../styles/components/header.css"
 import { Link } from "react-router-dom"
 import { useAppSelector, useAppDispatch } from '../hooks/hooks'
-import { signOut } from "../store/userSlice"
+import { changeIsLogin } from "../store/userSlice"
+import { logout } from "../api/user"
 
 function Header (){
   const dispatch = useAppDispatch();
+  const email = useAppSelector(state => state.user.email);
 
-  interface UserState{
-    email: string,
-    password: string,
-    isLogin: boolean,
-    userInfo: any,
-  }
-
-  async function logout(){
-    const userInfo : UserState = {
-      email : "",
-      password: "",
-      isLogin: false,
-      userInfo: null,
-    }
-    await dispatch(signOut(userInfo));
+  async function logoutApi(){
+    await logout(
+      email,
+      (data: any) => {
+        if(data.status === 200){
+          console.log(sessionStorage.getItem('access-token'));
+          sessionStorage.removeItem('access-token');
+          sessionStorage.removeItem('refresh-token');
+          dispatch(changeIsLogin(false));
+        }
+      },
+      (error: any) => {
+        console.log(error);
+      }
+    )
   }
 
     return (
@@ -55,7 +57,7 @@ function Header (){
                     </span>
                   </span>
                   <div className="dropdown_content">
-                    <Link to="/" onClick={logout}>로그아웃</Link>
+                    <Link to="/" onClick={logoutApi}>로그아웃</Link>
                     <Link to="/banner/mypage">마이페이지</Link>
                   </div>
                 </div>

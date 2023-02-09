@@ -54,7 +54,7 @@
     align-items: center;
     text-align: center;
 
-    line-height: 300%;
+    line-height: 40px;
     
 
     background-color: #031059;
@@ -87,4 +87,10 @@
 }
 .reserved_card_time{
     height: 40px;
+}
+
+
+
+.text_img{
+       
 }

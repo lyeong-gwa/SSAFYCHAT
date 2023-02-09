@@ -1,6 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import type { RootState } from './store'
-import {search} from '../api/applying'
 
 interface MentoringInfo{
   belong:string,
@@ -38,6 +37,6 @@ export const ApplyingSlice = createSlice({
 export const { searchMentoring, tempAddMentoring } = ApplyingSlice.actions
 
 // Other code such as selectors can use the imported `RootState` type
-export const selectCount = (state: RootState) => state.applying.applyingMentorings
+export const selectCount = (state: RootState) => state.applying
 
 export default ApplyingSlice.reducer

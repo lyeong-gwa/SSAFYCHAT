@@ -21,10 +21,12 @@ function ReservedCard(props : any){
                     {props.info.name}
                 </div>
                 <div className="reserved_card_content_container">
+                    <img className="text_img" src="/img/company_shape_black.png" alt="회사아이콘"></img>
                   회사
                 </div>
                 <div className="reserved_card_content_container">
-                {props.info.job}
+                    <img className="text_img" src="/img/company_shape_black.png" alt="회사아이콘"></img>
+                    {props.info.job}
                 </div>
                 <div className="reserved_card_content_container">
                 {props.info.num}
