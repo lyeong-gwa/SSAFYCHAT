@@ -87,7 +87,7 @@ public class MentoringServiceImpl implements MentoringService {
         System.out.println("getApplyMentoringListForMentor() 호출");
         List<ApplyMentoringForMentorDto> applyList = new ArrayList<>();
         // 식별자로 직무, 회사 조회.
-        Member mentor = memberRepository.findByUserId(userId).get();
+        Member mentor = memberRepository.findByUserId(userId);
         String job = mentor.getJob();
         String belong = mentor.getBelong();
         // applymentoring 테이블에서 본인 직무, 회사에 맞는 목록 불러오기
@@ -179,7 +179,7 @@ public class MentoringServiceImpl implements MentoringService {
         System.out.println(applyMentoring);
         Mentoring mentoring = Mentoring.builder()
                 .mentoringId(applyMentoring.getApplyMentoringId())
-                .mentor(memberRepository.findByUserId(userId).get())
+                .mentor(memberRepository.findByUserId(userId))
                 .mentee(applyMentoring.getMentee())
                 .job(applyMentoring.getJob())
                 .company(applyMentoring.getCompany())

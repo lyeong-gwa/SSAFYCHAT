@@ -2,9 +2,10 @@ package com.ssafychat.domain.member.controller;
 
 
 import com.ssafychat.domain.member.dto.MemberDto;
+import com.ssafychat.domain.member.dto.TokenInfoDto;
 import com.ssafychat.domain.member.service.MemberService;
-import com.ssafychat.global.jwt.JwtService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.ssafychat.domain.member.service.MemberServiceImpl;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,15 +13,16 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 @RestController
 @CrossOrigin("*")
 public class LoginController {
 
-    @Autowired
-    private MemberService memberService;
+    private final MemberService memberService;
 
-    @Autowired
-    private JwtService jwtService;
+    public LoginController(MemberServiceImpl memberService) {
+        this.memberService = memberService;
+    }
 
     @GetMapping("")
     public ResponseEntity<?> aliveCheck() {
@@ -41,10 +43,12 @@ public class LoginController {
 
     @PostMapping("/login")
     public ResponseEntity<?> nomalLogin(@RequestBody Map<String, String> user) {
-        //사용자가 전달한 email, password와 일치하는 사용자 찾기
+
         String email = user.get("email");
         String password = user.get("password");
-        Map<String,String> info = memberService.loginUser(email, password);
+        //아이디 체크는 Authentication 에 사용자 입력 아이디, 비번을 넣어줘야지 작동
+
+        Map<String, String> info = memberService.loginUser(email, password);
         if(info != null){ // 존재한다면 토큰생성
             return new ResponseEntity<>(info, HttpStatus.OK);
         }
@@ -52,5 +56,12 @@ public class LoginController {
         info.put("message","fail");
         return new ResponseEntity<>(info,HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    @PostMapping("/reissue")
+    public ResponseEntity refreshToken(@RequestBody TokenInfoDto tokenInfo) {
+        Map<String, String> response = memberService.reissue(tokenInfo);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
 
 }

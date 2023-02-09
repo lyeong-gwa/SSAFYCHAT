@@ -7,12 +7,11 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface MemberRepository extends JpaRepository<Member, Integer> {
     Member findByEmail(String email);
-    Optional<Member> findByUserId(int user_id);
+    Member findByUserId(int userId);
     List<PossibleMentoringDto> findDistinctByJobAndBelong(String job, String belong);
     List<PossibleMentoringDto> findDistinctByJob(String job);
     List<PossibleMentoringDto> findDistinctByBelong(String belong);
@@ -26,4 +25,5 @@ public interface MemberRepository extends JpaRepository<Member, Integer> {
 
     @Query(value = "select * from member where user_id = :userId", nativeQuery = true)
     Member findByUserIdForRanker(int userId);
+
 }

@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Getter
+@Setter
 @ToString
 @AllArgsConstructor
 @RequiredArgsConstructor
@@ -58,9 +59,8 @@ public class Member implements UserDetails {
         this.refreshToken = refreshToken;
     }
 
-
-
     //시큐리티 관련
+    @Column
     @ElementCollection(fetch = FetchType.EAGER)
     @Builder.Default
     private List<String> roles = new ArrayList<>();

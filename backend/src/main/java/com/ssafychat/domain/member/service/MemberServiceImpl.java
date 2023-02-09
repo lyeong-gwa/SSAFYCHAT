@@ -2,30 +2,38 @@ package com.ssafychat.domain.member.service;
 
 import com.ssafychat.domain.member.dto.MemberDto;
 import com.ssafychat.domain.member.dto.MyPageDto;
+import com.ssafychat.domain.member.dto.TokenInfoDto;
 import com.ssafychat.domain.member.model.Member;
 import com.ssafychat.domain.member.repository.MemberRepository;
 import com.ssafychat.domain.mentoring.model.CompleteMentoring;
 import com.ssafychat.domain.mentoring.model.Mentoring;
 import com.ssafychat.domain.mentoring.repository.CompleteMentoringRepository;
 import com.ssafychat.domain.mentoring.repository.MentoringRepository;
-import com.ssafychat.global.jwt.JwtService;
+import com.ssafychat.global.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 @RequiredArgsConstructor
 @Service
+@Slf4j
 public class MemberServiceImpl implements MemberService {
     @Autowired
     private MemberRepository memberRepository;
-
-    @Autowired
-    private JwtService jwtService;
-
     @Autowired
     private BCryptPasswordEncoder bcryptPasswordEncoder;
 
@@ -35,15 +43,21 @@ public class MemberServiceImpl implements MemberService {
     @Autowired
     private CompleteMentoringRepository completeMentoringRepository;
 
+    @Autowired
+    private JwtTokenProvider jwtTokenProvider;
+
+    private final AuthenticationManager authenticationManager;
+    private final RedisTemplate<String, Object> redisTemplate;
+
+
     //유효성 검사 적용안함, 기능구현까지 -> 나중에 검사하는 로직도 필요
     @Override
     public boolean registUser(MemberDto memberInfo) {
-//        Optional<Member> checkMember = memberRepository.findByEmail(memberInfo.getEmail());
         Member checkMember = memberRepository.findByEmail(memberInfo.getEmail());
 
 //        if(checkMember.isEmpty()){
         if(checkMember == null){
-            Member regist_user = Member.builder().
+            Member registUser = Member.builder().
                     job(memberInfo.getJob()).
                     belong(memberInfo.getBelong()).
                     name(memberInfo.getName()).
@@ -53,41 +67,117 @@ public class MemberServiceImpl implements MemberService {
                     social("싸피").
                     role("role_mentee").
                     build();
-            memberRepository.save(regist_user);
+            List<String> roleArray = registUser.getRoles();
+            roleArray.add("role_mentee");
+            registUser.setRoles(roleArray);
+            memberRepository.save(registUser);
             return true;
         }
         return false;
     }
 
+
     @Override
-    public Map<String,String> loginUser( String email, String password) {
+    public Map<String,String> loginUser(String email, String password) {
 
-        Member checkMember = memberRepository.findByEmail(email);
+        Member loginMember = memberRepository.findByEmail(email);
 
-        if(checkMember != null && bcryptPasswordEncoder.matches(password, checkMember.getPassword())){
-            String access_token = this.createToken(checkMember);
-            Map<String,String> info = new HashMap<>();
-            info.put("accessToken", access_token);
-            info.put("refreshToken", checkMember.getRefreshToken());
-            info.put("name",checkMember.getName());
-            return info;
+        if (loginMember == null) {
+            log.error("해당하는 유저가 존재하지 않습니다.");
+            return null;
         }
-        return null;
+
+        // 1. Login ID/PW 를 기반으로 Authentication 객체 생성
+        // 이때 authentication 는 인증 여부를 확인하는 authenticated 값이 false
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(email, password);
+
+        // 2. 실제 검증 (사용자 비밀번호 체크)이 이루어지는 부분
+        // authenticate 매서드가 실행될 때 CustomUserDetailsService 에서 만든 loadUserByUsername 메서드가 실행
+        Authentication authentication = authenticationManager.authenticate(authenticationToken);
+
+        // 3. 인증 정보를 기반으로 JWT 토큰 생성
+        TokenInfoDto tokenInfo = jwtTokenProvider.generateToken(authentication);
+
+        // 4. RefreshToken Redis 저장 (expirationTime 설정을 통해 자동 삭제 처리)
+        redisTemplate.opsForValue()
+                .set("RT:" + authentication.getName(), tokenInfo.getRefreshToken(), tokenInfo.getRefreshTokenExpirationTime(), TimeUnit.MILLISECONDS);
+
+        Map<String,String> info = new HashMap<>();
+        info.put("accessToken", tokenInfo.getAccessToken());
+        info.put("refreshToken", tokenInfo.getRefreshToken());
+        info.put("name", loginMember.getName());
+        return info;
     }
 
     @Override
-    public String createToken(Member member) {
-        String access_token = jwtService.createAccessToken("user_id", member.getUserId());
-        String refresh_token = jwtService.createRefreshToken("user_id", member.getUserId());
+    public Map<String, String> reissue(TokenInfoDto reissue) {
+        // 1. Refresh Token 검증
+        if (!jwtTokenProvider.validateToken(reissue.getRefreshToken())) {
+            log.error("Refresh Token 정보가 유효하지 않습니다.");
+            return null;
+        }
 
-        //member 리프레쉬토큰 넣고 DB update
-        member.changeRefreshToken(refresh_token);
-        memberRepository.save(member);
-        return access_token;
+        // 2. Access Token 에서 userId 을 가져옵니다.
+        Authentication authentication = jwtTokenProvider.getAuthentication(reissue.getAccessToken());
+
+        // 3. Redis 에서 userId 을 기반으로 저장된 Refresh Token 값을 가져옵니다.
+        String refreshToken = (String)redisTemplate.opsForValue().get("RT:" + authentication.getName());
+        // (추가) 로그아웃되어 Redis 에 RefreshToken 이 존재하지 않는 경우 처리
+        if(ObjectUtils.isEmpty(refreshToken)) {
+            log.error("잘못된 요청입니다.");
+            return null;
+        }
+        if(!refreshToken.equals(reissue.getRefreshToken())) {
+            log.error("Refresh Token 정보가 일치하지 않습니다.");
+            return null;
+        }
+
+        // 4. 새로운 토큰 생성
+        TokenInfoDto tokenInfo = jwtTokenProvider.generateToken(authentication);
+
+        // 5. RefreshToken Redis 업데이트
+        redisTemplate.opsForValue()
+                .set("RT:" + authentication.getName(), tokenInfo.getRefreshToken(), tokenInfo.getRefreshTokenExpirationTime(), TimeUnit.MILLISECONDS);
+
+        Map<String, String> response = new HashMap<>();
+        response.put("accessToken", tokenInfo.getAccessToken());
+        response.put("refreshToken", tokenInfo.getRefreshToken());
+        response.put("message", "accessToken 재발급 성공");
+
+        return response;
+    }
+
+    @Override
+    public Map<String, String> logout(TokenInfoDto logout) {
+        // 1. Access Token 검증
+        if (!jwtTokenProvider.validateToken(logout.getAccessToken())) {
+            log.error("잘못된 요청입니다.");
+            return null;
+        }
+
+        // 2. Access Token 에서 User email 을 가져옵니다.
+        Authentication authentication = jwtTokenProvider.getAuthentication(logout.getAccessToken());
+
+        // 3. Redis 에서 해당 User email 로 저장된 Refresh Token 이 있는지 여부를 확인 후 있을 경우 삭제합니다.
+        if (redisTemplate.opsForValue().get("RT:" + authentication.getName()) != null) {
+            // Refresh Token 삭제
+            redisTemplate.delete("RT:" + authentication.getName());
+        }
+
+        // 4. 해당 Access Token 유효시간 가지고 와서 BlackList 로 저장하기
+        Long expiration = jwtTokenProvider.getExpiration(logout.getAccessToken());
+        redisTemplate.opsForValue()
+                .set(logout.getAccessToken(), "logout", expiration, TimeUnit.MILLISECONDS);
+
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "로그아웃 되었습니다.");
+
+        return response;
     }
 
     @Override
     public Map<String,Object> userInfo(Member member){
+        System.out.println("userInfo 호출");
         Map<String,Object> info = new HashMap<>();
         Member token_user = (Member) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
@@ -107,6 +197,7 @@ public class MemberServiceImpl implements MemberService {
     public MyPageDto getMypage(Member member) {
         // user 정보에서 role 확인해서 서비스 호출
         String role = member.getRole();
+        System.out.println("member " + member);
         List<Mentoring> matchMentorings = new ArrayList<>();
         List<CompleteMentoring> completeMentorings = new ArrayList<>();
 
@@ -126,26 +217,6 @@ public class MemberServiceImpl implements MemberService {
                 .matchMentorings(matchMentorings)
                 .completeMentorings(completeMentorings)
                 .build();
-    }
-
-//    @Override
-//    public void saveRefreshToken(String id, String refreshToken) throws Exception {
-//        Map<String, String> map = new HashMap<String, String>();
-//        map.put("id", id);
-//        map.put("token", refreshToken);
-//        sqlSession.getMapper(MemberRepo.class).saveRefreshToken(map);
-//    }
-//
-//    @Override
-//    public Object getRefreshToken(String id) throws Exception {
-//        return sqlSession.getMapper(MemberRepo.class).getRefreshToken(id);
-//    }
-//
-    @Override // refreshtoken ""로 update
-    public void deleRefreshToken(int userId, String empty) {
-        // member 테이블 udpate
-        // userId 필요
-
     }
 
 }
