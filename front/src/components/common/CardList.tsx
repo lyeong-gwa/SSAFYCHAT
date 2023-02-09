@@ -2,7 +2,7 @@ import "../../styles/components/common/card-list.css";
 import {useState} from 'react';
 import ArrowButton from "../../widget/ArrowButton";
 import ReservationCard from "../../widget/ReservationCard";
-
+import { reservation } from "../../api/mentoring";
 function CardList(props : any){
 
     let cards = [];
@@ -24,7 +24,9 @@ function CardList(props : any){
            </div>
 
         {/* 카드리스트와 헤더를 감싸는 컨테이너 */}
-        <div className="card_list_inner_container">
+        <div className="card_list_inner_container" onClick={()=>{
+            reservation((success : any)=>{console.log(success)},(fail : any)=>{console.log(fail)});
+        }}>
             {/* 좌 화살표 */}
             <div className="card_list_arrow"  onMouseDown={()=>{
                     if(0 < startIdx){

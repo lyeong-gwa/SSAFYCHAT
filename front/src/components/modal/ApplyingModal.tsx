@@ -2,8 +2,10 @@ import '../../styles/components/modal/applying-modal.css';
 import Calendar from 'react-calendar';
 import { useState } from 'react';
 import '../../styles/widget/calendar.css';
+import { useAppSelector } from '../../hooks/hooks';
 
 function ApplyingModal (props:any){
+    const mentoringInfo = useAppSelector(state=>state.applying.selectedMentoring);
 
     const [value, onChange] = useState(new Date());
     function closeModal() {
@@ -66,10 +68,10 @@ function ApplyingModal (props:any){
                         </div>
                         <div className='modal_content_selected_belong_job_apply'>
                             <div className='modal_content_belong'>
-                                <div className="modal_content_belong_text">카카오</div> 
+                                <div className="modal_content_belong_text">{mentoringInfo.belong}</div> 
                             </div>
                             <div className='modal_content_job'>
-                                <div className="modal_content_job_text">백엔드</div>
+                                <div className="modal_content_job_text">{mentoringInfo.job}</div>
                             </div>
                             <div className='modal_content_apply'>
                                 <div className="modal_content_apply_btn">

@@ -1,6 +1,6 @@
 import "../../styles/components/user/sign_in_up.css";
 import TextBox from "../../widget/InputTextBox";
-import {Link} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import {useState} from 'react';
 import { useAppSelector, useAppDispatch } from '../../hooks/hooks'
 import { changeIsLogin } from "../../store/userSlice";
@@ -15,6 +15,7 @@ function emailRegexr(data: string){
 function Login(props: any){
     const dispatch = useAppDispatch();
     const IS_LOG_IN = useAppSelector(state => state.user.isLogin);
+    const navigate = useNavigate();
 
     async function signInApi(){
         if(userId!=='' && check_email && userPwd!==''){
@@ -32,6 +33,7 @@ function Login(props: any){
                         sessionStorage.setItem("access-token", accessToken);
                         sessionStorage.setItem("refresh-token", refreshToken);
                         dispatch(changeIsLogin(true));
+                        navigate("/");
                     }
                 },
                 (error: any) => {

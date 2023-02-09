@@ -20,7 +20,7 @@ const initialState: ReservedState = {
 }
 
 export const MentoringSlice = createSlice({
-  name: 'applying',
+  name: 'mentoring',
   initialState,
   reducers: {
     tempAddReserved: (state)=>{
@@ -33,12 +33,15 @@ export const MentoringSlice = createSlice({
       }
       state.reservedMentorings.push(reservedInfo);
     },
+    getReservation: ()=>{
+        
+    }
   }
 })
 
 export const { tempAddReserved } = MentoringSlice.actions
 
 // Other code such as selectors can use the imported `RootState` type
-export const selectCount = (state: RootState) => state.applying.applyingMentorings
+export const selectCount = (state: RootState) => state.mentoring
 
 export default MentoringSlice.reducer

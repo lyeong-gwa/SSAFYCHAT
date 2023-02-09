@@ -8,14 +8,18 @@ interface MentoringInfo{
 
 // Define a type for the slice state
 interface ApplyingState {
-  applyingMentorings: Array<MentoringInfo>,
+  searchedMentorings: Array<MentoringInfo>,
+  selectedMentoring: MentoringInfo,
 }
 
 // Define the initial state using that type
 const initialState: ApplyingState = {
-  applyingMentorings: []
+  searchedMentorings: [],
+  selectedMentoring: {
+    belong : '',
+    job : '',
+  }
 }
-
 export const ApplyingSlice = createSlice({
   name: 'applying',
   initialState,
@@ -25,16 +29,19 @@ export const ApplyingSlice = createSlice({
         belong : "삼성전자",
         job : "프론트 개발자"
       }
-      state.applyingMentorings.push(mentoringInfo);
+      state.searchedMentorings.push(mentoringInfo);
     },
     searchMentoring: (state, action: PayloadAction<[]>) => {
-      console.log(action.payload);
-      state.applyingMentorings = action.payload;
+      state.searchedMentorings = action.payload;
+    },
+    selectMentoring: (state, action: PayloadAction<MentoringInfo>) => {
+      state.selectedMentoring = action.payload;
+      console.log(state.selectedMentoring);
     }
   }
 })
 
-export const { searchMentoring, tempAddMentoring } = ApplyingSlice.actions
+export const { searchMentoring, selectMentoring, tempAddMentoring } = ApplyingSlice.actions
 
 // Other code such as selectors can use the imported `RootState` type
 export const selectCount = (state: RootState) => state.applying

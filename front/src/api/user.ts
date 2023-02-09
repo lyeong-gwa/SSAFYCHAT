@@ -8,6 +8,7 @@ async function login(user:any, success:any, fail:any) {
 
 async function logout(user: string, success:any, fail:any) {
     api.defaults.headers["Authorization"] = "Bearer " + sessionStorage.getItem("refresh-token");
+    api.defaults.headers["Access-Control-Allow-Origin"] = '*';
     await api.post('/logout').then(success).catch(fail);
 }
 

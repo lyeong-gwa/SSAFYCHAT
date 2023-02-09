@@ -1,5 +1,5 @@
 import "../styles/components/header.css"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { useAppSelector, useAppDispatch } from '../hooks/hooks'
 import { changeIsLogin } from "../store/userSlice"
 import { logout } from "../api/user"
@@ -7,6 +7,7 @@ import { logout } from "../api/user"
 function Header (){
   const dispatch = useAppDispatch();
   const email = useAppSelector(state => state.user.email);
+  const navigate = useNavigate();
 
   async function logoutApi(){
     await logout(
@@ -17,6 +18,7 @@ function Header (){
           sessionStorage.removeItem('access-token');
           sessionStorage.removeItem('refresh-token');
           dispatch(changeIsLogin(false));
+          navigate("/user/login");
         }
       },
       (error: any) => {

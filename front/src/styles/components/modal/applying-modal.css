@@ -317,12 +317,12 @@
   position: relative;
   display: grid;
 
-  align-items: start;
+  align-items: center;
 
   font-family: 'Do Hyeon';
   font-style: normal;
   font-weight: 400;
-  font-size: 60px;
+  font-size: 40px;
   line-height: 75px;
   text-align: center;
   
@@ -339,7 +339,7 @@
   font-family: 'Do Hyeon';
   font-style: normal;
   font-weight: 400;
-  font-size: 40px;
+  font-size: 30px;
   line-height: 50px;
   text-align: center;
 
