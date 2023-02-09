@@ -1,0 +1,137 @@
+.chat_container{
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    padding: 0px;
+
+    position: absolute;
+    width: 1280px;
+    height: 720px;
+    left: 0px;
+    top: 0px;
+
+    background: #8BABD8;
+}
+
+.bg{
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    padding: 0px;
+
+    width: 1280px;
+    height: 720px;
+
+    background: #8BABD8;
+
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+}
+
+.left_sidebar{
+    box-sizing: border-box;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 8px;
+
+    width: 364px;
+    height: 720px;
+
+    background: #FFFFFF;
+    border-right: 1px solid #D9DCE0;
+
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+}
+
+.search_bar{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 8px 16px;
+    gap: 16px;
+
+    width: 364px;
+    height: 56px;
+
+    flex: none;
+    order: 0;
+    align-self: stretch;
+    flex-grow: 0;
+}
+
+.menu_icon1{
+    width: 40px;
+    height: 40px;
+
+    border-radius: 100px;
+
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+}
+
+.menu_icon2{
+    position: relative;
+    width: 24px;
+    height: 24px;
+    left: 8px;
+    top: 8px;
+}
+
+.chat_menu{
+    position: relative;
+    left: 8.34%;
+    right: 8.34%;
+    top: 20.83%;
+    bottom: 20.83%;
+}
+
+.search_container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 5px 6px;
+    gap: 16px;
+
+    width: 276px;
+    height: 40px;
+
+    background: #F5F5F5;
+    border-radius: 20px;
+}
+
+.search_icon{
+    width: 24px;
+    height: 24px;
+}
+
+.chat_search{
+    position: relative;
+    left: 10.42%;
+    right: 12.51%;
+    top: 10.42%;
+    bottom: 12.5%;
+}
+
+/* .search_text{
+    width: 121px;
+    height: 20px;
+
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 20px;
+
+    color: #707991;
+
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+} */

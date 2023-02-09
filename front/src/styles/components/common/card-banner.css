@@ -1,0 +1,109 @@
+.card_banner{
+    position: relative;
+    width: 1000px;
+    left: calc(50% - 1000px/2);
+    height: 650px;
+    background: url("../../../assets/cardBanner.png");
+    border-radius: 70px;
+
+    margin-top: 50px;
+    margin-bottom: 50px;
+    display: grid;
+
+    grid-template-columns: 2fr 1fr;
+    grid-template-rows: 1fr 1fr;
+}
+
+[class *= cell]{
+    box-sizing: border-box;
+    left: calc(50% - 434.72px/2 - 352.55px);
+
+}
+
+.card_banner_content{
+    position: inherit;
+    padding-left: 50px;
+}
+
+.card_banner_header{
+    font-family: 'Do Hyeon';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 65px;
+    line-height: 125%;
+    /* or 81px */
+    
+    display: flex;
+    align-items: center;
+    
+    color: #D9D9D9;
+
+    margin-top: 10px;
+    margin-bottom: 10px;
+    
+    /* Inside auto layout */
+    
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+}
+
+.card_banner_main{
+    font-family: 'Do Hyeon';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 22px;
+    line-height: 150%;
+    /* or 33px */
+    
+    display: flex;
+    align-items: center;
+    letter-spacing: 0.01em;
+    
+    color: #A6A6A6;
+    margin: 0;
+    
+    /* Inside auto layout */
+    
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+}
+
+.card_banner_button{
+    /* Button */
+
+
+    /* Auto layout */
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 26px 49px 26px 48px;
+    margin-top: 10px;
+    gap: 10px;
+
+    width: 190.14px;
+    height: 75px;
+
+    background: #023E73;
+    border-radius: 18px;
+
+    font-style: normal;
+    font-weight: 600;
+    font-size: 22px;
+    color: #FFFFFF;
+
+    border: none;
+    /* Inside auto layout */
+
+    flex: none;
+    order: 2;
+    flex-grow: 0;
+}
+
+.card_banner_button:hover{
+    background-color: #031059;
+    cursor: pointer;
+}
