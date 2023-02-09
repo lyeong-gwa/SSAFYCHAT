@@ -1,0 +1,99 @@
+/* modal창 외부화면 */
+.cancel_modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    z-index: 1;
+  }
+   
+/* modal창 */
+.cancel_modal_body {
+  position: absolute;
+  display: grid;
+
+  grid-template-rows: 60px 1fr;
+
+  width: 900px;
+  height: 700px;
+  text-align: center;
+  background-color: rgb(255, 255, 255);
+  border-radius: 10px;
+  box-shadow: 0 2px 3px 0 rgba(34, 36, 38, 0.15);
+}
+
+.cancel_modal_header{
+  position: relative;
+  display: flex;
+
+  padding-right: 15px;
+  border-start-start-radius: 10px;
+  border-start-end-radius: 10px;
+  justify-content: space-between;
+  background-color: #023E73;
+  
+  color:#FFFFFF;
+}
+
+.cancel_modal_header_text{
+    margin: auto 0 auto 30px;
+    font-size: 30px;
+}
+
+
+#cancel_modal_close_btn {
+  position: relative;
+  border: none;
+  color: #FFFFFF;
+  background-color: transparent;
+  font-size: 20px;
+}
+#cancel_modal_close_btn:hover {
+  cursor: pointer;
+}
+
+.cancel_modal_content{
+    margin-top: 15px;
+}
+
+.cancel_modal_textarea{    
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 4px;
+    margin: 3px 0;
+    font-size: 14px;
+    width: 90%;
+    height: 90%;
+}
+
+
+
+.cancel_modal_submit_button{
+    width: 100px;
+    height: 30px;
+
+    line-height: 30px;
+    font-size: 25px;
+    color: #FFFFFF;
+
+    background-color: #023E73;
+    
+    border-radius: 8px;
+
+    margin: auto;    
+}
+
+.cancel_modal_submit_button{
+  cursor: pointer;
+}
+
+.cancel_modal_submit_button_container{
+  display: flex;
+
+}
