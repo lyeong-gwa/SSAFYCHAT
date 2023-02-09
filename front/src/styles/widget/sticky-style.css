@@ -4,6 +4,7 @@
     align-items: center;
     padding: 32px 24px 24px;
     gap: 24px;
+    width: 300px;
 
     position: absolute;
     left: 4.17%;
@@ -31,14 +32,14 @@
 }
 
 .text{
-    width: 290px;
-    height: 96px;
+    /* width: 290px; */
+    /* height: 96px; */
 
-    font-family: 'Inter';
+    /* font-family: 'Inter';
     font-style: normal;
-    font-weight: 500;
-    font-size: 18px;
-    line-height: 26px;
+    font-weight: 500; */
+    font-size: 30px;
+    line-height: 40px;
 
     color: #000000;
 

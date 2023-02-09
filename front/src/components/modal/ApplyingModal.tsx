@@ -3,6 +3,7 @@ import Calendar from 'react-calendar';
 import { useState } from 'react';
 import '../../styles/widget/calendar.css';
 import { useAppSelector } from '../../hooks/hooks';
+import { apply } from '../../api/applying';
 
 function ApplyingModal (props:any){
     const mentoringInfo = useAppSelector(state=>state.applying.selectedMentoring);
@@ -10,6 +11,22 @@ function ApplyingModal (props:any){
     const [value, onChange] = useState(new Date());
     function closeModal() {
         props.closeModal();
+    }
+    
+    function applyMentoring() {
+        const applying = {
+            "job" : mentoringInfo.belong,
+            "company" : mentoringInfo.job,
+            "times" : [value]
+        }
+
+        apply(
+            applying,
+            (data:any)=>{
+                console.log(data);
+            },
+            (err:any)=>{console.log(err);}
+          );
     }
 
     return (
@@ -75,7 +92,7 @@ function ApplyingModal (props:any){
                             </div>
                             <div className='modal_content_apply'>
                                 <div className="modal_content_apply_btn">
-                                    <div className="modal_content_apply_btn_text">신청</div>
+                                    <div className="modal_content_apply_btn_text"  onClick={()=>{applyMentoring();}}>신청</div>
                                 </div>
                             </div>
                         </div>

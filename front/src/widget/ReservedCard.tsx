@@ -19,19 +19,19 @@ function ReservedCard(props : any){
                 </div>                
                 <div className="reserved_card_content_container">
                 <img className="text_img" src="/img/name_shape_black.png" alt="이름"></img>
-                    {props.info.name}
+                    <span>{props.info.name}</span>
                 </div>
                 <div className="reserved_card_content_container">
                     <img className="text_img" src="/img/company_shape_black.png" alt="회사아이콘"></img>
-                  회사
+                    <span> 회사</span>
                 </div>
                 <div className="reserved_card_content_container">
                     <img className="text_img" src="/img/job_shape_black.png" alt="직업"></img>
-                    {props.info.job}
+                    <span>{props.info.job}</span>
                 </div>
                 <div className="reserved_card_content_container">
                 <img className="text_img" src="/img/number_shape_black.png" alt="기수"></img>
-                {props.info.num}
+                    <span>{props.info.num}</span>
                 </div>
                 <div className="reserved_card_button_container">  
                     {/* 버튼이벤트를 props로 받아와 사용 */}

@@ -19,7 +19,9 @@ function RollingPaper() {
                         <div className="clean">
                             <img className="clean_name" src={imgUrlclean} alt="Clean" />
                         </div>
-                        <div className="save">
+                        <div className="save" onClick={()=>{
+                            
+                        }}>
                             <img className="save_img" src={imgUrlsave} alt="Save" />
                         </div>
                     </div>
@@ -28,13 +30,13 @@ function RollingPaper() {
                     {/* 롤링페이퍼 컨텐츠가 올 공간 입니다. */}
                 </div>
             </div>
-            <div className="sticky_list_container">
+            {/* <div className="sticky_list_container">
                 <div className="upper_arrow"></div>
                 <div>
                     <Sticky title="감사합니다." text="덕분에 도움이 많이 됐어요"></Sticky>
                 </div>
                 <div className="lower_arrow"></div>
-            </div>
+            </div> */}
         </div>
     )
 }

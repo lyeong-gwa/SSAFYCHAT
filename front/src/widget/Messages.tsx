@@ -1,8 +1,8 @@
 import "../styles/widget/messages.css"
 
 function Messages(props: any){
-    const imgUrlEmoji = "img/emoji.png";
-    const imgUrlSend = "img/send.png";
+    const imgUrlEmoji = "/img/emoji.png";
+    const imgUrlSend = "/img/send.png";
     return(
         <div className="content">
             <div className="top_bar">

@@ -9,11 +9,10 @@ async function search(mentoring:any, success:any, fail:any) {
     .catch(fail);
 }
 
-async function apply(applying:any) {
+async function apply(applying:any, success:any, fail:any) {
     await api.post(`/mentoring/apply`, JSON.stringify(applying))
-    .then((data)=>{console.log(data);})
-    .catch((err)=>{console.log(err);
-    });
+    .then(success)
+    .catch(fail);
 }
 
 export {search, apply};
