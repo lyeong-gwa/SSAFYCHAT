@@ -1,9 +1,9 @@
 package com.ssafychat.domain.mentoring.model;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+import java.util.Date;
 
 public class MentoringDateInterface implements Serializable {
-    private Timestamp time;
+    private Date time;
     private int applyMentoring;
 }

@@ -26,7 +26,7 @@ public class MentoringController {
 
     @GetMapping("/")
     public ResponseEntity<?> aliveCheck() {
-        return new ResponseEntity<String>("Alive", HttpStatus.OK);
+        return new ResponseEntity<>("Alive", HttpStatus.OK);
     }
     @GetMapping
     public List<Mentoring> findMentoring() {
@@ -52,7 +52,7 @@ public class MentoringController {
         Member mentee = (Member) request.getAttribute("USER");
         // 서비스에 user와 applyMentoringDto(job, company, times) 넘긴다.
         mentoringService.insertApplyMentoringAndMentoringDate(mentee, applyMentoringDto);
-        return new ResponseEntity<String>("apply", HttpStatus.CREATED);
+        return new ResponseEntity<>("apply", HttpStatus.CREATED);
     }
 
     @GetMapping("/reservation")
@@ -79,7 +79,6 @@ public class MentoringController {
     @DeleteMapping("/cancel/appointment") // 멘토가 멘토링을 취소
     @Transactional
     public ResponseEntity<?> appointmentCancel(@RequestBody CancelReasonDto cancelReasonDto, HttpServletRequest request) {
-        // 헤더에서 받은 userId가 mentoring의 mentorUid와 같을 때만 기능하게
         Member user = (Member) request.getAttribute("USER");
         int userId = user.getUserId();
         // 멘토링 테이블에서 delete하면서 멘토링 정보 반환
@@ -176,4 +175,16 @@ public class MentoringController {
         return new ResponseEntity<>("report", HttpStatus.OK);
     }
 
+    @PostMapping("/complete") // 멘토링 정상 완료. 비정상 완료는 도커에서 mysql 스케줄러로
+    @Transactional
+    public ResponseEntity<?> completeMentoring(@RequestBody MentoringDto mentoringDto) {
+
+        // 멘토링 테이블에서 delete하면서 멘토링 정보 반환
+        Mentoring mentoring = mentoringService.deleteMentoring(mentoringDto.getMentoringId());
+
+        // 멘토링 완료 테이블에 insert (멘토링 테이블 정보 + completed 1)
+        mentoringService.insertCompleteMentoring(mentoring);
+
+        return new ResponseEntity<>("complete", HttpStatus.OK);
+    }
 }

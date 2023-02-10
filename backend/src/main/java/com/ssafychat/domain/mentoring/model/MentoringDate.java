@@ -3,7 +3,7 @@ package com.ssafychat.domain.mentoring.model;
 import lombok.*;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -18,7 +18,7 @@ public class MentoringDate {
     @Id
 //    @Convert(converter= DateToStringConverter.class)
     @Column(nullable = false)
-    private Timestamp time;
+    private Date time;
 
     @Id
     @ManyToOne

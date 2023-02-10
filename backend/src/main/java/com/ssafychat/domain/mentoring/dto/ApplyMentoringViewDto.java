@@ -3,7 +3,7 @@ package com.ssafychat.domain.mentoring.dto;
 import lombok.Builder;
 import lombok.Data;
 
-import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 
@@ -15,5 +15,5 @@ public class ApplyMentoringViewDto {
     private int menteeUid;
     private String job;
     private String company;
-    private List<Timestamp> times;
+    private List<Date> times;
 }

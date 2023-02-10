@@ -46,5 +46,6 @@ public interface MentoringService {
 
     List<CanceledMentoringListDto> getCancledMentoringList(int userId);
 
+    void insertCompleteMentoring(Mentoring mentoring);
 
 }

@@ -4,7 +4,7 @@ import com.ssafychat.domain.member.model.Member;
 import lombok.*;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -27,9 +27,9 @@ public class CompleteMentoring {
     private Member mentor;
 
     @Column(nullable = false)
-    private Timestamp time;
+    private Date time;
 
-    @Column(columnDefinition = "TEXT", nullable = false)
+    @Column(columnDefinition = "TEXT")
     private String chatLog;
 
     @Column(columnDefinition = "VARCHAR(20)", nullable = false)
