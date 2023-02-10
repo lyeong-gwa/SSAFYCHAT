@@ -5,6 +5,7 @@ import com.ssafychat.domain.member.dto.MyPageDto;
 import com.ssafychat.domain.member.dto.TokenInfoDto;
 import com.ssafychat.domain.member.model.Member;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 public interface MemberService {
@@ -17,6 +18,6 @@ public interface MemberService {
 
     Map<String, String> reissue(TokenInfoDto reissue);
 
-    Map<String, String> logout(TokenInfoDto logout);
+    Map<String, String> logout(HttpServletRequest request);
 
 }

@@ -41,19 +41,6 @@ public class MentoringServiceImpl implements MentoringService {
         return mentoringRepository.findAll();
     }
 
-
-//    @Transactional
-//    public ApplyMentoring toEntity(ApplyMentoringDto applyMentoringDto){
-//
-//        Optional<Member> memberOptional = memberRepository.findById(applyMentoringDto.getMenteeUid());
-//        Member member = memberOptional.get();
-//        return ApplyMentoring.builder()
-//                .applyMentoringId(applyMentoringDto.getApplyMentoringId())
-//                .mentee(member)
-//                .job(applyMentoringDto.getJob())
-//                .company(applyMentoringDto.getCompany())
-//                .build();
-//    }
     @Override
     @Transactional
     public void applyMentoring(ApplyMentoring applyMentoring) {
@@ -64,19 +51,15 @@ public class MentoringServiceImpl implements MentoringService {
     public List<PossibleMentoringDto> getPossibleMentoringList(String job, String belong) {
         if (job.equals("") && belong.equals("")){
             // 전체 목록 조회
-//            System.out.println(memberRepository.getAllJobAndBelong("싸피", ""));
             return memberRepository.getAllJobAndBelong("싸피", "");
         } else if (job.equals("") && !belong.equals("")) {
             // belong으로 조회
-//            System.out.println(memberRepository.findDistinctByBelong(belong));
             return memberRepository.findDistinctByBelong(belong);
         } else if (!job.equals("") && belong.equals("")) {
             // job으로 조회
-            System.out.println(memberRepository.findDistinctByJob(job));
             return memberRepository.findDistinctByJob(job);
         } else {
             // job & belong으로 조회
-//            System.out.println(memberRepository.findDistinctByJobAndBelong(job, belong));
             return memberRepository.findDistinctByJobAndBelong(job, belong);
         }
     }
@@ -84,7 +67,6 @@ public class MentoringServiceImpl implements MentoringService {
     @Override
     public List<ApplyMentoringForMentorDto> getApplyMentoringListForMentor(int userId) {
 
-        System.out.println("getApplyMentoringListForMentor() 호출");
         List<ApplyMentoringForMentorDto> applyList = new ArrayList<>();
         // 식별자로 직무, 회사 조회.
         Member mentor = memberRepository.findByUserId(userId);
@@ -94,23 +76,11 @@ public class MentoringServiceImpl implements MentoringService {
         List<ApplyMentoring> applyMentoringsForMentor = applyMentoringRepository.findByJobAndCompany(job, belong);
 
         for (int i = 0; i < applyMentoringsForMentor.size(); i++) {
-            System.out.println(applyMentoringsForMentor.get(i));
             ApplyMentoring applyMentoring = applyMentoringsForMentor.get(i);
             Member mentee = applyMentoring.getMentee();
-            System.out.println(mentee.getName());
-            System.out.println(applyMentoring.getApplyMentoringId());
-//            System.out.println(mentoringDateRepository.findByApplyMentoring(2));
             MentoringDateDto mentoringDateDto = MentoringDateDto.builder().applyMentoringId(applyMentoring.getApplyMentoringId()).build();
-//            System.out.println("mentoringDateDto 생성");
-//            MentoringDate mentoringDate = this.toEntity(mentoringDateDto);
-            System.out.println("mentoringDateDto => mentoringDate");
-//            System.out.println(new Date());
-//            System.out.println(mentoringDate);
-//            System.out.println(mentoringDate.getApplyMentoring());
-
 
             List<MentoringDate> dates = mentoringDateRepository.findByApplyMentoring_ApplyMentoringId(mentoringDateDto.getApplyMentoringId());
-            System.out.println("dates 조회 후"); // 여기까지 됐다!
             Timestamp[] times = new Timestamp[dates.size()];
             for (int j = 0; j < times.length; j++) {
                 times[j] = dates.get(j).getTime();
@@ -132,19 +102,13 @@ public class MentoringServiceImpl implements MentoringService {
     @Override
     public List<MatchMentoringForMentorDto> getMatchMentoringListForMentor(int userId) {
         // List<Mentoring>에 mentoring 테이블에서 멘토 uid와 일치하는 목록 담기
-
-        System.out.println("getMatchMentoringListForMentor() 호출");
         List<MatchMentoringForMentorDto> matchList = new ArrayList<>();
         // 본인 식별자로 mentoring(멘토링) 테이블 조회
         List<Mentoring> mathcMentoringsForMentor = mentoringRepository.findByMentor_UserId(userId);
 
         for (int i = 0; i < mathcMentoringsForMentor.size(); i++) {
-            System.out.println(mathcMentoringsForMentor.get(i));
             Mentoring mentoring = mathcMentoringsForMentor.get(i);
             Member mentee = mentoring.getMentee();
-            System.out.println(mentee.getName());
-            System.out.println(mentoring.getMentoringId());
-
             matchList.add(
                     MatchMentoringForMentorDto.builder()
                             .MentoringId(mentoring.getMentoringId())
@@ -173,9 +137,6 @@ public class MentoringServiceImpl implements MentoringService {
 
     @Override
     public Mentoring insertMentoring(int userId, ApplyMentoring applyMentoring, Timestamp time) {
-        // userId는 mentor_uid가 된다.
-        // applyMentoring에서 job, company, mentee_uid를 가져온다.
-        // time을 넣는다.
         System.out.println(applyMentoring);
         Mentoring mentoring = Mentoring.builder()
                 .mentoringId(applyMentoring.getApplyMentoringId())
@@ -185,17 +146,13 @@ public class MentoringServiceImpl implements MentoringService {
                 .company(applyMentoring.getCompany())
                 .time(time)
                 .build();
-        // insert!
         mentoringRepository.save(mentoring);
         return mentoring;
     }
 
     @Override
     public Mentoring deleteMentoring(int mentoringId) {
-        System.out.println(mentoringId);
         Mentoring mentoring = mentoringRepository.findByMentoringId(mentoringId);
-        System.out.println(mentoring);
-
         mentoringRepository.deleteMentoringByMentoringId(mentoringId);
         return mentoring;
     }
@@ -262,7 +219,7 @@ public class MentoringServiceImpl implements MentoringService {
     @Override
     public List<RollingPaperDto> getRollingPaper(Member mentor) {
         // completeMentoring에서 userId == mentor_uid인 데이터 조회
-        List<CompleteMentoring> completeMentorings = completeMentoringRepository.findByMentor(mentor);
+        List<CompleteMentoring> completeMentorings = completeMentoringRepository.getRollingPaper(mentor.getUserId());
         // rollingPaperDto에 담아서 반환
         List<RollingPaperDto> rollingPapers = new ArrayList<>();
         for (CompleteMentoring completeMentoring : completeMentorings) {
@@ -401,7 +358,5 @@ public class MentoringServiceImpl implements MentoringService {
         System.out.println(report);
 
     }
-
-
 
 }

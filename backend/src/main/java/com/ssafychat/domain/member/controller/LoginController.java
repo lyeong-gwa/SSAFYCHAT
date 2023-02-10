@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,7 +27,7 @@ public class LoginController {
 
     @GetMapping("")
     public ResponseEntity<?> aliveCheck() {
-        return new ResponseEntity<String>("Alive", HttpStatus.OK);
+        return new ResponseEntity<>("Alive", HttpStatus.OK);
     }
 
     @PostMapping("/regist")
@@ -58,10 +59,15 @@ public class LoginController {
     }
 
     @PostMapping("/reissue")
-    public ResponseEntity refreshToken(@RequestBody TokenInfoDto tokenInfo) {
+    public ResponseEntity<?> refreshToken(@RequestBody TokenInfoDto tokenInfo) {
         Map<String, String> response = memberService.reissue(tokenInfo);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @GetMapping("/user/logout")
+    public ResponseEntity<?> logout(HttpServletRequest request) {
+        Map<String, String> response = memberService.logout(request);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 
 }

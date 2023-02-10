@@ -13,8 +13,6 @@ public interface MentoringService {
 
     List<Mentoring> findMentoring();
 
-//    ApplyMentoring toEntity(ApplyMentoringDto applyMentoringDto);
-
     void applyMentoring(ApplyMentoring applyMentoring);
 
     List<PossibleMentoringDto> getPossibleMentoringList(String job, String company);
