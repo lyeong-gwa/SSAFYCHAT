@@ -1,0 +1,30 @@
+.rolling_card_list{    
+    width: 100%;
+    position: absolute;
+
+    display: flex;
+    justify-content: right;
+}
+
+.rolling_card_list_container{
+
+    position: absolute;
+    width: 380px;
+    height: 500px;
+
+    z-index: 2;
+
+    border: solid 2px black;
+
+    overflow: auto;
+}
+
+.rolling_card_list_container::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera*/
+}
+
+.rolling_card_list_inner_container{
+
+    display: flex;
+    flex-direction: column;
+}

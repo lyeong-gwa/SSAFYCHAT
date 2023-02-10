@@ -1,0 +1,1 @@
+export const COPYRIGHT="ⓣTeam BlueBerryPie. All rights reserved."
