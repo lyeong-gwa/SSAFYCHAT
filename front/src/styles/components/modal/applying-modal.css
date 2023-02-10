@@ -1,4 +1,12 @@
 /* modal창 외부화면 */
+
+* {
+  -webkit-user-select:none;
+  -moz-user-select:none;
+  -ms-user-select:none;
+  user-select:none;
+}
+
 .modal {
     position: fixed;
     top: 0;
@@ -10,7 +18,7 @@
     justify-content: center;
     align-items: center;
   }
-   
+
 /* modal창 */
 .modal_body {
   position: absolute;

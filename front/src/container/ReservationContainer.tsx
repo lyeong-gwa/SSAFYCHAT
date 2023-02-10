@@ -2,8 +2,12 @@ import CardList from "../components/common/CardList";
 import ReservedCardList from "../components/mentoring/ReservedCardList";
 import "../styles/container/reservation-container.css"
 import { dragCard } from "../utils/ts/move";
+import { useAppDispatch } from "../hooks/hooks"
+import { changeBanner } from "../store/userSlice"
 
 function ReservationContainer(){
+    const dispatch = useAppDispatch();
+    dispatch(changeBanner("예약확인"));
     const cardList = [["김도원","네이버","백엔드 개발자","2023-01-01"],["김겨울","SMENT","가수","2023-01-01"],["3","SMENT","가수","2023-01-01"],["4","SMENT","가수","2023-01-01"],["5","SMENT","가수","2023-01-01"],["6","SMENT","가수","2023-01-01"]];
     const reCardList = [
         {

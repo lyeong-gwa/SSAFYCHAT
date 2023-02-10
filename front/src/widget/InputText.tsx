@@ -7,13 +7,13 @@ function Text(props: any){
         case 'pwd':
             return <input className="input_text" type="password" name="pwd" id="pwd" placeholder="your password" onChange={(data) => props.sItem(data)} />
         case 'job':
-            return <input type="text" className="input_text" name="job" id="job" placeholder="BACK-END"/>
+            return <input type="text" className="input_text" name="job" id="job" placeholder="BACK-END" onChange={(data) => props.sItem(data)}/>
         case 'ssafy_id':
-            return <input className="input_text" type="text" name="ssafy_id" id="ssafy_id" placeholder="0123456"/>
+            return <input className="input_text" type="text" name="ssafy_id" id="ssafy_id" placeholder="0123456" onChange={(data) => props.sItem(data)}/>
         case 'name':
-            return <input className="input_text" type="text" name="name" id="name" placeholder="KIM SSAFY"/>
+            return <input className="input_text" type="text" name="name" id="name" placeholder="KIM SSAFY" onChange={(data) => props.sItem(data)}/>
         case 'company':
-            return <input type="text" className="input_text" name="company" id="company" placeholder="삼성전자"/>
+            return <input type="text" className="input_text" name="company" id="company" placeholder="삼성전자" onChange={(data) => props.sItem(data)}/>
         default:
             return null;
     }

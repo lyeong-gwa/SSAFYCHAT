@@ -40,7 +40,7 @@ function Login(props: any){
                         dispatch(appendUserId(decoded.user_id));
                         dispatch(appendName(data.data.name));
                         dispatch(appendRole(data.data.role));
-                        navigate("/");
+                        // navigate("/");
                     }
                 },
                 (error: any) => {

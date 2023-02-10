@@ -3,6 +3,9 @@ import "../../styles/components/rollingpaper/rollingpaper.css";
 import RollingCardList from "./RollingCardList";
 import { useState } from "react";
 import Sticky from "../../widget/Sticky";
+import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
+import { tempAddRolling } from "../../store/rollingSlice";
+import { changeBanner } from "../../store/userSlice"
 
 
 
@@ -10,16 +13,29 @@ function RollingPaper() {
     const imgUrlStar = "/img/Star.png"
     const imgUrlclean = "/img/clean.png"
     const imgUrlsave = "/img/save.png"
+    const dispatch = useAppDispatch();
+    dispatch(changeBanner("롤링페이퍼"));
+
     const[clickBtn, setClickBtn] = useState(false);
     const colorClassList =["sticky_purple","sticky_green","sticky_red","sticky_yellow","sticky_blue"];
-    const list = [];
-    for(let i = 0; i < 6; ++i){
-        list.push(<Sticky key={i} colorClass = {colorClassList[i % colorClassList.length]} closeList={()=>setClickBtn(false)} text="길지 않은 멘토링 시간 동안, 좋은 정보들을 제공해주신 멘토님 감사드립니다. 이번 채용 공고에 지원해서 꼭 같은 부서에서 만날 수 있었으면 좋겠습니다. 연락드리겠습니다!"></Sticky>);
-    }
+    const rollingList = useAppSelector(state=>state.rolling.rollings);
+    // for(let i = 0; i < cardList.length; ++i){
+    //     console.log(rollingList[i]);        
+    //     cardList.push(<Sticky key={i} colorClass = {rollingList[i].color} closeList={()=>setClickBtn(false)} text={rollingList[i].content}></Sticky>);
+    // }
+    // setCardList(rollingList);
+    
+
     return (
         <div className="rcontainer">
             <div className="dashboard">
-                <div className="dashboard_header">
+                <div className="dashboard_header"onClick={()=>{
+                    console.log(1);
+                    dispatch(tempAddRolling());
+                }}>
+
+
+            {/* 충전합시다 */}
                     <div className="dashboard_header_icon">
                         <img src={imgUrlStar} alt="Star" />
                     </div>
@@ -41,7 +57,7 @@ function RollingPaper() {
                 <div className="dashboard_main">
                 {/* 버튼을 클릭하면 */}
                 {clickBtn && (
-                    <RollingCardList props={list} closeList={()=>setClickBtn(false)}></RollingCardList>
+                    <RollingCardList cardList={rollingList} closeList={()=>setClickBtn(false)}></RollingCardList>
                 )}  
                     {/* 롤링페이퍼 컨텐츠가 올 공간 입니다. */}
                 </div>

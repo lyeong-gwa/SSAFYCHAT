@@ -2,8 +2,12 @@ import MyPageCalendar from '../components/common/MypageCalendar'
 import MentoringList from '../components/common/MentoringList'
 import Profile from '../components/common/Profile'
 import '../styles/container/mypage-container.css'
+import { useAppDispatch } from "../hooks/hooks"
+import { changeBanner } from "../store/userSlice"
 
 function MyPageContainer(){
+    const dispatch = useAppDispatch();
+    dispatch(changeBanner("마이페이지"));
     return (
         <div className="mypage_container">
             <div className='profile'>

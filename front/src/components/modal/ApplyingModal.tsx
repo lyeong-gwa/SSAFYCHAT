@@ -8,12 +8,20 @@ import { apply } from '../../api/applying';
 function ApplyingModal (props:any){
     const mentoringInfo = useAppSelector(state=>state.applying.selectedMentoring);
 
-    const [date, setDate] = useState(new Date());
+    const [beforeOrAfter, setBeforeOrAfter] = useState("AM");
+    const [date, setDate] = useState(()=>{
+        const curTime = new Date();
+        const curHour = curTime.getHours();
+        if(curHour > 12){
+            curTime.setHours(curHour-12)
+            setBeforeOrAfter("PM");
+        }
+        return curTime;
+    });
+    const [selectedTimes, pushTime] = useState<Date[]>([]);
     const [hour, setHour] = useState((date.getHours()<10?'0':'') + date.getHours());
     const [minute, setMinute] = useState("00");
-    const [beforeOrAfter, setBeforeOrAfter] = useState("AM");
-    const selectedTimes:any = [];
-    
+
     /** 월별 숫자를 영어로 바꾸는 함수 */
     function numToName(month : number){
         switch(month){
@@ -82,8 +90,8 @@ function ApplyingModal (props:any){
     function putTime(){
         date.setHours(parseInt(hour));
         date.setMinutes(parseInt(minute));
-        selectedTimes.push(date);
-        console.log(selectedTimes);
+        /** Date 배열에 삽입 */
+        pushTime([...selectedTimes, new Date(date)]);
     }
 
     /** 신청하는 api 호출*/
@@ -98,8 +106,14 @@ function ApplyingModal (props:any){
             applying,
             (data:any)=>{
                 console.log(data);
+                alert('신청되었습니다.');
+                props.closeModal();
             },
-            (err:any)=>{console.log(err);}
+            (err:any)=>{
+                console.log(err);
+                alert('신청에 실패하였습니다.');
+                props.closeModal();
+            }
           );
     }
 
@@ -148,17 +162,23 @@ function ApplyingModal (props:any){
                                     <div className="select_after_icon" onClick={()=>downBtnClicked()}></div>
                                 </div>
                                 <div className='select_time_btn'>
-                                    <div className='select_time_btn_text' onClick={()=>putTime()}>추가</div>
+                                    <div className='select_time_btn_text' onClick={async ()=>{await putTime()}}>추가</div>
                                 </div>
                             </div>
                         </div>
                         <div className='modal_content_selected_times'>
-                            <div className="selected_time_item">
-                                <div className='selected_time_item_text'>11 : 00</div>
+                            {selectedTimes.map((time)=>{
+                                return <div className="selected_time_item">
+                                <div className='selected_time_item_text'>
+                                    {(time.getHours()<10?'0':'') + time.getHours()}
+                                     : 
+                                    {(time.getMinutes()<10?'0':'') + time.getMinutes()}
+                                </div>
                             </div>
+                            })}
                         </div>
                         <div className='modal_content_selected_belong_job_apply'>
-                            <div className='modal_content_belong'>
+                            <div className='modal_content_belong' onClick={()=>{console.log(selectedTimes)}}>
                                 <div className="modal_content_belong_text">{mentoringInfo.belong}</div> 
                             </div>
                             <div className='modal_content_job'>
