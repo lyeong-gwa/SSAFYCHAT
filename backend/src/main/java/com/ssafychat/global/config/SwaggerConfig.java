@@ -3,10 +3,8 @@ package com.ssafychat.global.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
-import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.ApiKey;
 import springfox.documentation.service.AuthorizationScope;
 import springfox.documentation.service.SecurityReference;
@@ -19,16 +17,7 @@ import java.util.List;
 
 @Configuration
 public class SwaggerConfig {
-//    @Bean
-//    public Docket api() {
-//        return new Docket(DocumentationType.SWAGGER_2).select()
-//                .apis(RequestHandlerSelectors.basePackage("com.ssafychat.domain"))
-//                .paths(PathSelectors.ant("/**")).build().apiInfo(apiInfo());
-//    }
-//
-//    private ApiInfo apiInfo() {
-//        return new ApiInfoBuilder().title("SSAFYCHAT Swaager").description("SSAFYCHAT").version("v1").build();
-//    }
+
     @Bean
     public Docket api() {
         return new Docket(DocumentationType.OAS_30)

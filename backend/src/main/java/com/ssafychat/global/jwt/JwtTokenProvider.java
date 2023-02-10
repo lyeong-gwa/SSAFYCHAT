@@ -12,6 +12,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
@@ -41,7 +42,7 @@ public class JwtTokenProvider {
         byte[] key = null;
         try {
             // charset 설정 안하면 사용자 플랫폼의 기본 인코딩 설정으로 인코딩 됨.
-            key = JWT_TOKEN.getBytes("UTF-8");
+            key = JWT_TOKEN.getBytes(StandardCharsets.UTF_8);
         } catch (Exception e) {
             if (log.isInfoEnabled()) {
                 e.printStackTrace();
@@ -97,10 +98,10 @@ public class JwtTokenProvider {
                 Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
                         .map(SimpleGrantedAuthority::new)
                         .collect(Collectors.toList());
-        UserDetails userDetails = memberDetails.loadUserByUsername(claims.getSubject());
 
         // UserDetails 객체를 만들어서 Authentication 리턴
-//        UserDetails principal = new Member(Integer.parseInt(claims.getSubject()), "", authorities);
+        UserDetails userDetails = memberDetails.loadUserByUsername(claims.getSubject());
+
         return new UsernamePasswordAuthenticationToken(userDetails, "", authorities);
     }
 
@@ -133,7 +134,7 @@ public class JwtTokenProvider {
         // accessToken 남은 유효시간
         Date expiration = Jwts.parser().setSigningKey(this.generateKey()).parseClaimsJws(accessToken).getBody().getExpiration();
         // 현재 시간
-        Long now = new Date().getTime();
+        long now = new Date().getTime();
         return (expiration.getTime() - now);
     }
 }

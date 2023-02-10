@@ -57,7 +57,6 @@ public class MemberServiceImpl implements MemberService {
     public boolean registUser(MemberDto memberInfo) {
         Member checkMember = memberRepository.findByEmail(memberInfo.getEmail());
 
-//        if(checkMember.isEmpty()){
         if(checkMember == null){
             Member registUser = Member.builder().
                     job(memberInfo.getJob()).
@@ -67,10 +66,15 @@ public class MemberServiceImpl implements MemberService {
                     password(bcryptPasswordEncoder.encode(memberInfo.getPassword())).
                     studentNumber(memberInfo.getStudent_number()).
                     social("싸피").
-                    role("role_mentee").
                     build();
             List<String> roleArray = registUser.getRoles();
-            roleArray.add("role_mentee");
+            if (registUser.getJob().equals("")) { // 직무 없으면 멘티
+                roleArray.add("role_mentee");
+                registUser.setRole("role_mentee");
+            } else {
+                roleArray.add("role_mentor");
+                registUser.setRole("role_mentor");
+            }
             registUser.setRoles(roleArray);
             memberRepository.save(registUser);
             return true;
@@ -108,6 +112,7 @@ public class MemberServiceImpl implements MemberService {
         info.put("accessToken", tokenInfo.getAccessToken());
         info.put("refreshToken", tokenInfo.getRefreshToken());
         info.put("name", loginMember.getName());
+        info.put("role", loginMember.getRole());
         return info;
     }
 
