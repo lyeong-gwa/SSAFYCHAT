@@ -1,7 +1,8 @@
 import { Route,Routes } from "react-router"
 import Login from "../components/user/Login"
 import Join from "../components/user/Join"
-function BannerPage (){
+
+function UserPage (){
     return(
         <div>
             <Routes>
@@ -12,4 +13,4 @@ function BannerPage (){
     )
 }
 
-export default BannerPage
+export default UserPage

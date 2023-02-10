@@ -35,7 +35,7 @@ export const MentoringSlice = createSlice({
     },
     getReservation: ()=>{
         
-    }
+    },
   }
 })
 

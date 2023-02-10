@@ -7,12 +7,14 @@ import counterReducer from './counterSlice'
 import applyingReducer from './applyingSlice'
 import userReducer from './userSlice'
 import mentoringReducer from './mentoringSlice'
+import rollingReducer from './rollingSlice'
 
 const reducers = combineReducers ({
   counter: counterReducer,
   applying: applyingReducer,
   user: userReducer,
   mentoring: mentoringReducer,
+  rolling: rollingReducer,
 })
 
 const persistConfig = {

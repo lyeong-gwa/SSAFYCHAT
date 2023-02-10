@@ -3,7 +3,7 @@ import TextBox from "../../widget/InputTextBox";
 import {Link, useNavigate} from 'react-router-dom';
 import {useState} from 'react';
 import { useAppSelector, useAppDispatch } from '../../hooks/hooks'
-import { changeIsLogin, appendEmail, appendName, appendUserId } from "../../store/userSlice";
+import { changeIsLogin, appendEmail, appendName, appendUserId, appendRole } from "../../store/userSlice";
 import { login } from "../../api/user";
 import jwt_decode from "jwt-decode";
 
@@ -39,6 +39,7 @@ function Login(props: any){
                         dispatch(appendEmail(userId));
                         dispatch(appendUserId(decoded.user_id));
                         dispatch(appendName(data.data.name));
+                        dispatch(appendRole(data.data.role));
                         navigate("/");
                     }
                 },

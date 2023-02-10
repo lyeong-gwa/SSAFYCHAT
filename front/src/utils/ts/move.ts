@@ -124,10 +124,12 @@ function dragCard(event : any, elemClassName : string, containerClassName : stri
 // 확대 축소에도 제자리에 있게 하자
 function dragRoll(event : any, elemClassName : string, containerClassName : string, isEnterCheck : boolean, startFunc : any){
     // 받아온 시작할때 하고 싶은 코드들을 넣은 함수 실행
-    startFunc();
+    // startFunc();   
 
+    // react 최상위 요소 가져오기
+    // const rootDiv = document.getElementsByClassName("App")[0];
+    const rootDiv = document.getElementById("root");
     // 요소 가져오기
-    const rootDiv = document.getElementsByClassName("App")[0];
     let elem = event.target;
     
     // 마우스 위치 저장할 변수
@@ -141,6 +143,8 @@ function dragRoll(event : any, elemClassName : string, containerClassName : stri
 
     // 카드 아우터 요소를 가져오기
     const outer = elem.parentElement;
+
+    //컨테이너 관련 변수
     // 카드 컨테이너 요소를 가져오기
     const container : any = document.getElementsByClassName(containerClassName)[0];
     // 대상 컨테이너의 위치 구하기 (좌상포인트)
@@ -150,8 +154,16 @@ function dragRoll(event : any, elemClassName : string, containerClassName : stri
     const conW = container.offsetWidth;
     const conH = container.offsetHeight;
 
+
+    ///////////////////////////////////////////////////////////
+    // app의 위치를 구해서 마지막에 계산해서 container에 넣자
+    //////////////////////////////////////////////////////////
+
+
     // 컨테이너의 자식으로
-    container.append(elem);
+    if(rootDiv){
+        rootDiv.append(elem);
+    }
 
     // 카드가 이동가능하게 만들기
     elem.style.position = 'absolute';
@@ -162,7 +174,19 @@ function dragRoll(event : any, elemClassName : string, containerClassName : stri
     function moveAt(pageX : number,pageY : number){
         elem.style.left = pageX - elem.offsetWidth / 2 + 'px';
         elem.style.top = pageY - elem.offsetHeight / 2 + 'px';
-        console.log(elem.style.left);
+
+        // 페이퍼 밖으로 마우스가 나가기 전까지는 종이 위치 고정
+        if(pageX - elem.offsetWidth / 2  < conLeft && pageX - elem.offsetWidth / 2  - conLeft > -elem.offsetWidth / 2){
+            elem.style.left = conLeft  + "px";
+        }
+        if(pageY - elem.offsetHeight / 2  < conTop && pageY - elem.offsetHeight / 2  - conTop > -elem.offsetHeight / 2){
+            elem.style.top = conTop  + "px";
+        }
+        if(conLeft + conW < pageX + elem.offsetWidth / 2 && conLeft + conW - (pageX + elem.offsetWidth / 2) > -elem.offsetWidth / 2){
+            elem.style.left = conLeft + conW - elem.offsetWidth + "px";            
+        }if(conTop + conH < pageY + elem.offsetHeight / 2 && conTop + conH - (pageY + elem.offsetHeight / 2) > -elem.offsetWidth / 2){
+            elem.style.top = conTop + conH - elem.offsetHeight + "px";            
+        }
     }
 
     // 처음 클릭했을 때 마우스위치로 이동
@@ -178,7 +202,9 @@ function dragRoll(event : any, elemClassName : string, containerClassName : stri
     }
 
     // 마우스가 움직이면 함수 호출
-    document.addEventListener('mousemove', onMouseMove);
+    if(rootDiv){
+        rootDiv.addEventListener('mousemove', onMouseMove);
+    }
     if(!isEnterCheck){
         container.onmouseleave = function(){
             if(!(conTop < mY && mY < conTop + conH && conLeft < mX && mX < conLeft + conW )){            
@@ -214,18 +240,41 @@ function dragRoll(event : any, elemClassName : string, containerClassName : stri
                     // **********************
                     // 이 곳에 기능을 넣어야 함
                     // **********************
-                    elem.style.left = mX;
-                    elem.style.top = mY;
+                    container.append(elem);
+                    // 마우스 위치에서 컨테이너의 위치를 빼고 조정값을 빼주어 위치 지정
+                    elem.style.left = mX - conLeft - 174  + "px";
+                    elem.style.top = mY - conTop - 48 + "px";        
+                    
+                    // const elemTop = elem.getBoundingClientRect().top;
+                    // const elemLeft = elem.getBoundingClientRect().left;
+
+                    // 페이퍼 밖으로 쪽지가 나가면 안으로 들인다.
+                    // if(elemLeft  < conLeft){
+                    //     elem.style.left = conLeft  + "px";
+                    // }
+                    // if(elemTop < conTop){
+                    //     elem.style.top = conTop  + "px";
+                    // }
+                    // if(conLeft + conW < elemLeft + elem.offsetWidth){
+                    //     elem.style.left = conLeft + conW - elem.offsetWidth + "px";            
+                    // }if(conTop + conH < elemTop + elem.offsetHeight){
+                    //     elem.style.top = conTop + conH - elem.offsetHeight + "px";            
+                    // }
+
                 }
-                else{                    
+                else{            
+                    // *************************
+                    // 이 곳에 기능을 넣어야 함
+                    // *************************        
                     elem.remove();                
                 }
             }
             else{                
                 elem.remove();
             }
-
-            document.removeEventListener('mousemove',onMouseMove);
+            if(rootDiv){
+                rootDiv.removeEventListener('mousemove',onMouseMove);
+            }
             elem.onmouseup = null;
             // outer.append(elem);
             

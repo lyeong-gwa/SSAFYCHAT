@@ -2,11 +2,12 @@ import "../styles/container/video-conference-container.css"
 import io from 'socket.io-client';
 import { useNavigate } from "react-router";
 import { useAppSelector } from "../hooks/hooks";
-import {chatMessage} from "../api/chatting"
+import {chatMessage, chatLog} from "../api/chatting"
 function test(userinfo:any){
 
+const mentoringid= 20;
+const userid = 1;
 const socket = io(process.env.REACT_APP_SOCKET as string,{path: "/socket.io",transports:["websocket"]});
-
 const myFace = document.getElementById("myFace") as HTMLMediaElement;
 const muteBtn = document.getElementById("mute") as HTMLButtonElement;
 const cameraBtn = document.getElementById("camera") as HTMLVideoElement;
@@ -14,19 +15,26 @@ const camerasSelect = document.getElementById("cameras") as HTMLSelectElement;
 const call = document.getElementById("call") as HTMLDivElement;
 const chattinginput = document.getElementById("video_conference_chat_input") as HTMLInputElement;
 let chattinglog: { user_id: any; message: string; Date: number; }[] = [];
+
+chatLog(mentoringid,(chatlog:any)=>{
+                    chattinglog=chatlog.data.log;
+                    },(err:any)=>{
+                        console.log(err);
+                    }
+                );
+
 chattinginput.addEventListener("keyup",function (event) {
     if (event.keyCode === 13) {
-        const senddata = {"chat_id": 15,"user_id":userinfo,"message":this.value,"Date": Date.now()};
-        myDataChannel.send(JSON.stringify(senddata));
-        chattinglog.push(senddata);
-        console.log(chattinglog);
+        const senddata = {"chat_id": mentoringid,"user_id":userid,"message":this.value,"Date": Date.now()};
         this.value = "";
 
         //몽고DB에 senddata + chat_id를 추가해서 전달
         chatMessage(
             senddata,
             (data:any)=>{
-                console.log(data);
+                myDataChannel.send(JSON.stringify(senddata));
+                chattinglog.push(senddata);
+                console.log(chattinglog);
             },
             (err:any)=>{console.log(err);}
           );
@@ -169,7 +177,11 @@ welcomeForm?.addEventListener("submit", handleWelcomeSubmit);
 socket.on("welcome", async () => {
     //데이터채널 생성 최초생성자
     myDataChannel = myPeerConnection.createDataChannel("chat");
-    myDataChannel.addEventListener("message", (event : any) => console.log(event.data));
+    myDataChannel.addEventListener("message", (event : any) =>{
+        chattinglog.push(JSON.parse(event.data));
+        console.log(chattinglog);
+        }
+    );
     console.log("made data channel");
 
     const offer = await myPeerConnection.createOffer();
@@ -184,7 +196,7 @@ socket.on("offer", async (offer) => {
         myDataChannel = event.channel;
         myDataChannel.addEventListener("message", (event : any) =>{
             chattinglog.push(JSON.parse(event.data));
-            console.log(JSON.parse(event.data));
+            console.log(chattinglog);
             }
         );
     });
@@ -225,7 +237,7 @@ function handleIce(data : any) {
 }
 
 function handleAddStream(data : any) {
-    console.log("peer가 보낸 이벤트(스트림)-> 이걸로 나랑 연락할 수 있어", data);
+    console.log("stream : ", data);
     const peerFace = document.getElementById("peerFace") as HTMLVideoElement;
     if(peerFace != null){
         peerFace.srcObject = data.stream;

@@ -10,6 +10,18 @@ app.use(express.urlencoded({ extended: false }));
 app.get("/chat",(request,response)=>{
     response.send("8000 alive");
 });
+
+app.get("/chat/:chat_id",async(request,response)=>{
+    const chat_id = request.params.chat_id;
+    await chatting.findOne({"chat_id":chat_id}).then((data)=>{
+        response.status(200);
+        response.send({"log":data.content});
+    }).catch((error)=>{ //몽고디비에서 없으면 이쪽으로 넘어감
+        response.status(200);
+        response.send({"log":[]});
+    });
+});
+
 app.post("/chat", async(request, response)=>{
         const chat_id = request.body.chat_id;
         const user_id = request.body.user_id;
@@ -32,7 +44,7 @@ app.post("/chat", async(request, response)=>{
         }
         response.status(200);
         
-        response.send("success");
+        response.send({"message":"success"});
 });
 
 

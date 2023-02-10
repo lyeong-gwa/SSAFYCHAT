@@ -2,7 +2,6 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 32px 24px 24px;
     width: 300px;
 
     margin: 10px auto;
@@ -39,4 +38,25 @@
     line-height: 40px;
 
     color: #000000;
+}
+
+.sticky_purple{ 
+    padding: 32px 24px 24px;
+    background-color: #B388FF;
+}
+.sticky_green{  
+    padding: 32px 24px 24px;
+    background-color: #CCFF90;
+}
+.sticky_red{   
+    padding: 32px 24px 24px;
+    background-color: #FF8A80;
+}
+.sticky_yellow{   
+    padding: 32px 24px 24px;
+    background-color: #FFFF8D;
+}
+.sticky_blue{   
+    padding: 32px 24px 24px;
+    background-color: #A0AFFF;
 }

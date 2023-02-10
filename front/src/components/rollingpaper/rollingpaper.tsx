@@ -2,6 +2,7 @@ import "../../styles/components/rollingpaper/rollingpaper.css";
 // import Sticky from "../../widget/Sticky";
 import RollingCardList from "./RollingCardList";
 import { useState } from "react";
+import Sticky from "../../widget/Sticky";
 
 
 
@@ -10,6 +11,11 @@ function RollingPaper() {
     const imgUrlclean = "/img/clean.png"
     const imgUrlsave = "/img/save.png"
     const[clickBtn, setClickBtn] = useState(false);
+    const colorClassList =["sticky_purple","sticky_green","sticky_red","sticky_yellow","sticky_blue"];
+    const list = [];
+    for(let i = 0; i < 6; ++i){
+        list.push(<Sticky key={i} colorClass = {colorClassList[i % colorClassList.length]} closeList={()=>setClickBtn(false)} text="길지 않은 멘토링 시간 동안, 좋은 정보들을 제공해주신 멘토님 감사드립니다. 이번 채용 공고에 지원해서 꼭 같은 부서에서 만날 수 있었으면 좋겠습니다. 연락드리겠습니다!"></Sticky>);
+    }
     return (
         <div className="rcontainer">
             <div className="dashboard">
@@ -35,7 +41,7 @@ function RollingPaper() {
                 <div className="dashboard_main">
                 {/* 버튼을 클릭하면 */}
                 {clickBtn && (
-                    <RollingCardList closeList={()=>setClickBtn(false)}></RollingCardList>
+                    <RollingCardList props={list} closeList={()=>setClickBtn(false)}></RollingCardList>
                 )}  
                     {/* 롤링페이퍼 컨텐츠가 올 공간 입니다. */}
                 </div>

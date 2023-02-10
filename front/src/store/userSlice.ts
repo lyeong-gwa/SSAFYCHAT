@@ -5,6 +5,7 @@ interface UserState{
     email: string,
     name: string,
     userId: string,
+    role: string,
     isLogin: boolean,
     userInfo: any,
 }
@@ -13,6 +14,7 @@ const initialState: UserState = {
     email: "",
     name: "",
     userId: "",
+    role: "",
     isLogin: false,
     userInfo: null,
 }
@@ -33,10 +35,13 @@ export const UserSlice = createSlice({
         appendUserId: (state, action: PayloadAction<string>) => {
             state.userId = action.payload;
         },
+        appendRole: (state, action: PayloadAction<string>) => {
+            state.role = action.payload;
+        }
     }
 })
 
-export const { changeIsLogin, appendEmail, appendName, appendUserId } = UserSlice.actions;
+export const { changeIsLogin, appendEmail, appendName, appendUserId, appendRole } = UserSlice.actions;
 
 export const selectCount = (state: RootState) => state.user
 
