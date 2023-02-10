@@ -22,6 +22,25 @@ app.get("/chat/:chat_id",async(request,response)=>{
     });
 });
 
+app.delete("/chat",async(request,response)=>{
+    const chat_id = request.body.chat_id;
+    const user_id = request.body.user_id;
+    const message = request.body.message;
+    const date = request.body.Date;
+    const obj_message = { "user_id" : user_id, "message": message, "Date" : date};
+    console.log(obj_message);
+    await chatting.updateOne(
+            { "chat_id" : chat_id },
+            { $pull: { content: obj_message } }
+        ).then(()=>{
+        response.status(200);
+        response.send({"message":"success"});
+    }).catch((error)=>{ 
+        response.status(500);
+        response.send({"message":"fail"});
+    });
+});
+
 app.post("/chat", async(request, response)=>{
         const chat_id = request.body.chat_id;
         const user_id = request.body.user_id;
@@ -43,7 +62,6 @@ app.post("/chat", async(request, response)=>{
             }
         }
         response.status(200);
-        
         response.send({"message":"success"});
 });
 
@@ -76,3 +94,4 @@ wsServer.on("connection", (socket) => {
 });
 
 httpServer.listen(8000,handleListen);
+
