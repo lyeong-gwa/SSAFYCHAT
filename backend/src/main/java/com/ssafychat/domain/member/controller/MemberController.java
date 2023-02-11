@@ -23,7 +23,7 @@ public class MemberController {
 
     @GetMapping("/")
     public ResponseEntity<?> aliveCheck() {
-        return new ResponseEntity<String>("Alive", HttpStatus.OK);
+        return new ResponseEntity<>("Alive", HttpStatus.OK);
     }
 
     @GetMapping("/mentoring-infos") // 프로필, 매칭 멘토링, 완료 멘토링
@@ -37,7 +37,7 @@ public class MemberController {
     @GetMapping("/registinfo")
     public ResponseEntity<?> socialRegist() {
 
-        return new ResponseEntity<String>("registinfo", HttpStatus.OK);
+        return new ResponseEntity<>("registinfo", HttpStatus.OK);
     }
 
     @GetMapping("/user-info")
@@ -48,7 +48,7 @@ public class MemberController {
     }
     @GetMapping("/login/{social}")
     public ResponseEntity<?> socialLogin(@PathVariable("social") String social) {
-        return new ResponseEntity<String>("social:"+social, HttpStatus.OK);
+        return new ResponseEntity<>("social:"+social, HttpStatus.OK);
     }
 
 }

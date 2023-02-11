@@ -13,7 +13,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
-import java.sql.Timestamp;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -48,11 +49,16 @@ public class MentoringController {
 
     @PostMapping("/apply")
     @Transactional
-    public ResponseEntity<String> applyMentoring(@RequestBody ApplyMentoringDto applyMentoringDto, HttpServletRequest request) {
+    public ResponseEntity<?> applyMentoring(@RequestBody ApplyMentoringDto applyMentoringDto, HttpServletRequest request) {
         Member mentee = (Member) request.getAttribute("USER");
-        // 서비스에 user와 applyMentoringDto(job, company, times) 넘긴다.
-        mentoringService.insertApplyMentoringAndMentoringDate(mentee, applyMentoringDto);
-        return new ResponseEntity<>("apply", HttpStatus.CREATED);
+        Map<String,String> response = new HashMap<>();
+        try {
+            mentoringService.insertApplyMentoringAndMentoringDate(mentee, applyMentoringDto);
+            response.put("message", "success");
+        } catch (Exception e) {
+            response.put("message", "fail");
+        }
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @GetMapping("/reservation")
@@ -62,16 +68,13 @@ public class MentoringController {
         int userId = user.getUserId();
 
         List<ApplyMentoringViewDto> appliedMentoringList = mentoringService.getApplyMentoringList(userId);
-
         List<MentoringListForMenteeDto> matchedMentoringList = mentoringService.getMatchedMentoringList(userId);
-
         List<CanceledMentoringListDto> canceledMentoringListForMentee = mentoringService.getCancledMentoringList(userId);
 
         CheckMentoringReservationForMenteeDto checkMentoringListForMentee =
                 CheckMentoringReservationForMenteeDto.builder()
                         .appliedList(appliedMentoringList).matchedList(matchedMentoringList)
                                 .cancledList(canceledMentoringListForMentee).build();
-
 
         return new ResponseEntity<>(checkMentoringListForMentee, HttpStatus.OK);
     }
@@ -81,35 +84,46 @@ public class MentoringController {
     public ResponseEntity<?> appointmentCancel(@RequestBody CancelReasonDto cancelReasonDto, HttpServletRequest request) {
         Member user = (Member) request.getAttribute("USER");
         int userId = user.getUserId();
-        // 멘토링 테이블에서 delete하면서 멘토링 정보 반환
-        Mentoring mentoring = mentoringService.deleteMentoring(cancelReasonDto.getMentoringId());
-        // 멘토링 취소 테이블에 insert (멘토링 테이블 정보 + reaseon, canceler)
-        mentoringService.insertCancelMentoring(userId, cancelReasonDto.getReason(), mentoring);
-
-        return new ResponseEntity<>("cancel/appointment", HttpStatus.OK);
+        Map<String,String> response = new HashMap<>();
+        try {
+            // 멘토링 테이블에서 delete하면서 멘토링 정보 반환
+            Mentoring mentoring = mentoringService.deleteMentoring(cancelReasonDto.getMentoringId());
+            // 멘토링 취소 테이블에 insert (멘토링 테이블 정보 + reaseon, canceler)
+            mentoringService.insertCancelMentoring(userId, cancelReasonDto.getReason(), mentoring);
+            response.put("message", "success");
+        } catch (Exception e) {
+            response.put("message", "fail");
+        }
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @DeleteMapping("/cancel/matched-reservation")
     @Transactional
     public ResponseEntity<?> matchedReservationCancel(@RequestBody CancelReasonDto cancelReasonDto, HttpServletRequest request) {
-        //멘토 멘티여부 검증 추가 필요
         Member user = (Member) request.getAttribute("USER");
         int userId = user.getUserId();
-        
-        Mentoring mentoring = mentoringService.deleteMentoring(cancelReasonDto.getMentoringId());
-
-        mentoringService.insertCancelMentoring(userId, cancelReasonDto.getReason(), mentoring);
-                
-        return new ResponseEntity<>("cancel/matched-reservation", HttpStatus.OK);
+        Map<String,String> response = new HashMap<>();
+        try {
+            Mentoring mentoring = mentoringService.deleteMentoring(cancelReasonDto.getMentoringId());
+            mentoringService.insertCancelMentoring(userId, cancelReasonDto.getReason(), mentoring);
+            response.put("message", "success");
+        } catch (Exception e) {
+            response.put("message", "fail");
+        }
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
     @DeleteMapping("/cancel/reservation")
-    @Transactional
     public ResponseEntity<?> reservationCancel(HttpServletRequest request, @RequestBody MentoringDateDto mentoringDateDto) {
         Member user = (Member) request.getAttribute("USER");
         int applyMentoringId = mentoringDateDto.getApplyMentoringId();
-        mentoringService.deleteApplyMentoring(applyMentoringId);
-
-        return new ResponseEntity<>("cancel/reservation", HttpStatus.OK);
+        Map<String,String> response = new HashMap<>();
+        try {
+            mentoringService.deleteApplyMentoring(applyMentoringId);
+            response.put("message", "success");
+        } catch (Exception e) {
+            response.put("message", "fail");
+        }
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
     @GetMapping("/appointment") // 멘토에게 들어온 멘토링 목록, 매칭된 멘토링 목록
     public ResponseEntity<?> appointmentSearch(HttpServletRequest request) {
@@ -120,10 +134,8 @@ public class MentoringController {
 
         // 예약 정보 받아오기
         List<ApplyMentoringForMentorDto> applyList = mentoringService.getApplyMentoringListForMentor(userId);
-
         // 매칭 정보 받아오기
         List<MatchMentoringForMentorDto> matchList = mentoringService.getMatchMentoringListForMentor(userId);
-
         // MentoringListForMentorDto에 두 List 담아서 반환
         MentoringListForMentorDto list = MentoringListForMentorDto.builder().applys(applyList).matches(matchList).build();
         return new ResponseEntity<>(list, HttpStatus.OK);
@@ -131,20 +143,23 @@ public class MentoringController {
     @PostMapping("/appointment") // apply_mentoring_id에 해당하는 멘토링 요청을 수락처리
     @Transactional
     public ResponseEntity<?> appointmentAccept(HttpServletRequest request, @RequestBody MentoringDateDto mentoringDateDto) {
-        // 프론트 헤더로 userId 받아온다.
         Member user = (Member) request.getAttribute("USER");
         int userId = user.getUserId();
-        // 프론트 body로 apply_mentoring_id 와 time 정보 받아온다. MentoringDateDto에 둘다 있음
         int applyMentoringId = mentoringDateDto.getApplyMentoringId();
-        Timestamp time = mentoringDateDto.getTime();
-        // mentoring_date 테이블에서 삭제한다.
-        mentoringService.deleteMentoringDate(applyMentoringId);
-        // apply_mentoring 테이블에서 삭제하면서 apply_mentoring정보 반환 받는다.
-        ApplyMentoring applyMentoring = mentoringService.deleteApplyMentoring(applyMentoringId);
-        // mentoring 테이블에 넣는다.
-        Mentoring mentoring = mentoringService.insertMentoring(userId, applyMentoring, time);
-
-        return new ResponseEntity<>(mentoring, HttpStatus.OK);
+        Date time = mentoringDateDto.getTime();
+        Map<String,String> response = new HashMap<>();
+        try {
+            // mentoring_date 테이블에서 삭제한다.
+            mentoringService.deleteMentoringDate(applyMentoringId);
+            // apply_mentoring 테이블에서 삭제하면서 apply_mentoring정보 반환 받는다.
+            ApplyMentoring applyMentoring = mentoringService.deleteApplyMentoring(applyMentoringId);
+            // mentoring 테이블에 넣는다.
+            mentoringService.insertMentoring(userId, applyMentoring, time);
+            response.put("message", "success");
+        } catch (Exception e) {
+            response.put("message", "fail");
+        }
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
     @GetMapping("/review")
     public ResponseEntity<?> getReviewRollingPaper(HttpServletRequest request) {
@@ -161,30 +176,41 @@ public class MentoringController {
 
     @PostMapping("/review")
     public ResponseEntity<?> postReviewAndScore(@RequestBody ReviewAndScoreDto reviewAndScoreDto) {
-        // 후기 입력해서 completeMentoring update
-        mentoringService.addReviewAndScore(reviewAndScoreDto);
-        return new ResponseEntity<>("review and score", HttpStatus.OK);
+        Map<String,String> response = new HashMap<>();
+        try {
+            mentoringService.addReviewAndScore(reviewAndScoreDto);
+            response.put("message", "success");
+        } catch (Exception e) {
+            response.put("message", "fail");
+        }
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
     @PostMapping("/report")
     public ResponseEntity<?> postReport(HttpServletRequest request, @RequestBody Map<String, String> report) {
         int completeMentoringId = Integer.parseInt(report.get("completeMentoringId"));
         String reason = report.get("reason");
         Member reporter = (Member) request.getAttribute("USER");
-
-        mentoringService.reportBadUser(reporter, completeMentoringId, reason);
-        return new ResponseEntity<>("report", HttpStatus.OK);
+        Map<String,String> response = new HashMap<>();
+        try {
+            mentoringService.reportBadUser(reporter, completeMentoringId, reason);
+            response.put("message", "success");
+        } catch (Exception e) {
+            response.put("message", "fail");
+        }
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping("/complete") // 멘토링 정상 완료. 비정상 완료는 도커에서 mysql 스케줄러로
     @Transactional
     public ResponseEntity<?> completeMentoring(@RequestBody MentoringDto mentoringDto) {
-
-        // 멘토링 테이블에서 delete하면서 멘토링 정보 반환
-        Mentoring mentoring = mentoringService.deleteMentoring(mentoringDto.getMentoringId());
-
-        // 멘토링 완료 테이블에 insert (멘토링 테이블 정보 + completed 1)
-        mentoringService.insertCompleteMentoring(mentoring);
-
-        return new ResponseEntity<>("complete", HttpStatus.OK);
+        Map<String,String> response = new HashMap<>();
+        try {
+            Mentoring mentoring = mentoringService.deleteMentoring(mentoringDto.getMentoringId());
+            mentoringService.insertCompleteMentoring(mentoring);
+            response.put("message", "success");
+        } catch (Exception e) {
+            response.put("message", "fail");
+        }
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

@@ -16,7 +16,6 @@ public class MemberDetailsImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
-        System.out.println("loadUserByUsername " + userId);
         if (userId.contains("@")){
             return memberRepository.findByEmail(userId);
         }

@@ -6,14 +6,12 @@ import com.ssafychat.domain.mentoring.dto.*;
 import com.ssafychat.domain.mentoring.model.ApplyMentoring;
 import com.ssafychat.domain.mentoring.model.Mentoring;
 
-import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 public interface MentoringService {
 
     List<Mentoring> findMentoring();
-
-    void applyMentoring(ApplyMentoring applyMentoring);
 
     List<PossibleMentoringDto> getPossibleMentoringList(String job, String company);
 
@@ -22,7 +20,7 @@ public interface MentoringService {
 
     int deleteMentoringDate(int applyMentoringId);
     ApplyMentoring deleteApplyMentoring(int applyMentoringId);
-    Mentoring insertMentoring(int userId, ApplyMentoring applyMentoring, Timestamp time);
+    Mentoring insertMentoring(int userId, ApplyMentoring applyMentoring, Date time);
 
     Mentoring deleteMentoring(int mentoringId);
     void insertCancelMentoring(int canceler, String reason, Mentoring mentoring);
