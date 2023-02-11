@@ -213,7 +213,6 @@ public class MentoringServiceImpl implements MentoringService {
         for (CompleteMentoring completeMentoring : completeMentorings) {
             RollingPaperDto rollingPaper = RollingPaperDto.builder()
                     .completeMentoringId(completeMentoring.getCompleteMentoringId())
-                    .reviewTitle(completeMentoring.getReviewTitle())
                     .reviewContent(completeMentoring.getReviewContent())
                     .reviewHeight(completeMentoring.getReviewHeight())
                     .reviewWidth(completeMentoring.getReviewWidth())
@@ -237,7 +236,6 @@ public class MentoringServiceImpl implements MentoringService {
     @Override
     public void addReviewAndScore(ReviewAndScoreDto reviewAndScoreDto) {
         CompleteMentoring completeMentoring = completeMentoringRepository.findByCompleteMentoringId(reviewAndScoreDto.getCompleteMentoringId());
-        completeMentoring.setReviewTitle(reviewAndScoreDto.getReviewTitle());
         completeMentoring.setReviewContent(reviewAndScoreDto.getReviewContent());
         completeMentoring.setScore(reviewAndScoreDto.getScore());
         completeMentoringRepository.save(completeMentoring);

@@ -9,6 +9,5 @@ public class ReviewAndScoreDto {
 
     private int completeMentoringId;
     private int score;
-    private String reviewTitle;
     private String reviewContent;
 }

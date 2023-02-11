@@ -41,8 +41,6 @@ public class CompleteMentoring {
     @Column(columnDefinition = "int default '3'")
     private int score;
 
-    private String reviewTitle;
-
     @Column(columnDefinition = "TEXT")
     private String reviewContent;
 

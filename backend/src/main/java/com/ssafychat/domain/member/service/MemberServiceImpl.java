@@ -95,19 +95,20 @@ public class MemberServiceImpl implements MemberService {
             return info;
         }
 
-        // 1. Login ID/PW 를 기반으로 Authentication 객체 생성
-        // 이때 authentication 는 인증 여부를 확인하는 authenticated 값이 false
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(email, password);
 
         try {
-            // 2. 실제 검증 (사용자 비밀번호 체크)이 이루어지는 부분
-            // authenticate 매서드가 실행될 때 CustomUserDetailsService 에서 만든 loadUserByUsername 메서드가 실행
+            // email, password로 Authentication 객체 생성
+            // authentication은 인증 여부를 확인하는 authenticated 값이 false
+            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(email, password);
+            // 검증 (비밀번호 체크)
+            // authenticate 매서드가 실행될 때 MemberDetailsService의 loadUserByUsername 실행
             Authentication authentication = authenticationManager.authenticate(authenticationToken);
-            // 3. 인증 정보를 기반으로 JWT 토큰 생성
+            // JWT 토큰 생성
             TokenInfoDto tokenInfo = jwtTokenProvider.generateToken(authentication);
-            // 4. RefreshToken Redis 저장 (expirationTime 설정을 통해 자동 삭제 처리)
+            // RefreshToken Redis 저장 (expirationTime 설정을 통해 자동 삭제 처리)
             redisTemplate.opsForValue()
                     .set("RT:" + authentication.getName(), tokenInfo.getRefreshToken(), tokenInfo.getRefreshTokenExpirationTime(), TimeUnit.MILLISECONDS);
+
             info.put("accessToken", tokenInfo.getAccessToken());
             info.put("refreshToken", tokenInfo.getRefreshToken());
             info.put("name", loginMember.getName());
@@ -124,31 +125,32 @@ public class MemberServiceImpl implements MemberService {
 
         Map<String, String> response = new HashMap<>();
 
-        // 1. Refresh Token 검증
+        // Refresh Token 검증
         if (!jwtTokenProvider.validateToken(reissue.getRefreshToken())) {
             log.error("Refresh Token 정보가 유효하지 않습니다.");
             response.put("message", "Refresh Token 정보가 유효하지 않습니다.");
             return response;
         }
 
-        // 2. Access Token 에서 userId 을 가져옵니다.
+        // Access Token에서 userId 가져오기
         Authentication authentication = jwtTokenProvider.getAuthentication(reissue.getAccessToken());
 
-        // 3. Redis 에서 userId 을 기반으로 저장된 Refresh Token 값을 가져옵니다.
+        // Redis에서 userId로 저장된 Refresh Token 값 가져오기
         String refreshToken = (String)redisTemplate.opsForValue().get("RT:" + authentication.getName());
-        // 로그아웃되어 Redis 에 RefreshToken 이 존재하지 않는 경우 처리
+        // 로그아웃되어 Redis에 Refresh Token이 없는 경우
         if(ObjectUtils.isEmpty(refreshToken)) {
             log.error("Refresh Token 정보가 유효하지 않습니다.");
             response.put("message", "Refresh Token 정보가 유효하지 않습니다.");
             return response;
         }
+        // Refresh Token이 일치하지 않는 경우
         if(!refreshToken.equals(reissue.getRefreshToken())) {
             log.error("Refresh Token 정보가 일치하지 않습니다.");
             response.put("message", "Refresh Token 정보가 일치하지 않습니다.");
             return response;
         }
 
-        // 4. 새로운 토큰 생성
+        // 새로운 토큰 생성
         TokenInfoDto tokenInfo = jwtTokenProvider.generateToken(authentication);
 
         response.put("accessToken", tokenInfo.getAccessToken());
@@ -170,23 +172,23 @@ public class MemberServiceImpl implements MemberService {
         }
         String accessToken = bearerToken.substring(7);
 
-        // 1. Access Token 검증
+        // Access Token 검증
         if (!jwtTokenProvider.validateToken(accessToken)) {
             log.error("잘못된 요청입니다.");
             response.put("message", "잘못된 요청입니다.");
             return response;
         }
 
-        // 2. Access Token 에서 User id을 가져옵니다.
+        // Access Token에서 UserId 가져오기
         Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
 
-        // 3. Redis 에서 해당 User id 로 저장된 Refresh Token 이 있는지 여부를 확인 후 있을 경우 삭제합니다.
+        // Redis에서 해당 UserId로 저장된 Refresh Token이 있는지 확인 후 있을 경우 삭제
         if (redisTemplate.opsForValue().get("RT:" + authentication.getName()) != null) {
             // Refresh Token 삭제
             redisTemplate.delete("RT:" + authentication.getName());
         }
 
-        // 4. 해당 Access Token 유효시간 가지고 와서 BlackList 로 저장
+        // 해당 Access Token 유효시간 가지고 와서 BlackList로 저장
         Long expiration = jwtTokenProvider.getExpiration(accessToken);
         redisTemplate.opsForValue()
                 .set(accessToken, "logout", expiration, TimeUnit.MILLISECONDS);
