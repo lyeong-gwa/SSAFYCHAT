@@ -68,32 +68,25 @@ function Join(){
 
 
     const handleStateId = (data: any) => {
-        console.log(data.target.value);
         setEmail(data.target.value);
     }
     const handleStatePassword = (data: any) => {
-        console.log(data.target.value);
         setPassword(data.target.value);
     }
     const handleStateBelong = (data: any) => {
         if(userBelong===''){
-            console.log(data.target.value);
             setUserBelong("SSAFY");
         }else{
-            console.log(data.target.value);
             setUserBelong(data.target.value);
         }      
     }
     const handleStateStudentNumber = (data: any) => {
-        console.log(data.target.value);
         setStudentNumber(data.target.value);
     }
     const handleStateName = (data: any) => {
-        console.log(data.target.value);
         setUserName(data.target.value);
     }
     const handleStateUserJob = (data: any) => {
-        console.log(data.target.value);
         setUserJob(data.target.value);
     }
 

@@ -44,7 +44,7 @@ function localServer() {
         }
       );
       sessionStorage.setItem('access-token', data.accessToken);
-      // console.log(sessionStorage.getItem('access-token'));
+      console.log(sessionStorage.getItem('access-token'));
 
       if (refreshToken !== null) {
         sessionStorage.setItem('refresh-token', refreshToken);

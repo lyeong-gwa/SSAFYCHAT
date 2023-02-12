@@ -1,6 +1,15 @@
 import { createSlice, /*PayloadAction*/ } from '@reduxjs/toolkit'
 import type { RootState } from './store'
 
+
+interface AppliedInfo{
+    applyMentoringId: number,
+    menteeUid: number,
+    job: string,
+    company: string,
+    times:Array<string>,
+}
+
 interface ReservedInfo{
     date : string,
     name : string,
@@ -9,9 +18,18 @@ interface ReservedInfo{
     job : string,
 }
 
+interface CanceledInfo{
+    cancelMentoringId : number,
+    job: string,
+    company: string,
+    time: string
+}
+
 // Define a type for the slice state
 interface ReservedState {
     reservedMentorings: Array<ReservedInfo>,
+    appliedMentorings: Array<AppliedInfo>,
+    canceledInfo: Array<CanceledInfo>,
 }
 
 // Define the initial state using that type
@@ -24,7 +42,13 @@ const initialState: ReservedState = {
         email : "api로하고삭제",
         job : "제거할것",
       }
-    ]
+    ],
+    appliedMentorings:[
+
+    ],
+    canceledInfo:[
+
+    ],
 }
 
 export const MentoringSlice = createSlice({

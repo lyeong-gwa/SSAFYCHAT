@@ -2,7 +2,7 @@ import "../styles/container/mentor-reservation-container.css"
 import CardList from "../components/common/CardList";
 import ReservedList from "../components/mentoring/ReservedList";
 import { dragCard } from "../utils/ts/move";
-import { useAppDispatch} from '../hooks/hooks'
+import { useAppDispatch } from '../hooks/hooks'
 import { changeBanner } from "../store/userSlice"
 import { useEffect } from "react";
 import {getAppointment} from "../api/mentoring"
