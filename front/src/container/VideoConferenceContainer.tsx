@@ -4,267 +4,21 @@ import { useNavigate } from "react-router";
 import { useAppSelector } from "../hooks/hooks";
 import {chatMessage, chatLog} from "../api/chatting"
 import MentoringChat from "../widget/MentoringChat";
-function init(userinfo:any){
-
-const mentoringid= 20;
-const userid = 1;
-const socket = io(process.env.REACT_APP_SOCKET as string,{path: "/socket.io",transports:["websocket"]});
-const myFace = document.getElementById("myFace") as HTMLMediaElement;
-const muteBtn = document.getElementById("mute") as HTMLButtonElement;
-const cameraBtn = document.getElementById("camera") as HTMLVideoElement;
-const camerasSelect = document.getElementById("cameras") as HTMLSelectElement;
-const call = document.getElementById("call") as HTMLDivElement;
-const chattinginput = document.getElementById("video_conference_chat_input") as HTMLInputElement;
-let chattinglog: { user_id: any; message: string; Date: number; }[] = [{"user_id":false,"message":"aa","Date":1676001100809},{"user_id":false,"message":"aa","Date":1676001110317},{"user_id":false,"message":"??","Date":1676001114944},{"user_id":false,"message":"??","Date":1676001254805},{"user_id":false,"message":"?","Date":1676001260116},{"user_id":false,"message":"?","Date":1676001260936},{"user_id":false,"message":"?","Date":1676001261621},{"user_id":false,"message":"?","Date":1676001266832},{"user_id":false,"message":"?","Date":1676001268549},{"user_id":false,"message":"?","Date":1676001269810},{"user_id":false,"message":"?","Date":1676001276201},{"user_id":false,"message":"?","Date":1676001277461},{"user_id":false,"message":"?","Date":1676001278317}];
-
-chatLog(mentoringid,(chatlog:any)=>{
-                    chattinglog=chatlog.data.log;
-                    },(err:any)=>{
-                        console.log(err);
-                    }
-                );
-
-chattinginput.addEventListener("keyup",function (event) {
-    if (event.keyCode === 13) {
-        const senddata = {"chat_id": mentoringid,"user_id":userid,"message":this.value,"Date": Date.now()};
-        this.value = "";
-
-        //몽고DB에 senddata + chat_id를 추가해서 전달
-        chatMessage(
-            senddata,
-            (data:any)=>{
-                myDataChannel.send(JSON.stringify(senddata));
-                chattinglog.push(senddata);
-                console.log(chattinglog);
-            },
-            (err:any)=>{console.log(err);}
-          );
-    }
-    
-});
-
-if(call != null){
-    call.hidden = true;
-}
-let myStream : any;
-let muted = false;
-let cameraOff = false;
-let roomName : any ;
-let myPeerConnection : any; //상호간의 연락을 위한
-let myDataChannel : any; //데이터채널 1:1 
-async function getCameras() {
-    try {
-        const devices = await navigator.mediaDevices.enumerateDevices();//사용자의 미디어 디바이스 목록 가져온다.
-        const cameras = devices.filter((device) => device.kind === "videoinput");
-        const currentCamera = myStream.getVideoTracks()[0];
-        cameras.forEach((camera) => {
-            const option = document.createElement("option");
-            option.value = camera.deviceId;
-            option.innerText = camera.label;
-            if (currentCamera.label === camera.label) {//카메라 디바이스 중에서 선택한 값에 해당하는 디바이스를 활성화
-                option.selected = true;
-            }
-            camerasSelect?.appendChild(option);
-        });
-    } catch (e) {
-        console.log(e);
-    }
-}
-
-async function getMedia(deviceId : any) {
-    const initialConstrains = { //전면카메라
-        audio: true,
-        video: { facingMode: "user" },
-    };
-    const cameraConstraints = {//후면카메라
-        audio: true,
-        video: { deviceId: { exact: deviceId } },
-    };
-    try {
-        // 카메라 예제에서 사용
-        // myStream = await navigator.mediaDevices.getUserMedia({
-        //     audio: true,
-        //     video: true,
-        // });
-
-        //
-
-        myStream = await navigator.mediaDevices.getUserMedia(
-            deviceId ? cameraConstraints : initialConstrains
-        );
-        myFace.srcObject = myStream;
-        if (!deviceId) {
-            await getCameras();
-        }
-    } catch (e) {
-        console.log(e);
-    }
-}
-function handleMuteClick() {
-    myStream
-        .getAudioTracks()
-        .forEach((track : any) => (track.enabled = !track.enabled));
-    
-    if (!muted) {
-        const childs = muteBtn.children;
-        childs[1].innerHTML = "음소거 해제"
-        muted = true;
-    } else {
-        const childs = muteBtn.children;
-        childs[1].innerHTML = "음소거"
-        muted = false;
-    } 
-    
-}
-function handleCameraClick() {
-    myStream
-        .getVideoTracks()
-        .forEach((track : any) => (track.enabled = !track.enabled));
-    
-    if(cameraBtn != null){
-        if (cameraOff) {
-            const childs = cameraBtn.children;
-            childs[1].innerHTML = "비디오 중지"
-            cameraOff = false;
-        } else {
-            const childs = cameraBtn.children;
-            childs[1].innerHTML = "비디오 시작"
-            cameraOff = true;
-        }
-    }
-}
-
-async function handleCameraChange() {
-    await getMedia(camerasSelect.value);
-    if (myPeerConnection) { //peer통신가능하다면
-        const videoTrack = myStream.getVideoTracks()[0]; //선택한 비디오 트랙
-        const videoSender = myPeerConnection  //비디오 변경되면 스트림 새로 생성후 대체해야 한다.
-            .getSenders()
-            .find((sender : any) => sender.track.kind === "video");
-        videoSender.replaceTrack(videoTrack);
-    }
-}
-//getMedia(); 이제 ui에서 불러오므로 생략
-muteBtn.addEventListener("click", handleMuteClick);
-cameraBtn.addEventListener("click", handleCameraClick);
-camerasSelect.addEventListener("input", handleCameraChange);
-
-//-아래코드는 방과 관련한 코드--------------------------------------------
-
-const welcome = document.getElementById("welcome") as HTMLDivElement;
-const welcomeForm = welcome?.querySelector("form") as HTMLFormElement;
-
-async function initCall() { //startMedia() -> initCall
-    welcome.hidden = true;
-    call.hidden = false;
-    await getMedia(null);//이제 여기서 미디어를 시작한다.
-    makeConnection();
-}
-
-async function handleWelcomeSubmit(event : any) {
-    event.preventDefault();
-    const input = welcomeForm.querySelector("input") as HTMLInputElement;
-    //socket.emit("join_room", input.value, startMedia); //answer실습위치에서 done삭제하였음
-    await initCall();
-    socket.emit("join_room", input.value);
-    roomName = input.value;
-    input.value = "";
-}
-
-welcomeForm?.addEventListener("submit", handleWelcomeSubmit);
-
-// Socket Code
-
-socket.on("welcome", async () => {
-    //데이터채널 생성 최초생성자
-    myDataChannel = myPeerConnection.createDataChannel("chat");
-    myDataChannel.addEventListener("message", (event : any) =>{
-        chattinglog.push(JSON.parse(event.data));
-        console.log(chattinglog);
-        }
-    );
-    console.log("made data channel");
-
-    const offer = await myPeerConnection.createOffer();
-    myPeerConnection.setLocalDescription(offer);
-    console.log("sent the offer");
-    socket.emit("offer", offer, roomName);
-});
-
-socket.on("offer", async (offer) => {
-    //데이터채널 두번째 들어온사람
-    myPeerConnection.addEventListener("datachannel", (event : any) => {
-        myDataChannel = event.channel;
-        myDataChannel.addEventListener("message", (event : any) =>{
-            chattinglog.push(JSON.parse(event.data));
-            console.log(chattinglog);
-            }
-        );
-    });
+import {useState} from "react";
 
 
-    console.log("received the offer");
-    myPeerConnection.setRemoteDescription(offer);
-    const answer = await myPeerConnection.createAnswer();
-    myPeerConnection.setLocalDescription(answer);
-    socket.emit("answer", answer, roomName);
-    console.log("sent the answer");
-});
-
-socket.on("answer", (answer) => {
-    console.log("received the answer");
-    myPeerConnection.setRemoteDescription(answer);
-});
-
-socket.on("ice", (ice) => {
-    console.log("received candidate");
-    myPeerConnection.addIceCandidate(ice);
-});
-
-// RTC Code
-
-function makeConnection() {
-    myPeerConnection = new RTCPeerConnection(); // {stun}서버 등록해야 같은 공용네트워크 이외의 다른 네트워크간의 통신가능
-    myPeerConnection.addEventListener("icecandidate", handleIce);
-    myPeerConnection.addEventListener("addstream", handleAddStream);
-    myStream
-        .getTracks()
-        .forEach((track : any) => myPeerConnection.addTrack(track, myStream));
-}
-
-function handleIce(data : any) {
-    console.log("sent candidate");
-    socket.emit("ice", data.candidate, roomName);
-}
-
-function handleAddStream(data : any) {
-    console.log("stream : ", data);
-    const peerFace = document.getElementById("peerFace") as HTMLVideoElement;
-    if(peerFace != null){
-        peerFace.srcObject = data.stream;
-    }
-}
-}
 
 function exit(navigate : any){
     navigate("/banner/mentoring");
 }
 
+
 function VideoConferenceContainer(props : any){
-    let tmplog: { user_id: any; message: string; Date: number; }[] = [
-        {"user_id":1,"message":"1번이 ","Date":1676001100809},
-        {"user_id":2,"message":"2번이 ","Date":1676006160809},
-        {"user_id":1,"message":"1번이 보낸 메세지","Date":1676011220809},
-        {"user_id":2,"message":"2번이 보낸 메세지","Date":1676016280809},
-        {"user_id":1,"message":"1번이 보낸 메세지1번이 보낸 메세지","Date":1676021340809},
-        {"user_id":2,"message":"2번이 보낸 메세지2번이 보낸 메세지","Date":1676026400809},
-        {"user_id":1,"message":"1번이 보낸 메세지1번이 보낸 메세지1번이 보낸 메세지1번이 보낸 메세지1번이 보낸 메세지1번이 보낸 메세지1번이 보낸 메세지1번이 보낸 메세지1번이 보낸 메세지","Date":1676621340809},
-        {"user_id":2,"message":"2번이 보낸 메세지2번이 보낸 메세지2번이 보낸 메세지2번이 보낸 메세지2번이 보낸 메세지2번이 보낸 메세지2번이 보낸 메세지2번이 보낸 메세지2번이 보낸 메세지","Date":1676626400809},
-        ];
+    
     const imgUrlEmoji = "/img/emoji.png";
     const imgUrlSend = "/img/send.png";
     const userinfo = useAppSelector(state => state.user.isLogin);
-
+    const [tmplog, setTmpLog] = useState<{ chat_id: number; user_id: number; message: string; Date: number; }[]>([]);
     const navigate = useNavigate();
     let first = true;
     return(
@@ -364,6 +118,245 @@ function VideoConferenceContainer(props : any){
             </script>
         </div>
     )
+
+    function init(userinfo:any){
+
+        const mentoringid= 20;
+        const userid = 1;
+        const socket = io(process.env.REACT_APP_SOCKET as string,{path: "/socket.io",transports:["websocket"]});
+        const myFace = document.getElementById("myFace") as HTMLMediaElement;
+        const muteBtn = document.getElementById("mute") as HTMLButtonElement;
+        const cameraBtn = document.getElementById("camera") as HTMLVideoElement;
+        const camerasSelect = document.getElementById("cameras") as HTMLSelectElement;
+        const call = document.getElementById("call") as HTMLDivElement;
+        const chattinginput = document.getElementById("video_conference_chat_input") as HTMLInputElement;
+        chatLog(15,(chatlog:any)=>{
+            setTmpLog(chatlog.data.log);
+            },(err:any)=>{
+                console.log(err);
+            }
+        );
+        chattinginput.addEventListener("keyup",function (event) {
+            if (event.keyCode === 13) {
+                const senddata = {"chat_id": mentoringid,"user_id":userid,"message":this.value,"Date": Date.now()};
+                this.value = "";
+        
+                //몽고DB에 senddata + chat_id를 추가해서 전달
+                chatMessage(
+                    senddata,
+                    (data:any)=>{
+                        myDataChannel.send(JSON.stringify(senddata));
+                        setTmpLog([...tmplog,...[senddata]]);
+                        console.log(senddata);
+                    },
+                    (err:any)=>{console.log(err);}
+                  );
+            }
+            
+        });
+        
+        if(call != null){
+            call.hidden = true;
+        }
+        let myStream : any;
+        let muted = false;
+        let cameraOff = false;
+        let roomName : any ;
+        let myPeerConnection : any; //상호간의 연락을 위한
+        let myDataChannel : any; //데이터채널 1:1 
+        async function getCameras() {
+            try {
+                const devices = await navigator.mediaDevices.enumerateDevices();//사용자의 미디어 디바이스 목록 가져온다.
+                const cameras = devices.filter((device) => device.kind === "videoinput");
+                const currentCamera = myStream.getVideoTracks()[0];
+                cameras.forEach((camera) => {
+                    const option = document.createElement("option");
+                    option.value = camera.deviceId;
+                    option.innerText = camera.label;
+                    if (currentCamera.label === camera.label) {//카메라 디바이스 중에서 선택한 값에 해당하는 디바이스를 활성화
+                        option.selected = true;
+                    }
+                    camerasSelect?.appendChild(option);
+                });
+            } catch (e) {
+                console.log(e);
+            }
+        }
+        
+        async function getMedia(deviceId : any) {
+            const initialConstrains = { //전면카메라
+                audio: true,
+                video: { facingMode: "user" },
+            };
+            const cameraConstraints = {//후면카메라
+                audio: true,
+                video: { deviceId: { exact: deviceId } },
+            };
+            try {
+                // 카메라 예제에서 사용
+                // myStream = await navigator.mediaDevices.getUserMedia({
+                //     audio: true,
+                //     video: true,
+                // });
+        
+                //
+        
+                myStream = await navigator.mediaDevices.getUserMedia(
+                    deviceId ? cameraConstraints : initialConstrains
+                );
+                myFace.srcObject = myStream;
+                if (!deviceId) {
+                    await getCameras();
+                }
+            } catch (e) {
+                console.log(e);
+            }
+        }
+        function handleMuteClick() {
+            myStream
+                .getAudioTracks()
+                .forEach((track : any) => (track.enabled = !track.enabled));
+            
+            if (!muted) {
+                const childs = muteBtn.children;
+                childs[1].innerHTML = "음소거 해제"
+                muted = true;
+            } else {
+                const childs = muteBtn.children;
+                childs[1].innerHTML = "음소거"
+                muted = false;
+            } 
+            
+        }
+        function handleCameraClick() {
+            myStream
+                .getVideoTracks()
+                .forEach((track : any) => (track.enabled = !track.enabled));
+            
+            if(cameraBtn != null){
+                if (cameraOff) {
+                    const childs = cameraBtn.children;
+                    childs[1].innerHTML = "비디오 중지"
+                    cameraOff = false;
+                } else {
+                    const childs = cameraBtn.children;
+                    childs[1].innerHTML = "비디오 시작"
+                    cameraOff = true;
+                }
+            }
+        }
+        
+        async function handleCameraChange() {
+            await getMedia(camerasSelect.value);
+            if (myPeerConnection) { //peer통신가능하다면
+                const videoTrack = myStream.getVideoTracks()[0]; //선택한 비디오 트랙
+                const videoSender = myPeerConnection  //비디오 변경되면 스트림 새로 생성후 대체해야 한다.
+                    .getSenders()
+                    .find((sender : any) => sender.track.kind === "video");
+                videoSender.replaceTrack(videoTrack);
+            }
+        }
+        //getMedia(); 이제 ui에서 불러오므로 생략
+        muteBtn.addEventListener("click", handleMuteClick);
+        cameraBtn.addEventListener("click", handleCameraClick);
+        camerasSelect.addEventListener("input", handleCameraChange);
+        
+        //-아래코드는 방과 관련한 코드--------------------------------------------
+        
+        const welcome = document.getElementById("welcome") as HTMLDivElement;
+        const welcomeForm = welcome?.querySelector("form") as HTMLFormElement;
+        
+        async function initCall() { //startMedia() -> initCall
+            welcome.hidden = true;
+            call.hidden = false;
+            await getMedia(null);//이제 여기서 미디어를 시작한다.
+            makeConnection();
+        }
+        
+        async function handleWelcomeSubmit(event : any) {
+            event.preventDefault();
+            const input = welcomeForm.querySelector("input") as HTMLInputElement;
+            //socket.emit("join_room", input.value, startMedia); //answer실습위치에서 done삭제하였음
+            await initCall();
+            socket.emit("join_room", input.value);
+            roomName = input.value;
+            input.value = "";
+        }
+        
+        welcomeForm?.addEventListener("submit", handleWelcomeSubmit);
+        
+        // Socket Code
+        
+        socket.on("welcome", async () => {
+            //데이터채널 생성 최초생성자
+            myDataChannel = myPeerConnection.createDataChannel("chat");
+            myDataChannel.addEventListener("message", (event : any) =>{
+                    setTmpLog([...tmplog,...[JSON.parse(event.data)]]);
+                    console.log(tmplog);
+                }
+            );
+            console.log("made data channel");
+        
+            const offer = await myPeerConnection.createOffer();
+            myPeerConnection.setLocalDescription(offer);
+            console.log("sent the offer");
+            socket.emit("offer", offer, roomName);
+        });
+        
+        socket.on("offer", async (offer) => {
+            //데이터채널 두번째 들어온사람
+            myPeerConnection.addEventListener("datachannel", (event : any) => {
+                myDataChannel = event.channel;
+                myDataChannel.addEventListener("message", (event : any) =>{
+                        setTmpLog([...tmplog,...[JSON.parse(event.data)]]);
+                        console.log(tmplog);
+                    }
+                );
+            });
+        
+        
+            console.log("received the offer");
+            myPeerConnection.setRemoteDescription(offer);
+            const answer = await myPeerConnection.createAnswer();
+            myPeerConnection.setLocalDescription(answer);
+            socket.emit("answer", answer, roomName);
+            console.log("sent the answer");
+        });
+        
+        socket.on("answer", (answer) => {
+            console.log("received the answer");
+            myPeerConnection.setRemoteDescription(answer);
+        });
+        
+        socket.on("ice", (ice) => {
+            console.log("received candidate");
+            myPeerConnection.addIceCandidate(ice);
+        });
+        
+        // RTC Code
+        
+        function makeConnection() {
+            myPeerConnection = new RTCPeerConnection(); // {stun}서버 등록해야 같은 공용네트워크 이외의 다른 네트워크간의 통신가능
+            myPeerConnection.addEventListener("icecandidate", handleIce);
+            myPeerConnection.addEventListener("addstream", handleAddStream);
+            myStream
+                .getTracks()
+                .forEach((track : any) => myPeerConnection.addTrack(track, myStream));
+        }
+        
+        function handleIce(data : any) {
+            console.log("sent candidate");
+            socket.emit("ice", data.candidate, roomName);
+        }
+        
+        function handleAddStream(data : any) {
+            console.log("stream : ", data);
+            const peerFace = document.getElementById("peerFace") as HTMLVideoElement;
+            if(peerFace != null){
+                peerFace.srcObject = data.stream;
+            }
+        }
+        }
 }
 
 export default VideoConferenceContainer;
