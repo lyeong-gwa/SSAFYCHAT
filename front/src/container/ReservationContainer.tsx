@@ -4,41 +4,54 @@ import "../styles/container/reservation-container.css"
 import { dragCard } from "../utils/ts/move";
 import { useAppDispatch } from "../hooks/hooks"
 import { changeBanner } from "../store/userSlice"
+import { reservation } from "../api/mentoring";
+import { useEffect } from "react";
 
 function ReservationContainer(){
     const dispatch = useAppDispatch();
     dispatch(changeBanner("예약확인"));
+    // 예약 리스트들 호출
+    useEffect(()=>{
+        console.log("reservation");
+        reservation((success : any)=>{console.log(success)},(fail : any)=>{console.log(fail)});
+    })
     const cardList = [["김도원","네이버","백엔드 개발자","2023-01-01"],["김겨울","SMENT","가수","2023-01-01"],["3","SMENT","가수","2023-01-01"],["4","SMENT","가수","2023-01-01"],["5","SMENT","가수","2023-01-01"],["6","SMENT","가수","2023-01-01"]];
     const reCardList = [
         {
-            time:"2022.02.02",
+            time:"2022.02.02 AM 09:10",
             name:"김겨울",
+            belong: "SMENT",
             job:"아이돌",
             num: "7전8기",
         },
         {
             time:"2022.02.02",
             name:"2",
+            belong: "삼성SDS",
             job:"아이돌",
             num: "7전8기",
         },{
             time:"2022.02.02",
             name:"3",
+            belong: "삼성SDS",
             job:"아이돌",
             num: "7전8기",
         },{
             time:"2022.02.02",
             name:"4",
+            belong: "삼성SDS",
             job:"아이돌",
             num: "7전8기",
         },{
             time:"2022.02.02",
             name:"5",
+            belong: "삼성SDS",
             job:"아이돌",
             num: "7전8기",
         },{
             time:"2022.02.02",
             name:"6",
+            belong: "삼성SDS",
             job:"아이돌",
             num: "7전8기",
         }

@@ -83,7 +83,14 @@
     font-size: 14px;
     height: 20px;
     margin-top: 10px;
+    margin-right: 10px;
     line-height: 40px;
+
+    display: flex;
+    justify-content:space-between;
+}
+.cancle_btn:hover{
+    cursor: pointer;
 }
 .reserved_card_time{
     height: 40px;

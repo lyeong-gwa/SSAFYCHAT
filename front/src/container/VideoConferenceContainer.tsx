@@ -3,7 +3,8 @@ import io from 'socket.io-client';
 import { useNavigate } from "react-router";
 import { useAppSelector } from "../hooks/hooks";
 import {chatMessage, chatLog} from "../api/chatting"
-function test(userinfo:any){
+import MentoringChat from "../widget/MentoringChat";
+function init(userinfo:any){
 
 const mentoringid= 20;
 const userid = 1;
@@ -14,7 +15,7 @@ const cameraBtn = document.getElementById("camera") as HTMLVideoElement;
 const camerasSelect = document.getElementById("cameras") as HTMLSelectElement;
 const call = document.getElementById("call") as HTMLDivElement;
 const chattinginput = document.getElementById("video_conference_chat_input") as HTMLInputElement;
-let chattinglog: { user_id: any; message: string; Date: number; }[] = [];
+let chattinglog: { user_id: any; message: string; Date: number; }[] = [{"user_id":false,"message":"aa","Date":1676001100809},{"user_id":false,"message":"aa","Date":1676001110317},{"user_id":false,"message":"??","Date":1676001114944},{"user_id":false,"message":"??","Date":1676001254805},{"user_id":false,"message":"?","Date":1676001260116},{"user_id":false,"message":"?","Date":1676001260936},{"user_id":false,"message":"?","Date":1676001261621},{"user_id":false,"message":"?","Date":1676001266832},{"user_id":false,"message":"?","Date":1676001268549},{"user_id":false,"message":"?","Date":1676001269810},{"user_id":false,"message":"?","Date":1676001276201},{"user_id":false,"message":"?","Date":1676001277461},{"user_id":false,"message":"?","Date":1676001278317}];
 
 chatLog(mentoringid,(chatlog:any)=>{
                     chattinglog=chatlog.data.log;
@@ -250,6 +251,18 @@ function exit(navigate : any){
 }
 
 function VideoConferenceContainer(props : any){
+    let tmplog: { user_id: any; message: string; Date: number; }[] = [
+        {"user_id":1,"message":"1번이 ","Date":1676001100809},
+        {"user_id":2,"message":"2번이 ","Date":1676006160809},
+        {"user_id":1,"message":"1번이 보낸 메세지","Date":1676011220809},
+        {"user_id":2,"message":"2번이 보낸 메세지","Date":1676016280809},
+        {"user_id":1,"message":"1번이 보낸 메세지1번이 보낸 메세지","Date":1676021340809},
+        {"user_id":2,"message":"2번이 보낸 메세지2번이 보낸 메세지","Date":1676026400809},
+        {"user_id":1,"message":"1번이 보낸 메세지1번이 보낸 메세지1번이 보낸 메세지1번이 보낸 메세지1번이 보낸 메세지1번이 보낸 메세지1번이 보낸 메세지1번이 보낸 메세지1번이 보낸 메세지","Date":1676621340809},
+        {"user_id":2,"message":"2번이 보낸 메세지2번이 보낸 메세지2번이 보낸 메세지2번이 보낸 메세지2번이 보낸 메세지2번이 보낸 메세지2번이 보낸 메세지2번이 보낸 메세지2번이 보낸 메세지","Date":1676626400809},
+        ];
+    const imgUrlEmoji = "/img/emoji.png";
+    const imgUrlSend = "/img/send.png";
     const userinfo = useAppSelector(state => state.user.isLogin);
 
     const navigate = useNavigate();
@@ -259,7 +272,7 @@ function VideoConferenceContainer(props : any){
         <div id="call" className="video_conference_container" onMouseEnter={()=>{
             if(first){
                 first = false;
-                test(userinfo);
+                init(userinfo);
             }
         }}>
 
@@ -325,22 +338,24 @@ function VideoConferenceContainer(props : any){
 
             {/* 채팅창을 담을 오른쪽 컨테이너 */}
             <div className="video_conference_right">
-               <div className="tmpButton" id="tmpButton">
-                    나는 임시버튼
-               </div>
                 {/* 채팅 내용을 보여줄 리스트 요소 */}
-                <ul className="video_conference_chat_content_ul">
-                    <li className="video_conference_chat_content_li">
-
-                    </li> 
-                </ul>
-
-                {/*  */}
+                <div className="video_conference_chat_content_message">
+                    <MentoringChat tmplog={tmplog}></MentoringChat>
+                </div>
+                       
                 <div className="video_conference_chat_container">
                     {/* 채팅 입력 input */}
-                    <input className="video_conference_chat_input" id="video_conference_chat_input">
-
-                    </input>
+                    <div className="input_bar">
+                        <div className="emoji_div">
+                            <img src={imgUrlEmoji} alt="" className="emoji" />
+                        </div>
+                        
+                        <input type="text" name="msg" id="video_conference_chat_input" className="input_msg" />
+                        
+                        <div className="send_div">
+                            <img src={imgUrlSend} alt="" className="send" />
+                        </div>
+                    </div>
                 </div>
             </div>
             <script>
@@ -352,4 +367,3 @@ function VideoConferenceContainer(props : any){
 }
 
 export default VideoConferenceContainer;
-

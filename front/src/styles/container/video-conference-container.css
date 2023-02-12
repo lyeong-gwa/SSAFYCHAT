@@ -59,7 +59,7 @@
     justify-content:space-around;
 }
 
-.video_conference_chat_content_ul{
+.video_conference_chat_content_message{
     margin:auto;
     width: 90%;
     height: 80%;
@@ -71,6 +71,7 @@
     width: 100%;
     height: 150px;
     display: flex;
+    margin-top: 50px;
     justify-content: center;
 }
 

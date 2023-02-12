@@ -1,8 +1,8 @@
 import { useNavigate } from "react-router";
 import "../../styles/components/mentoring/reserved-list.css"
+import { useAppSelector } from '../../hooks/hooks'
 import { useState } from "react";
-import { useAppDispatch, useAppSelector } from '../../hooks/hooks'
-import { tempAddReserved } from '../../store/mentoringSlice';
+import CancelModal from "../modal/CancelModal";
 
 function dragItem(event : any){
     let elem = event.target;
@@ -33,12 +33,11 @@ function dragItem(event : any){
     }
 }
 
+
 function ReservedListItem(props : any){
+    const[clickCancel, setClickCancel] = useState(false);
     return(
         <tr className="reserved_list_tr_body" 
-        // onMouseDown={(event)=>{
-        //     dragItem(event);
-        // }}
         draggable='true'
         onMouseDown={(event)=>{
             dragItem(event);
@@ -48,9 +47,18 @@ function ReservedListItem(props : any){
             <td>{props.reserved.name}</td>
             <td>{props.reserved.cardinal}</td>
             <td>{props.reserved.email}</td>
-            <td><div className="reserved_list_enter_button enter_meeting_button" onClick={(event)=>{
+            <td className="reserved_list_btn_container">
+                <div className="reserved_list_enter_button enter_meeting_button" onClick={(event)=>{
                 props.func(event);
-            }} >입장</div></td>
+                }} >입장</div>
+                <div className="reserved_list_cancel_btn">
+                    <img src="/img/trash_shape_red.png" alt="취소" onClick={()=>{setClickCancel(!clickCancel)}}>
+                    </img>
+                </div>
+            </td>
+            {clickCancel && (
+                <CancelModal closeModal={()=> setClickCancel(!clickCancel)}></CancelModal>
+            )}  
         </tr>
     )
 }
@@ -62,10 +70,8 @@ function enterMeeting(event : any, navigate : any){
 
 function ReservedList(props : any){
     const navigate = useNavigate();
-    const dispatch = useAppDispatch();
     const reservedList = useAppSelector((state)=>state.mentoring.reservedMentorings);
     const list = [];
-    console.log(reservedList.length);
     for(let i = 0; i < reservedList.length; ++i){
         list.push(<ReservedListItem key={i} reserved={reservedList[i]}  func={(event : any)=>{
             enterMeeting(event, navigate);
@@ -75,17 +81,16 @@ function ReservedList(props : any){
 
     return (
         <div className="reserved_list_container">
-            <div className="reserved_list_header" onClick={()=>{
-                dispatch(tempAddReserved());
-            }}>
+            <div className="reserved_list_header">
                 예약된 멘토링
             </div>
+            <div className="reserved_list_table_container">
             <table className="reserved_list_table">
                 <thead>
                     <tr className="reserved_list_tr_head">
                        <th>날짜</th>
                        <th>이름</th>
-                       <th>타이틀</th>
+                       <th>기수</th>
                        <th>이메일</th>
                        <th></th>
                     </tr>
@@ -94,7 +99,9 @@ function ReservedList(props : any){
                     {list}              
                 </tbody>
             </table>
+            </div>
         </div>
+        
     )
 }
 

@@ -1,11 +1,13 @@
 import "../../styles/components/rollingpaper/rolling-card-list.css";
+import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import Sticky from "../../widget/Sticky";
 function RollingCardList(props : any){
     const list : any = [];
-    console.log(props.cardList);
-    for(let i = 0; i < props.cardList.length; ++i){
-        if(!props.cardList[i].attached){
-            list.push(<Sticky key={i} colorClass = {props.cardList[i].color} closeList={()=>props.closeList} text={props.cardList[i].content}></Sticky>);
+    const cardList = useAppSelector(state=>state.rolling.rollings);
+    // console.log(cardList + "RC");
+    for(let i = 0; i < cardList.length; ++i){
+        if(cardList[i].attached === 0){
+            list.push(<Sticky rolling={cardList[i]} key={i} colorClass = {cardList[i].color} closeList={()=>props.closeList}></Sticky>);
         }
     }
 

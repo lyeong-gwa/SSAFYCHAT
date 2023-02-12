@@ -1,6 +1,6 @@
 import "../../styles/components/user/sign_in_up.css";
 import TextBox from "../../widget/InputTextBox";
-import {Link, useNavigate} from 'react-router-dom';
+import {Link} from 'react-router-dom';
 import {useState} from 'react';
 import { useAppSelector, useAppDispatch } from '../../hooks/hooks'
 import { changeIsLogin, appendEmail, appendName, appendUserId, appendRole } from "../../store/userSlice";
@@ -15,7 +15,6 @@ function emailRegexr(data: string){
 function Login(props: any){
     const dispatch = useAppDispatch();
     const IS_LOG_IN = useAppSelector(state => state.user.isLogin);
-    const navigate = useNavigate();
 
     async function signInApi(){
         if(userId!=='' && check_email && userPwd!==''){
@@ -27,20 +26,23 @@ function Login(props: any){
                 userInfo,
                 (data: any) => {
                     console.log(data);
-                    if(data.status === 200){
-                        const accessToken = data.data["accessToken"];
-                        const refreshToken = data.data["refreshToken"];
-                        sessionStorage.setItem("access-token", accessToken);
-                        sessionStorage.setItem("refresh-token", refreshToken);
-
-                        const decoded:any = jwt_decode(accessToken);
-
-                        dispatch(changeIsLogin(true));
-                        dispatch(appendEmail(userId));
-                        dispatch(appendUserId(decoded.user_id));
-                        dispatch(appendName(data.data.name));
-                        dispatch(appendRole(data.data.role));
-                        // navigate("/");
+                    if (data.status === 200) {
+                        if (data.data.message === "비밀번호를 확인해주십시오.") {
+                            alert('비밀번호를 확인해주세요.');
+                        } else {
+                            const accessToken = data.data["accessToken"];
+                            const refreshToken = data.data["refreshToken"];
+                            sessionStorage.setItem("access-token", accessToken);
+                            sessionStorage.setItem("refresh-token", refreshToken);
+    
+                            const decoded:any = jwt_decode(accessToken);
+    
+                            dispatch(changeIsLogin(true));
+                            dispatch(appendEmail(userId));
+                            dispatch(appendUserId(decoded.user_id));
+                            dispatch(appendName(data.data.name));
+                            dispatch(appendRole(data.data.role));
+                        }
                     }
                 },
                 (error: any) => {

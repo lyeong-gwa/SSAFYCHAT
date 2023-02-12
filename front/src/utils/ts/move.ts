@@ -1,3 +1,5 @@
+import { attachRolling, removeRolling } from "../../store/rollingSlice";
+
 
 function dragCard(event : any, elemClassName : string, containerClassName : string, isEnterCheck : boolean){
     // 요소 가져오기
@@ -90,12 +92,6 @@ function dragCard(event : any, elemClassName : string, containerClassName : stri
         }
     }
     else{
-
-        container.onmouseover = function(){
-            console.log(onDrag)
-        
-        }  
-
         //마우스 클릭 해제시 원래대로
         elem.onmouseup = function(){
 
@@ -122,12 +118,8 @@ function dragCard(event : any, elemClassName : string, containerClassName : stri
 }
 
 // 확대 축소에도 제자리에 있게 하자
-function dragRoll(event : any, elemClassName : string, containerClassName : string, isEnterCheck : boolean, startFunc : any){
-    // 받아온 시작할때 하고 싶은 코드들을 넣은 함수 실행
-    // startFunc();   
-
+async function dragRoll(event : any, elemClassName : string, containerClassName : string, dispatch : any, id : number, isAttached : number){
     // react 최상위 요소 가져오기
-    // const rootDiv = document.getElementsByClassName("App")[0];
     const rootDiv = document.getElementById("root");
     // 요소 가져오기
     let elem = event.target;
@@ -154,12 +146,6 @@ function dragRoll(event : any, elemClassName : string, containerClassName : stri
     const conW = container.offsetWidth;
     const conH = container.offsetHeight;
 
-
-    ///////////////////////////////////////////////////////////
-    // app의 위치를 구해서 마지막에 계산해서 container에 넣자
-    //////////////////////////////////////////////////////////
-
-
     // 컨테이너의 자식으로
     if(rootDiv){
         rootDiv.append(elem);
@@ -184,7 +170,8 @@ function dragRoll(event : any, elemClassName : string, containerClassName : stri
         }
         if(conLeft + conW < pageX + elem.offsetWidth / 2 && conLeft + conW - (pageX + elem.offsetWidth / 2) > -elem.offsetWidth / 2){
             elem.style.left = conLeft + conW - elem.offsetWidth + "px";            
-        }if(conTop + conH < pageY + elem.offsetHeight / 2 && conTop + conH - (pageY + elem.offsetHeight / 2) > -elem.offsetWidth / 2){
+        }
+        if(conTop + conH < pageY + elem.offsetHeight / 2 && conTop + conH - (pageY + elem.offsetHeight / 2) > -elem.offsetWidth / 2){
             elem.style.top = conTop + conH - elem.offsetHeight + "px";            
         }
     }
@@ -205,82 +192,70 @@ function dragRoll(event : any, elemClassName : string, containerClassName : stri
     if(rootDiv){
         rootDiv.addEventListener('mousemove', onMouseMove);
     }
-    if(!isEnterCheck){
-        container.onmouseleave = function(){
-            if(!(conTop < mY && mY < conTop + conH && conLeft < mX && mX < conLeft + conW )){            
-                if(window.confirm("삭제합니까")){
-                    // **********************
-                    // 이 곳에 기능을 넣어야 함
-                    // **********************
-                }                
-            }
+
+    //마우스 클릭 해제시 원래대로
+    function mouseUP(){
+        if(conTop < mY && mY < conTop + conH && conLeft < mX && mX < conLeft + conW ){  
+                // 마우스 위치에서 컨테이너의 위치를 빼고 조정값을 빼주어 위치 지정
+                container.append(elem);
+                elem.style.left = mX - conLeft - 174  + "px";
+                elem.style.top = mY - conTop - 48 + "px";        
+                if("나중에 사용"){
+                // const elemTop = elem.getBoundingClientRect().top;
+                // const elemLeft = elem.getBoundingClientRect().left;
+
+                // 페이퍼 밖으로 쪽지가 나가면 안으로 들인다.
+                // if(elemLeft  < conLeft){
+                //     elem.style.left = conLeft  + "px";
+                // }
+                // if(elemTop < conTop){
+                //     elem.style.top = conTop  + "px";
+                // }
+                // if(conLeft + conW < elemLeft + elem.offsetWidth){
+                //     elem.style.left = conLeft + conW - elem.offsetWidth + "px";            
+                // }if(conTop + conH < elemTop + elem.offsetHeight){
+                //     elem.style.top = conTop + conH - elem.offsetHeight + "px";            
+                // }
+                }
+
+                // *************************
+                // 이 곳에 기능을 넣어야 함
+                // *************************
+                if(isAttached === 0){
+                    elem.remove();
+                }
+                dispatch(attachRolling({
+                    id: id,
+                    posX: mX - conLeft - 174,
+                    posY: mY -conTop - 48,
+                }));        
         }
-        container.onmouseover = function(){
+        else{            
+            // *************************
+            // 이 곳에 기능을 넣어야 함
+            // *************************    
+            dispatch(removeRolling({
+                id:id,
+                posX: 0,
+                posY:0,
+            }));
             
-        }          
-
-        //마우스 클릭 해제시 원래대로
-        elem.onmouseup = function(){
-            document.removeEventListener('mousemove',onMouseMove);
-            elem.onmouseup = null;
-            outer.append(elem);
-            elem.style.zIndex = 'auto';
-        }
-    }
-    else{
-
-        container.onmouseover = function(){
-           
-        }  
-
-        //마우스 클릭 해제시 원래대로
-        elem.onmouseup = function(){
-            if(conTop < mY && mY < conTop + conH && conLeft < mX && mX < conLeft + conW ){  
-                if(window.confirm("추가합니까")){
-                    // **********************
-                    // 이 곳에 기능을 넣어야 함
-                    // **********************
-                    container.append(elem);
-                    // 마우스 위치에서 컨테이너의 위치를 빼고 조정값을 빼주어 위치 지정
-                    elem.style.left = mX - conLeft - 174  + "px";
-                    elem.style.top = mY - conTop - 48 + "px";        
-                    
-                    // const elemTop = elem.getBoundingClientRect().top;
-                    // const elemLeft = elem.getBoundingClientRect().left;
-
-                    // 페이퍼 밖으로 쪽지가 나가면 안으로 들인다.
-                    // if(elemLeft  < conLeft){
-                    //     elem.style.left = conLeft  + "px";
-                    // }
-                    // if(elemTop < conTop){
-                    //     elem.style.top = conTop  + "px";
-                    // }
-                    // if(conLeft + conW < elemLeft + elem.offsetWidth){
-                    //     elem.style.left = conLeft + conW - elem.offsetWidth + "px";            
-                    // }if(conTop + conH < elemTop + elem.offsetHeight){
-                    //     elem.style.top = conTop + conH - elem.offsetHeight + "px";            
-                    // }
-
-                }
-                else{            
-                    // *************************
-                    // 이 곳에 기능을 넣어야 함
-                    // *************************        
-                    elem.remove();                
-                }
-            }
-            else{                
+            if(isAttached === 1){
                 elem.remove();
             }
-            if(rootDiv){
-                rootDiv.removeEventListener('mousemove',onMouseMove);
+            else{
+                outer.append(elem);
+                elem.style.position = "static";
+                elem.style.zIndex = "auto";
+            }    
+                
             }
-            elem.onmouseup = null;
-            // outer.append(elem);
-            
-            elem.style.zIndex = 'auto';
+        if(rootDiv){
+            rootDiv.removeEventListener('mousemove',onMouseMove);
+            elem.removeEventListener('onmouseup', mouseUP);
         }
     }
+    elem.addEventListener('mouseup',mouseUP);
 
 }
 

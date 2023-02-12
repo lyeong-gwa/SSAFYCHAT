@@ -16,7 +16,6 @@ function Header (){
       email,
       (data: any) => {
         if(data.status === 200){
-          console.log(sessionStorage.getItem('access-token'));
           sessionStorage.removeItem('access-token');
           sessionStorage.removeItem('refresh-token');
 

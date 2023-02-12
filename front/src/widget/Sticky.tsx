@@ -1,21 +1,25 @@
+import { useAppDispatch } from "../hooks/hooks";
 import "../styles/widget/sticky-style.css"
 import { dragRoll } from "../utils/ts/move";
+
 function Sticky(props: any){
-    
+    const dispacth = useAppDispatch();
     return(
-        // event : any, elemClassName : string, containerClassName : string, isEnterCheck : boolean
-        <div className="sticky_main" onClick={()=>{console.log(456)}} onMouseDown={
-            (event:any)=>{console.log(123);dragRoll(event,"sticky_main","dashboard_main",true,props.closeList)}
+        <div>
+        <div style={{
+            position: props.rolling.attached ? "absolute" : "static",
+            left : props.rolling.posX +"px",
+            top : props.rolling.posY +"px"
+        }}
+         className="sticky_main" onClick={()=>{console.log(456)}} onMouseDown={
+            (event:any)=>{dragRoll(event,"sticky_main","dashboard_main", dispacth, props.rolling.id, props.rolling.attached);}
         }>
-            <div className={props.colorClass}>
-            {/* <div className="title">
-                {props.title}
-                조원재
-            </div> */}
+            <div className={props.rolling.color}>
                 <div className="text">
-                    {props.text}
+                    {props.rolling.content}
                 </div>
             </div>
+        </div>
         </div>
     )
 }

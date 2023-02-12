@@ -16,7 +16,15 @@ interface ReservedState {
 
 // Define the initial state using that type
 const initialState: ReservedState = {
-    reservedMentorings: []
+    reservedMentorings: [
+      {
+        date : "2023-21-31 AM 09:30",
+        name : "임시데이터",
+        cardinal : 7,
+        email : "api로하고삭제",
+        job : "제거할것",
+      }
+    ]
 }
 
 export const MentoringSlice = createSlice({

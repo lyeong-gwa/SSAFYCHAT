@@ -13,10 +13,25 @@ const api = localServer();
 
 // param, success, fail 을 받아 함수 호출
 async function reservation(success : any, fail : any){
-    api.defaults.headers["Authorization"] = "Bearer " + sessionStorage.getItem("refresh-token");
+    api.defaults.headers["Authorization"] = "Bearer " + sessionStorage.getItem("access-token");
     await api.get(`/mentoring/reservation`)
     .then(success)
     .catch(fail);
 }
+// 확정된 멘토링리스트와 요청멘토링리트를 받아온다.
+async function getAppointment(success : any, fail : any){
+    api.defaults.headers["Authorization"] = "Bearer " + sessionStorage.getItem("access-token");
+    await api.get(`/mentoring/appointment`)
+    .then(success)
+    .catch(fail);
+}
+// 요청멘토링 중 하나를 승낙한다
+async function setAppointment(appointment:{applyMentoringId:number, time:Date,}, success: any, fail: any){
+    api.defaults.headers["Authorization"] = "Bearer " + sessionStorage.getItem("access-token");
+    await api.post(`/mentoring/appointment`,JSON.stringify(appointment))
+    .then(success)
+    .catch(fail);
+}
 
-export {reservation,};
+
+export {reservation,getAppointment,setAppointment};

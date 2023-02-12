@@ -27,12 +27,20 @@
     font-size: 15px;
 }
 
+.reserved_list_table_container{
+    height: 400px;
+    overflow: auto;
+}
+
+.reserved_list_table_container::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera*/
+}
+
 .reserved_list_thead{
     
 }
 
 .reserved_list_tbody{
-    
 }
 .reserved_list_tr_head{
     text-align: center;
@@ -53,8 +61,34 @@
     background: #dadada;
 }
 
+.reserved_list_btn_container{
+    display: flex;
+    justify-content:space-around;
+}
+
 .reserved_list_enter_button{
-    /* background: #031059;
-    height: 40px;
-    width: 80px; */
+    background: #031059;
+    border-radius: 10px;    
+
+    margin-top: 15px;
+    padding: 0;
+
+    color:#ffffff;
+    
+    height: 30px;
+    width: 50px;
+
+    line-height: 30px;
+}
+
+.reserved_list_enter_button:hover{
+    cursor: pointer;
+}
+
+.reserved_list_cancel_btn{
+    margin-top: 15px;
+}
+
+.reserved_list_cancel_btn:hover{
+    cursor: pointer;
 }
