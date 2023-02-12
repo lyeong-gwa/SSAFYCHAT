@@ -302,6 +302,7 @@ public class MentoringServiceImpl implements MentoringService {
             canceledMentoringListForMentee.add(
                     CanceledMentoringListDto.builder()
                             .cancelMentoringId(cancelMentoring.getCancelMentoringId())
+                            .name(cancelMentoring.getMentor().getName())
                             .job(cancelMentoring.getJob())
                             .company(cancelMentoring.getCompany())
                             .time(cancelMentoring.getTime())

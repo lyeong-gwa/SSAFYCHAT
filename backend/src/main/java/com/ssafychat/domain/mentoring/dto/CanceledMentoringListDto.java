@@ -11,6 +11,8 @@ public class CanceledMentoringListDto {
 
     private int cancelMentoringId;
 
+    private String name;
+
     private String job;
 
     private String company;
