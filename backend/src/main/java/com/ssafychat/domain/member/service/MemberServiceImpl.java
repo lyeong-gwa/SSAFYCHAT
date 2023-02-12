@@ -95,7 +95,6 @@ public class MemberServiceImpl implements MemberService {
             return info;
         }
 
-
         try {
             // email, password로 Authentication 객체 생성
             // authentication은 인증 여부를 확인하는 authenticated 값이 false
@@ -103,6 +102,15 @@ public class MemberServiceImpl implements MemberService {
             // 검증 (비밀번호 체크)
             // authenticate 매서드가 실행될 때 MemberDetailsService의 loadUserByUsername 실행
             Authentication authentication = authenticationManager.authenticate(authenticationToken);
+
+            // 중복로그인 처리
+            // Redis에서 userId로 저장된 Refresh Token 값이 있는지 확인 (로그인 기록이 있는지)
+            String refreshToken = (String)redisTemplate.opsForValue().get("RT:" + authentication.getName());
+            if(!ObjectUtils.isEmpty(refreshToken)) {
+                // 기존 로그인 회원의 refresh token 삭제
+                redisTemplate.delete("RT:" + authentication.getName());
+            }
+
             // JWT 토큰 생성
             TokenInfoDto tokenInfo = jwtTokenProvider.generateToken(authentication);
             // RefreshToken Redis 저장 (expirationTime 설정을 통해 자동 삭제 처리)

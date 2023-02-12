@@ -43,7 +43,7 @@ public class MentoringServiceImpl implements MentoringService {
     public List<PossibleMentoringDto> getPossibleMentoringList(String job, String belong) {
         if (job.equals("") && belong.equals("")){
             // 전체 목록 조회
-            return memberRepository.getAllJobAndBelong("싸피", "");
+            return memberRepository.getAllJobAndBelong("SSAFY", "");
         } else if (job.equals("")) {
             // belong으로 조회
             return memberRepository.findDistinctByBelong(belong);
