@@ -8,6 +8,8 @@ import { setMentoringId } from "../store/mentoringSlice";
 function ReservedCard(props : any){
     const[clickCancel, setClickCancel] = useState(false);
     let dispatch = useAppDispatch();
+    
+    console.log(useAppSelector(state => state.mentoring.mentoringId));
     console.log(props.info);
     return(
         // 카드를 감싸는 outer
@@ -44,7 +46,6 @@ function ReservedCard(props : any){
                     {/* 버튼이벤트를 props로 받아와 사용 */}
                     <div className="reserved_card_button enter_meeting_button" onClick={(event)=>{
                         dispatch(setMentoringId(props.info.mentoringId));
-                        console.log(useAppSelector(state => state.mentoring.mentoringId));
                         props.button(event);
                     }}>
                         입장하기

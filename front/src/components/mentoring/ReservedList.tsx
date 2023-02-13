@@ -63,6 +63,8 @@ function dragItem(event : any){
 
 
 function ReservedListItem(props : any){
+    
+    console.log(useAppSelector(state => state.mentoring.mentoringId));
     let dispatch = useAppDispatch();
     const[clickCancel, setClickCancel] = useState(false);
     return(
@@ -79,7 +81,6 @@ function ReservedListItem(props : any){
             <td className="reserved_list_btn_container">
                 <div className="reserved_list_enter_button enter_meeting_button" onClick={(event)=>{
                     dispatch(setMentoringId(props.reserved.mentoringId));
-                    console.log(useAppSelector(state => state.mentoring.mentoringId));
                     props.func(event);
                 }} >입장</div>
                 <div className="reserved_list_cancel_btn">
