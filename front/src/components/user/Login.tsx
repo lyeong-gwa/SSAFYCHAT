@@ -29,6 +29,8 @@ function Login(props: any){
                     if (data.status === 200) {
                         if (data.data.message === "비밀번호를 확인해주십시오.") {
                             alert('비밀번호를 확인해주세요.');
+                        }else if(data.data.message === "해당하는 유저가 존재하지 않습니다."){
+                            alert('회원정보가 조회되지 않습니다.')
                         } else {
                             const accessToken = data.data["accessToken"];
                             const refreshToken = data.data["refreshToken"];

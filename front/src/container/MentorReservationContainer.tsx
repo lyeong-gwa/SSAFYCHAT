@@ -2,7 +2,7 @@ import "../styles/container/mentor-reservation-container.css"
 import CardList from "../components/common/CardList";
 import ReservedList from "../components/mentoring/ReservedList";
 import { dragCard } from "../utils/ts/move";
-import { useAppDispatch } from '../hooks/hooks'
+import { useAppDispatch, useAppSelector } from '../hooks/hooks'
 import { changeBanner } from "../store/userSlice"
 import { getAppointment } from "../store/mentoringSlice";
 import { useEffect } from "react";
@@ -35,6 +35,8 @@ function MentorReservationContainer(){
     const dispatch = useAppDispatch();
     dispatch(changeBanner("멘토링 확인"));
 
+    const apply = useAppSelector(state => state.mentoring.appointmentList.applys);
+    const match = useAppSelector(state => state.mentoring.appointmentList.matches);
     const applyData: applyInfo = {
         applyMentoringId: 0,
         name: "",
@@ -90,11 +92,22 @@ function MentorReservationContainer(){
             console.log(error);
         });
     },[])
+    const cardList: any[] = [];
+    apply.map((item: any) => {
+        item.times.map((data: any) => {
+            cardList.push([item.name, item.numberth, item.email, data, item.applyMentoringId]);
+        });
+    });
+    // const rcardList: any[] = [];
+    // match.map((item: any) => {
+    //     rcardList.push([item.data, item.])
+    // })
+
     return (
         <div className="mentor_reservation_page_container">
             <div className="mentor_reservation_page_inner_container">
                 <ReservedList></ReservedList>
-                <CardList drag={dragCard} header={"신청 목록"} isAbleDrag={true} container={"reserved_list_container"} isEnterable={true} hoverText={"리스트에 드래그 앤 드롭하여 수락"}></CardList>
+                <CardList cardList={cardList} drag={dragCard} header={"신청 목록"} isAbleDrag={true} container={"reserved_list_container"} isEnterable={true} hoverText={"리스트에 드래그 앤 드롭하여 수락"}></CardList>
             </div>
         </div>
     )

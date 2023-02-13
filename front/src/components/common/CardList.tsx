@@ -1,19 +1,10 @@
 import "../../styles/components/common/card-list.css";
 import { useState } from 'react';
-import { useAppSelector } from "../../hooks/hooks";
 import ArrowButton from "../../widget/ArrowButton";
 import ReservationCard from "../../widget/ReservationCard";
 function CardList(props : any){
-    const applyData = useAppSelector(state => state.mentoring.appointmentList.applys);
-
     let cards: any[] = [];
     let [startIdx, setIdx] = useState(0);
-    
-    applyData.map((item) => {
-        item.times.map((data) => {
-            cards.push(<ReservationCard drag={props.drag} info={[item.name, item.numberth, item.email, data]} isAbleDrag={props.isAbleDrag} container={props.container} isEnterable={props.isEnterable} hoverText={props.hoverText}></ReservationCard>)
-        });
-    });
 
     for(let i = startIdx; i < startIdx+4&&props.cardList.length; ++i){
         let info = props.cardList[i];

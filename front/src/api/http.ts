@@ -36,6 +36,9 @@ function localServer() {
       const refreshToken = sessionStorage.getItem('refresh-token');
       const accessToken = sessionStorage.getItem('access-token');
       // console.log('getrefreshToken : ' + refreshToken);
+      // if(accessToken==="" || refreshToken==="" || accessToken==='undefined'){
+
+      // }
       const { data } = await axios.post(
         "https://ssafychat.shop/api/reissue",
         {
