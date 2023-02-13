@@ -11,6 +11,6 @@ public class CheckMentoringReservationForMenteeDto {
 
     private List<ApplyMentoringViewDto> appliedList;
     private List<MentoringListForMenteeDto> matchedList;
-    private List<CanceledMentoringListDto> cancledList;
+    private List<CanceledMentoringListDto> canceledList;
 
 }

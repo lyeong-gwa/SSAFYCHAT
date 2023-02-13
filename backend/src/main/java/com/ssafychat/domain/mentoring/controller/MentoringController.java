@@ -74,7 +74,7 @@ public class MentoringController {
         CheckMentoringReservationForMenteeDto checkMentoringListForMentee =
                 CheckMentoringReservationForMenteeDto.builder()
                         .appliedList(appliedMentoringList).matchedList(matchedMentoringList)
-                                .cancledList(canceledMentoringListForMentee).build();
+                                .canceledList(canceledMentoringListForMentee).build();
 
         return new ResponseEntity<>(checkMentoringListForMentee, HttpStatus.OK);
     }
