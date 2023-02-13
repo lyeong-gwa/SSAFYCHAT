@@ -20,7 +20,8 @@ interface UserInfo{
 function MyPageContainer(){
     const dispatch = useAppDispatch();
     dispatch(changeBanner("마이페이지"));
-    const [pagedata,setPagedata] = useState<{ member: Object; matchMentorings: Array<Object>; completeMentorings: Array<Object>; }[]>({member: {},matchMentorings: [],completeMentorings: [],});
+    // 여기 수정4
+    // const [pagedata,setPagedata] = useState<{ member: Object; matchMentorings: Array<Object>; completeMentorings: Array<Object>; }[]>({member: {},matchMentorings: [],completeMentorings: [],});
     async function init() {
         let userInfo: UserInfo = {
             belong: "",
@@ -34,8 +35,8 @@ function MyPageContainer(){
             (data: any) => {
                 console.log(data.data.matchMentorings);
                 console.log(data.data.completeMentorings);
-                
-                setPagedata(data.data);
+                // 여기수정 5
+                // setPagedata(data.data);
                 userInfo.belong = data.data.member.belong;
                 userInfo.social = data.data.member.social;
                 userInfo.studentNumber = data.data.member.studentNumber;
@@ -66,7 +67,8 @@ function MyPageContainer(){
                     <MyPageCalendar></MyPageCalendar>
                 </div>
                 <div className='my_schedule'>
-                    <MentoringList matchMentorings={pagedata.matchMentorings} completeMentorings={pagedata.completeMentorings}></MentoringList>
+                    {/* 여기 수정 6 */}
+                    {/* <MentoringList matchMentorings={pagedata.matchMentorings} completeMentorings={pagedata.completeMentorings}></MentoringList> */}
                 </div>
             </div>
         </div>

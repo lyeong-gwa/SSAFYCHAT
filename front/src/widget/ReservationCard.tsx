@@ -39,9 +39,10 @@ function ReservationCard(props : any){
                             email: appointmentList.applys[i].email,
                             time: appointmentList.applys[i].times[0],
                             mentoringId: appointmentList.applys[i].applyMentoringId,
-                        });
+                        });                        
                         appointmentList.applys.splice(i,1);
-                        dispatch(getAppointment(appointmentList));
+                        let newLists = {applys:appointmentList.applys,matches:appointmentList.matches};
+                        dispatch(getAppointment(newLists));
                         return true;
                     },(fail : any)=>{
                         console.log(fail);
@@ -61,7 +62,9 @@ function ReservationCard(props : any){
                     cancelReservation({applyMentoringId:props.info[4]},(success : any)=>{
                         console.log(success);
                         reservationList.appliedList.splice(i,1);
-                        dispatch(getReservation(reservationList));
+                        let newLists = {matchedList:reservationList.matchedList,appliedList:reservationList.appliedList,canceledList:reservationList.canceledList};
+                        dispatch(getReservation(newLists));
+                        
                         return true;
                     },(fail:any)=>{
                         console.log(fail)

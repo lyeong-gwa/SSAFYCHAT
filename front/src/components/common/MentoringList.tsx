@@ -2,7 +2,10 @@ import "../../styles/components/common/mentoring-list.css";
 
 function MentoringList(props: any) {
   function dateToString(mentoringdate: String){
-    const date = new Date(mentoringdate);
+
+    // 여기 수정 1
+    // const date = new Date(mentoringdate);
+    const date = new Date();    
     const formattedTime = date.toLocaleString("ko-KR", {year: "numeric", month: "long", day: "numeric", hour: "numeric", minute: "numeric",});
     return formattedTime;
   }
@@ -24,7 +27,8 @@ function MentoringList(props: any) {
               </tr>
             </thead>
             <tbody>
-            {props.matchMentorings.map((mentoring) => (
+            {/*  여기 수정 2 */}
+            {props.matchMentorings.map((mentoring : any) => (
               <tr key={mentoring.mentoringId}>
                 <td>{mentoring.mentoringId}</td>
                 <td>{mentoring.mentee.name}</td>
@@ -52,7 +56,8 @@ function MentoringList(props: any) {
               </tr>
             </thead>
             <tbody>
-            {props.completeMentorings.map((mentoring) => (
+              {/* 여기 수정3 */}
+            {props.completeMentorings.map((mentoring : any) => (
               <tr key={mentoring.mentoringId}>
                 <td>{mentoring.mentoringId}</td>
                 <td>{mentoring.mentee.name}</td>
