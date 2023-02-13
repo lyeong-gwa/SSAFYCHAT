@@ -25,10 +25,11 @@ function CancelModal (props:any){
                     <div className='cancel_modal_submit_button_container'>                          
                         <div className='cancel_modal_submit_button' onClick={()=>{
                             cancelMenteeMentoring({mentoringId:mId,reason:text},(success : any)=>{
+                                console.log(success);
                                 closeModal();
                                 
                             },(fail : any)=>{
-
+                                console.log(fail);
                             })}
                         }>제출</div>
                     </div>

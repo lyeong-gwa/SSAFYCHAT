@@ -11,11 +11,12 @@ interface AppliedInfo{
 }
 
 interface ReservedInfo{
-    date : string,
+    mentoringId: number,
+    time : string,
     name : string,
-    cardinal : Number,
-    email : string,
+    company : string,
     job : string,
+    numberth: number,
 }
 
 interface CanceledInfo{

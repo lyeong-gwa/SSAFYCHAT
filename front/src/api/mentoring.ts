@@ -51,6 +51,14 @@ async function setAppointmentApi(appointment:{applyMentoringId:number, time:stri
     .then(success)
     .catch(fail);
 }
+// 매칭된 멘토링 취소
+async function cancelAppointmentApi(info:{mentoringId:number,reason:string},
+    success:any,fail:any) {
+        api.defaults.headers["Authorization"] = "Bearer " + sessionStorage.getItem("access-token");
+        await api.delete(`/mentoring/cancel/appointment`,{data:JSON.stringify(info)})
+        .then(success)
+        .catch(fail);
+}
 
 
-export {reservation,getAppointmentApi,setAppointmentApi,cancelReservation,cancelMenteeMentoring};
+export {reservation,getAppointmentApi,setAppointmentApi,cancelReservation,cancelMenteeMentoring, cancelAppointmentApi};
