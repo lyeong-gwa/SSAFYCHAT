@@ -2,9 +2,12 @@ package com.ssafychat.domain.member.service;
 
 import com.ssafychat.domain.member.dto.MemberDto;
 import com.ssafychat.domain.member.dto.MyPageDto;
+import com.ssafychat.domain.member.dto.ProfileDto;
 import com.ssafychat.domain.member.dto.TokenInfoDto;
 import com.ssafychat.domain.member.model.Member;
 import com.ssafychat.domain.member.repository.MemberRepository;
+import com.ssafychat.domain.mentoring.dto.MyPageCompleteDto;
+import com.ssafychat.domain.mentoring.dto.MyPageMatchDto;
 import com.ssafychat.domain.mentoring.model.CompleteMentoring;
 import com.ssafychat.domain.mentoring.model.Mentoring;
 import com.ssafychat.domain.mentoring.repository.CompleteMentoringRepository;
@@ -228,24 +231,104 @@ public class MemberServiceImpl implements MemberService {
     public MyPageDto getMypage(Member member) {
         // user 정보에서 role 확인해서 서비스 호출
         String role = member.getRole();
+        ProfileDto profile = ProfileDto.builder()
+                .userId(member.getUserId())
+                .name(member.getName())
+                .belong(member.getBelong())
+                .job(member.getJob())
+                .email(member.getEmail())
+                .level(member.getTotalScore())
+                .student_number(member.getStudentNumber())
+                .build();
+
         List<Mentoring> matchMentorings = new ArrayList<>();
         List<CompleteMentoring> completeMentorings = new ArrayList<>();
+        List<MyPageMatchDto> matches = new ArrayList<>();
+        List<MyPageCompleteDto> completes = new ArrayList<>();
 
         // 멘티라면 mentee_uid로 조회 : mentoring 테이블, completeMentoring 테이블
         if (role.equals("role_mentee")){
             matchMentorings = mentoringRepository.findByMentee(member);
+            for (Mentoring match : matchMentorings) {
+                Member mentor = memberRepository.findByUserId(match.getMentor().getUserId());
+                matches.add(MyPageMatchDto.builder()
+                        .mentoringId(match.getMentoringId())
+                        .mentee(profile)
+                        .mentor(ProfileDto.builder()
+                                .userId(mentor.getUserId())
+                                .name(mentor.getName())
+                                .belong(mentor.getBelong())
+                                .job(mentor.getJob())
+                                .email(mentor.getEmail())
+                                .level(mentor.getTotalScore())
+                                .student_number(mentor.getStudentNumber())
+                                .build())
+                        .time(match.getTime())
+                        .build());
+            }
             completeMentorings = completeMentoringRepository.findByMentee(member);
+            for (CompleteMentoring complete : completeMentorings) {
+                Member mentor = memberRepository.findByUserId(complete.getMentor().getUserId());
+                completes.add(MyPageCompleteDto.builder()
+                        .completeMentoringId(complete.getCompleteMentoringId())
+                        .mentee(profile)
+                        .mentor(ProfileDto.builder()
+                                .userId(mentor.getUserId())
+                                .name(mentor.getName())
+                                .belong(mentor.getBelong())
+                                .job(mentor.getJob())
+                                .email(mentor.getEmail())
+                                .level(mentor.getTotalScore())
+                                .student_number(mentor.getStudentNumber())
+                                .build())
+                        .time(complete.getTime())
+                        .build());
+            }
         // 멘토라면 mentor_uid로 조회 : mentoring 테이블, completeMentoring 테이블
         } else if (role.equals("role_mentor")) {
             matchMentorings = mentoringRepository.findByMentor(member);
+            for (Mentoring match : matchMentorings) {
+                Member mentee = memberRepository.findByUserId(match.getMentee().getUserId());
+                matches.add(MyPageMatchDto.builder()
+                        .mentoringId(match.getMentoringId())
+                        .mentor(profile)
+                        .mentee(ProfileDto.builder()
+                                .userId(mentee.getUserId())
+                                .name(mentee.getName())
+                                .belong(mentee.getBelong())
+                                .job(mentee.getJob())
+                                .email(mentee.getEmail())
+                                .level(mentee.getTotalScore())
+                                .student_number(mentee.getStudentNumber())
+                                .build())
+                        .time(match.getTime())
+                        .build());
+            }
             completeMentorings = completeMentoringRepository.findByMentor(member);
+            for (CompleteMentoring complete : completeMentorings) {
+                Member mentee = memberRepository.findByUserId(complete.getCompleteMentoringId());
+                completes.add(MyPageCompleteDto.builder()
+                        .completeMentoringId(complete.getMentee().getUserId())
+                        .mentor(profile)
+                        .mentee(ProfileDto.builder()
+                                .userId(mentee.getUserId())
+                                .name(mentee.getName())
+                                .belong(mentee.getBelong())
+                                .job(mentee.getJob())
+                                .email(mentee.getEmail())
+                                .level(mentee.getTotalScore())
+                                .student_number(mentee.getStudentNumber())
+                                .build())
+                        .time(complete.getTime())
+                        .build());
+            }
         }
 
         // 멤버 정보까지 담아서 반환
         return MyPageDto.builder()
-                .member(member)
-                .matchMentorings(matchMentorings)
-                .completeMentorings(completeMentorings)
+                .member(profile)
+                .matchMentorings(matches)
+                .completeMentorings(completes)
                 .build();
     }
 

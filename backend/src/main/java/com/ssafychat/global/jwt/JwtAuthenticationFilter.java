@@ -50,8 +50,8 @@ public class JwtAuthenticationFilter  extends OncePerRequestFilter {
             chain.doFilter(request, response);
         } catch (ExpiredJwtException e) {
             setErrorResponse(response, ErrorCode.EXPiRED_TOKEN);
-        } catch (Exception e) {
-            setErrorResponse(response, ErrorCode.INVALID_TOKEN);
+//        } catch (Exception e) {
+//            setErrorResponse(response, ErrorCode.INVALID_TOKEN);
         }
     }
 
