@@ -1,0 +1,58 @@
+.profile_component{
+    position: relative;
+    display: grid;
+
+    grid-template-rows: repeat(5, 1fr);
+    grid-template-columns: 1fr;
+    margin: 100px;
+}
+
+.profile_component_name{
+    font-style: normal;
+    font-weight: 400;
+    font-size: 50px;
+    line-height: 150%;
+}
+
+.profile_component_belong_job{
+    font-style: normal;
+    font-weight: 400;
+    font-size: 22px;
+    line-height: 150%;
+    color: #A6A6A6;
+}
+
+.profile_component_total_score{
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 150%;
+    
+
+    color: #A6A6A6;
+}
+
+.profile_component_student_id{
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 150%;
+    /* identical to box height, or 30px */
+
+    color: #A6A6A6;
+}
+
+.profile_component_email{
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 150%;
+    /* identical to box height, or 30px */
+
+    color: #A6A6A6;
+}
+
+.profile_component_edit{
+    text-align: right;
+    text-decoration: underline;
+}

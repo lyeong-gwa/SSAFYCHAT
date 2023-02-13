@@ -1,0 +1,27 @@
+.result_component {
+    position: relative;
+    display: grid;
+    overflow: auto;
+
+    grid-template-columns: repeat(4, 1fr);
+    grid-auto-rows: 200px;
+
+    width: 1200px;
+    height: 700px;
+
+    border: 1px solid black;
+    border-radius: 50px;
+
+}
+
+.result_component::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera*/
+}
+
+.result_component_card{
+    position: relative;
+    display: grid;
+
+    align-items: center;
+    justify-content: center;
+}
