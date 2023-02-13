@@ -4,6 +4,7 @@ import com.ssafychat.domain.member.dto.PossibleMentoringDto;
 import com.ssafychat.domain.member.model.Member;
 import com.ssafychat.domain.mentoring.dto.*;
 import com.ssafychat.domain.mentoring.model.ApplyMentoring;
+import com.ssafychat.domain.mentoring.model.CompleteMentoring;
 import com.ssafychat.domain.mentoring.model.Mentoring;
 import com.ssafychat.domain.mentoring.service.MentoringService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,8 +37,8 @@ public class MentoringController {
 
 
     @GetMapping("/main-info")
-    public ResponseEntity<?> mainInfo() {
-        MainInfoDto mainInfoDto = mentoringService.mainInfo();
+    public ResponseEntity<?> mainInfo(CompleteMentoring completeMentoring) {
+        MainInfoDto mainInfoDto = mentoringService.mainInfo(completeMentoring);
         return new ResponseEntity<>(mainInfoDto, HttpStatus.OK);
     }
 
@@ -112,15 +113,22 @@ public class MentoringController {
         }
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    @Transactional
     @DeleteMapping("/cancel/reservation")
     public ResponseEntity<?> reservationCancel(HttpServletRequest request, @RequestBody MentoringDateDto mentoringDateDto) {
         Member user = (Member) request.getAttribute("USER");
+        int userId = user.getUserId();
         int applyMentoringId = mentoringDateDto.getApplyMentoringId();
+        Date time = mentoringDateDto.getTime();
+        int rowsDeleted = mentoringService.deleteMentoringDate(applyMentoringId);
+        ApplyMentoring applyMentoring = mentoringService.deleteApplyMentoring(applyMentoringId);
         Map<String,String> response = new HashMap<>();
         try {
             mentoringService.deleteApplyMentoring(applyMentoringId);
             response.put("message", "success");
         } catch (Exception e) {
+            e.printStackTrace();
             response.put("message", "fail");
         }
         return new ResponseEntity<>(response, HttpStatus.OK);
