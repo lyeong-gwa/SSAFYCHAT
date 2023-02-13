@@ -106,7 +106,7 @@ function VideoConferenceContainer(props : any){
                             <img src={imgUrlEmoji} alt="" className="emoji" />
                         </div>
                         
-                        <input type="text" name="msg" id="video_conference_chat_input_test" className="input_msg" />
+                        <input type="text" name="msg" id="video_conference_chat_input" className="input_msg" />
                         
                         <div className="send_div">
                             <img src={imgUrlSend} alt="" className="send" />
@@ -131,7 +131,7 @@ function VideoConferenceContainer(props : any){
         const cameraBtn = document.getElementById("camera") as HTMLVideoElement;
         const camerasSelect = document.getElementById("cameras") as HTMLSelectElement;
         const call = document.getElementById("call") as HTMLDivElement;
-        const chattinginput = document.getElementById("video_conference_chat_input_test") as HTMLInputElement;
+        const chattinginput = document.getElementById("video_conference_chat_input") as HTMLInputElement;
         let myDataChannel : any; //데이터채널 1:1 
         chatLog(mentoringid,(chatlog:any)=>{
             tmplog = chatlog.data.log;
@@ -153,10 +153,13 @@ function VideoConferenceContainer(props : any){
                         myDataChannel.send(JSON.stringify(senddata));
                         tmplog.push(senddata);
                         setLogmsg(JSON.parse(JSON.stringify(tmplog)));
+
                     },
                     (err:any)=>{console.log(err);}
                   );
-                  
+                  const msgdiv = document.getElementById("messages") as HTMLDivElement;
+                  console.log("msgdiv",msgdiv);
+                  msgdiv.scrollTop = 0;
             }
             
         }

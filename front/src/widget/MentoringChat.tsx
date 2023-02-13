@@ -21,9 +21,6 @@ function Chat(props: any){
     )
 }
 
-// props.tmplog = [{"user_id":false,"message":"aa","Date":1676001100809},{"user_id":false,"message":"aa","Date":1676001110317},{"user_id":false,"message":"??","Date":1676001114944},{"user_id":false,"message":"??","Date":1676001254805},{"user_id":false,"message":"?","Date":1676001260116},{"user_id":false,"message":"?","Date":1676001260936},{"user_id":false,"message":"?","Date":1676001261621},{"user_id":false,"message":"?","Date":1676001266832},{"user_id":false,"message":"?","Date":1676001268549},{"user_id":false,"message":"?","Date":1676001269810},{"user_id":false,"message":"?","Date":1676001276201},{"user_id":false,"message":"?","Date":1676001277461},{"user_id":false,"message":"?","Date":1676001278317}];
-
-
 function Messages(props: any){
     const imgUrlEmoji = "/img/emoji.png";
     const imgUrlSend = "/img/send.png";
@@ -44,7 +41,7 @@ function Messages(props: any){
                 </div>
                 
                     
-                <div className="messages">
+                <div className="messages" id="messages">
                     {props.tmplog.map((chat: any, index: number) => {
                         const day = new Date(chat.Date).toISOString().substring(0,10);
                         if(!checkdate.includes(day)){

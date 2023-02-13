@@ -18,7 +18,7 @@ async function setReview(review:{completeMentoringId: number, reviewContent: str
     .catch(fail);
 }
 // 리뷰위치 변경
-async function patchReview(review:{completeMentoringId: number, reviewContent: string, reviewHeight:number, reviewWidth:number,reviewSelected:number},
+async function patchReview(review:{completeMentoringId: number, reviewHeight:number, reviewWidth:number,reviewSelected:number},
     success:any, fail:any){
     api.defaults.headers["Authorization"] = "Bearer " + sessionStorage.getItem("access-token");
     await api.patch(`/mentoring/review`, JSON.stringify(review))
