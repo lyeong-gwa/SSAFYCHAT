@@ -44,7 +44,8 @@ function ReservationCard(props : any){
                         return true;
                     },(fail : any)=>{
                         console.log(fail);
-                        console.log(props.info[4]);
+                        console.log("실패 아이디 " + props.info[4]);
+                        console.log("실패 시간 " + props.info[3]);
                         return false;
                     });
                     // 이곳에 api호출
