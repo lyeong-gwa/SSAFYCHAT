@@ -47,7 +47,7 @@ async function getAppointmentApi(success : any, fail : any){
 // 요청멘토링 중 하나를 승낙한다
 async function setAppointmentApi(appointment:{applyMentoringId:number, time:string}, success: any, fail: any){
     api.defaults.headers["Authorization"] = "Bearer " + sessionStorage.getItem("access-token");
-    await api.post(`/mentoring/appointment`,JSON.stringify(appointment))
+    await api.post(`/mentoring/appointment`,JSON.stringify({applyMentoringId:appointment.applyMentoringId, time:appointment.time}))
     .then(success)
     .catch(fail);
 }

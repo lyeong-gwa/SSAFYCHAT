@@ -23,11 +23,12 @@ function ReservationCard(props : any){
     if(props.isEnterable){
         funcAfterDrag = async ()=>{
             for(let i = 0; i < appointmentList.applys.length; ++i){
-                console.log("infoId "+ props.info[4]);
+                
                 console.log("listId " + appointmentList.applys[i].applyMentoringId );
                 
                 if(appointmentList.applys[i].applyMentoringId === props.info[4]){
-                    console.log(props.info[3]);
+                    console.log("아이디 "+ props.info[4]);
+                    console.log("시간 " + props.info[3]);
                     setAppointmentApi({applyMentoringId:props.info[4],time:props.info[3]},(success : any)=>{
                         console.log(success);
                         
