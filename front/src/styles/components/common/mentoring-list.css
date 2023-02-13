@@ -11,6 +11,7 @@
   font-weight: 400;
   font-size: 25px;
   line-height: 125%;
+  height: 25px;
   /* or 31px */
 
   align-items: center;
@@ -18,3 +19,18 @@
 
   color: #031059;
 }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  }
+  
+  th, td {
+  padding: 8px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+  }
+  
+  th {
+  background-color: #ddd;
+  }

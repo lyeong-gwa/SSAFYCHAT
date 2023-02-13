@@ -1,16 +1,5 @@
 import '../../styles/components/common/profile.css'
 import { useAppSelector, useAppDispatch } from '../../hooks/hooks'
-import { userinfo } from '../../api/user'
-import { appendUserInfo } from '../../store/userSlice'
-import { useEffect } from 'react'
-
-interface UserInfo{
-    belong: string,
-    social: string,
-    studentNumber: string,
-    job: string,
-    totalScore: number,
-}
 
 function whatMyNick(nick: string){
     console.log(nick);
@@ -44,36 +33,10 @@ function studentNumberSplit(num: string){
 }
 
 function Profile(){
-    useEffect(() => {
-        getUserInfo();
-      }, []);
-    const dispatch = useAppDispatch();
     const name = useAppSelector(state => state.user.name);
     const email = useAppSelector(state => state.user.email);
     const userInfo = useAppSelector(state => state.user.userInfo);
     const nick = studentNumberSplit(userInfo.studentNumber);
-    async function getUserInfo(){
-        let userInfo: UserInfo = {
-            belong: "",
-            social: "",
-            studentNumber: "",
-            job: "",
-            totalScore: 0,
-        };
-        await userinfo(
-            (data: any) => {
-                userInfo.belong = data.data.belong;
-                userInfo.social = data.data.social;
-                userInfo.studentNumber = data.data.studentNumber;
-                userInfo.job = data.data.job;
-                userInfo.totalScore = parseInt(data.data.totalScore);
-                dispatch(appendUserInfo(userInfo));
-            },
-            (error: any) => {
-                console.log(error);
-            }
-        )
-    }
     return (
         <div className='profile_component'>
             <div className='profile_component_name'>{name}</div>
