@@ -4,6 +4,7 @@ import BannerPage from './pages/BannerPage';
 import PrivateRoute from './components/PrivateRoute';
 import ProtectRoute from './components/ProtectRoute';
 function App() {
+  console.log(new Date("2023-03-03T13:00:00.000+00:00").toISOString());
   return (
     <div className="App">
       <Routes>

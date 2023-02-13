@@ -32,7 +32,7 @@ function ReservationContainer(){
     // console.log(app);
     // console.log(can);
     app.map((item: any) => {
-            appliedList.push(["신청카드",item.company,item.job,new Date(item.times[0]).toISOString(),item.applyMentoringId]);
+            appliedList.push(["신청카드",item.company,item.job,item.times[0],item.applyMentoringId]);
     });
     // for(let i = 0; i < app.length; ++i){
     //     appliedList.push(["신청카드",app[i].company,app[i].job,new Date(app[i].times[0]).toISOString(),app[i].applyMentoringId]);
@@ -44,7 +44,7 @@ function ReservationContainer(){
     //     canceledList.push(["취소카드",can[i].company,can[i].job,new Date(can[i].time).toISOString(),can[i].cancelMentoringId]);
     // }
     can.map((item: any) => {
-            canceledList.push(["취소카드",item.company,item.job,new Date(item.time).toISOString(),item.cancelMentoringId]);
+            canceledList.push(["취소카드",item.company,item.job,item.time,item.cancelMentoringId]);
     });
 
     mat.map((item: any) => {
