@@ -64,27 +64,13 @@ function MentorReservationContainer(){
             console.log(data);
             const result = data.data.applys;
             const applyItems = result.map((item: applyInfo) => {
-                // applyData.applyMentoringId = item.applyMentoringId;
-                // applyData.name = item.name;
-                // applyData.studentNumber = item.studentNumber;
-                // applyData.numberth = item.numberth;
-                // applyData.email = item.email;
-                // applyData.times = item.times;
                 applyList.push(item);
             });
-            console.log(11);
-            console.log(applyList);
-            const matcheItems = result.map((item: matchInfo) => {
-                // matcheData.name = item.name;
-                // matcheData.studentNumber = item.studentNumber;
-                // matcheData.numberth = item.numberth;
-                // matcheData.email = item.email;
-                // matcheData.time = item.time;
-                // matcheData.mentoringId = item.mentoringId;
+
+            const rresult = data.data.matches;
+            const matcheItems = rresult.map((item: matchInfo) => {
                 matchesList.push(item);
             })
-            console.log(22);
-            console.log(matchesList);
 
             const rdata: AppointmentState = {
                 applys: applyList,

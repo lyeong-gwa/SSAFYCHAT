@@ -22,9 +22,9 @@ function ReservationContainer(){
     })
     const reservationList = useAppSelector(state => state.mentoring.reservationList);
 
-    let app = useAppSelector(state => state.mentoring.reservationList.appliedList);
-    let can = useAppSelector(state => state.mentoring.reservationList.canceledList);
-    let appliedList : any = [];  
+    let app: any[] = useAppSelector(state => state.mentoring.reservationList.appliedList);
+    let can: any[] = useAppSelector(state => state.mentoring.reservationList.canceledList);
+    let appliedList : any = [];
     let matchedList : any = useAppSelector(state => state.mentoring.reservationList.matchedList);
     let canceledList : any = [];
 
@@ -39,9 +39,9 @@ function ReservationContainer(){
     for(let i = 0; i < can.length; ++i){
         canceledList.push([can[i].company,can[i].job,new Date(can[i].time)]);
     }
-    console.log("applied "+appliedList);
-    console.log("match " + matchedList);
-    console.log("cancel" + canceledList);
+    console.log("applied :"+appliedList);
+    console.log("match :" + matchedList);
+    console.log("cancel :" + canceledList);
     return (
         <div className="reservation_page_container">
             <div className="reservation_page_inner_container">
