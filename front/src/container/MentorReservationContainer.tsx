@@ -102,7 +102,7 @@ function MentorReservationContainer(){
     // match.map((item: any) => {
     //     rcardList.push([item.data, item.])
     // })
-
+    console.log(cardList);
     return (
         <div className="mentor_reservation_page_container">
             <div className="mentor_reservation_page_inner_container">

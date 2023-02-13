@@ -31,9 +31,11 @@ function ReservationContainer(){
     //     matchedList.push(reservationList.matchedList[i]);
     // }
     for(let i = 0; i < reservationList.canceledList.length; ++i){
-        canceledList.push(reservationList.canceledList[i].company,reservationList.canceledList[i].job,new Date(reservationList.canceledList[i].time));
+        canceledList.push([reservationList.canceledList[i].company,reservationList.canceledList[i].job,new Date(reservationList.canceledList[i].time)]);
     }
-
+    console.log(appliedList);
+    console.log(matchedList);
+    console.log(canceledList);
     return (
         <div className="reservation_page_container">
             <div className="reservation_page_inner_container">
