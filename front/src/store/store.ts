@@ -21,7 +21,7 @@ const persistConfig = {
   key: 'root',
   storage,
   // whitelist: ['user'],
-  blacklist: ['applying', 'mentoring', 'user'],
+  blacklist: ['applying', 'mentoring'],
 }
 
 const persistedReducer = persistReducer(persistConfig, reducers);

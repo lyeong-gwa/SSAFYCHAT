@@ -3,6 +3,7 @@ import { useAppDispatch,useAppSelector } from "../hooks/hooks";
 import { getAppointment, getReservation } from "../store/mentoringSlice";
 import { cancelReservation } from "../api/mentoring";
 import { setAppointment } from "../api/mentoring";
+import DATE_TO_STRING from "../utils/ts/date_to_string";
 function whatMyNick(nick: number){
     console.log(nick);
     switch (nick){
@@ -102,7 +103,7 @@ function ReservationCard(props : any){
                     {props.info[2]}
                 </div>
                 <div className="card_time">
-                    {props.info[3]}
+                    {DATE_TO_STRING(props.info[3])}
                 </div>
           </div>
         </div>

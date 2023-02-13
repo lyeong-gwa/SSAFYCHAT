@@ -82,7 +82,7 @@ function MentorReservationContainer(){
             console.log(error);
         });
     },[])
-    const cardList: any[] = [];
+    const cardList: any = [];
     apply.map((item: any) => {
         item.times.map((data: any) => {
             cardList.push([item.name, item.numberth, item.email, data, item.applyMentoringId]);

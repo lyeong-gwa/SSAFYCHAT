@@ -3,7 +3,7 @@ import "../../styles/components/mentoring/reserved-list.css"
 import { useAppSelector } from '../../hooks/hooks'
 import { useState } from "react";
 import CancelModal from "../modal/CancelModal";
-
+import DATE_TO_STRING from "../../utils/ts/date_to_string";
 function dragItem(event : any){
     let elem = event.target;
     if(elem.className === "reserved_list_enter_button"){
@@ -43,7 +43,7 @@ function ReservedListItem(props : any){
             dragItem(event);
         }}
         >
-            <td>{props.reserved.date}</td>
+            <td>{DATE_TO_STRING(props.reserved.date)}</td>
             <td>{props.reserved.name}</td>
             <td>{props.reserved.cardinal}</td>
             <td>{props.reserved.email}</td>

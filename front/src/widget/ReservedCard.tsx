@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "../styles/widget/reserved-card.css"
 import CancelModal from "../components/modal/CancelModal";
-
+import DATE_TO_STRING from "../utils/ts/date_to_string";
 
 function ReservedCard(props : any){
     const[clickCancel, setClickCancel] = useState(false);
@@ -18,7 +18,7 @@ function ReservedCard(props : any){
                             <div className="cancle_btn"><img src="/img/trash_shape_red.png" alt="삭제" onClick={()=>setClickCancel(true)}></img>
                             </div>
                         </div>                
-                        <div className="reserved_card_time">{props.info.time}</div>
+                        <div className="reserved_card_time">{DATE_TO_STRING(props.info.time)}</div>
                     </div>
                 </div>                
                 <div className="reserved_card_content_container">
