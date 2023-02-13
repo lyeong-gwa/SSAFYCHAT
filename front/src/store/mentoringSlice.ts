@@ -60,6 +60,7 @@ interface ReservationState {
 interface MentoringState{
   appointmentList:AppointmentState,
   reservationList:ReservationState,
+  mentoringId:number,
 }
 
 // Define the initial state using that type
@@ -72,7 +73,8 @@ const initialState: MentoringState = {
       matchedList:[],
       appliedList:[],
       canceledList:[],
-    }
+    },
+    mentoringId: -1,
 }
 
 export const MentoringSlice = createSlice({
@@ -87,11 +89,14 @@ export const MentoringSlice = createSlice({
     getAppointment: (state, action: PayloadAction<AppointmentState>)=>{
         state.appointmentList.applys = action.payload.applys;
         state.appointmentList.matches = action.payload.matches;
+    },
+    setMentoringId:(state, action:PayloadAction<number>)=>{
+      state.mentoringId = action.payload;
     }
   }
 })
 
-export const { getReservation, getAppointment } = MentoringSlice.actions
+export const { getReservation, getAppointment, setMentoringId } = MentoringSlice.actions
 
 // Other code such as selectors can use the imported `RootState` type
 export const selectCount = (state: RootState) => state.mentoring

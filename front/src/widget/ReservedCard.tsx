@@ -2,9 +2,12 @@ import { useState } from "react";
 import "../styles/widget/reserved-card.css"
 import CancelModal from "../components/modal/CancelModal";
 import DATE_TO_STRING from "../utils/ts/date_to_string";
+import { useAppDispatch,useAppSelector } from "../hooks/hooks";
+import { setMentoringId } from "../store/mentoringSlice";
 
 function ReservedCard(props : any){
     const[clickCancel, setClickCancel] = useState(false);
+    let dispatch = useAppDispatch();
     console.log(props.info);
     return(
         // 카드를 감싸는 outer
@@ -40,6 +43,8 @@ function ReservedCard(props : any){
                 <div className="reserved_card_button_container">  
                     {/* 버튼이벤트를 props로 받아와 사용 */}
                     <div className="reserved_card_button enter_meeting_button" onClick={(event)=>{
+                        dispatch(setMentoringId(props.info.mentoringId));
+                        console.log(useAppSelector(state => state.mentoring.mentoringId));
                         props.button(event);
                     }}>
                         입장하기
