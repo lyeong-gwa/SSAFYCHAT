@@ -37,7 +37,7 @@ function ReservationContainer(){
     //     matchedList.push(reservationList.matchedList[i]);
     // }
     for(let i = 0; i < can.length; ++i){
-        canceledList.push([can[i].company,can[i].job,new Date(can[i].time).toISOString()]);
+        canceledList.push(["취소카드",can[i].company,can[i].job,new Date(can[i].time).toISOString(),can[i].cancelMentoringId]);
     }
     console.log("applied :"+appliedList);
     console.log("match :" + matchedList);

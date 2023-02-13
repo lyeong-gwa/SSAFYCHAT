@@ -8,7 +8,15 @@ function CardList(props : any){
 
     for(let i = startIdx; i < startIdx+4&&props.cardList.length; ++i){
         let info = props.cardList[i];
-        cards.push(<ReservationCard key={i} drag={props.drag} info={[info[0],info[1],info[2],info[3],info[4]]} isAbleDrag={props.isAbleDrag} container={props.container} isEnterable={props.isEnterable} hoverText={props.hoverText}></ReservationCard>)
+        cards.push(
+        <ReservationCard key={i} 
+            drag={props.drag} 
+            info={[info[0],info[1],info[2],info[3],info[4]]} 
+            isAbleDrag={props.isAbleDrag} 
+            container={props.container} 
+            isEnterable={props.isEnterable} 
+            hoverText={props.hoverText}>
+        </ReservationCard>)
     }
     console.log(props.cardList);
     return (
