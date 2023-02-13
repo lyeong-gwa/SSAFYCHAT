@@ -21,6 +21,7 @@ function ApplyingModal(props: any) {
     return curTime;
   });
   const [selectedTimes, pushTime] = useState<Date[]>([]);
+  const [times, pushTimeString] = useState<string[]>([]);
   const [hour, setHour] = useState(
     (date.getHours() < 10 ? "0" : "") + date.getHours()
   );
@@ -113,10 +114,14 @@ function ApplyingModal(props: any) {
 
   /** 신청하는 api 호출*/
   function applyMentoring() {
+    selectedTimes.map((time)=>{
+      times.push(time.toISOString());
+    });
+
     const applying = {
       job: mentoringInfo.job,
       company: mentoringInfo.belong,
-      times: [selectedTimes],
+      times: times,
     };
 
     apply(

@@ -70,7 +70,7 @@ function enterMeeting(event : any, navigate : any){
 
 function ReservedList(props : any){
     const navigate = useNavigate();
-    const reservedList = useAppSelector((state)=>state.mentoring.reservedMentorings);
+    const reservedList = useAppSelector((state)=>state.mentoring.appointmentList.matches);
     const list = [];
     for(let i = 0; i < reservedList.length; ++i){
         list.push(<ReservedListItem key={i} reserved={reservedList[i]}  func={(event : any)=>{

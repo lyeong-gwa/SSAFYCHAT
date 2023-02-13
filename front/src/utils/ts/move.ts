@@ -1,7 +1,7 @@
 import { attachRolling, removeRolling } from "../../store/rollingSlice";
 
 
-function dragCard(event : any, elemClassName : string, containerClassName : string, isEnterCheck : boolean){
+function dragCard(event : any, elemClassName : string, containerClassName : string, isEnterCheck : boolean, resultFunc : any){
     // 요소 가져오기
     let elem = event.target;
     // 기존의 드래그를 없애기
@@ -73,6 +73,9 @@ function dragCard(event : any, elemClassName : string, containerClassName : stri
                     // **********************
                     // 이 곳에 기능을 넣어야 함
                     // **********************
+
+                    // resultFunc에 원하는 행동을 넣어서 실행
+                    resultFunc();
                 }
                 onDrag = false;
             }
@@ -102,6 +105,9 @@ function dragCard(event : any, elemClassName : string, containerClassName : stri
                     // **********************
                     // 이 곳에 기능을 넣어야 함
                     // **********************
+
+                    // resultFunc에 원하는 행동을 넣어서 실행
+                    resultFunc();
                 }
                 onDrag = false;
             }
@@ -117,8 +123,7 @@ function dragCard(event : any, elemClassName : string, containerClassName : stri
     }
 }
 
-// 확대 축소에도 제자리에 있게 하자
-async function dragRoll(event : any, elemClassName : string, containerClassName : string, dispatch : any, id : number, isAttached : number){
+async function dragRoll(event : any, elemClassName : string, containerClassName : string, dispatch : any, patchReview:any, id : number, isAttached : number){
     // react 최상위 요소 가져오기
     const rootDiv = document.getElementById("root");
     // 요소 가져오기
@@ -224,30 +229,42 @@ async function dragRoll(event : any, elemClassName : string, containerClassName 
                 if(isAttached === 0){
                     elem.remove();
                 }
-                dispatch(attachRolling({
-                    id: id,
-                    posX: mX - conLeft - 174,
-                    posY: mY -conTop - 48,
-                }));        
+                patchReview({completeMentoringId: id, reviewContent: "", reviewHeight:mY -conTop - 48, reviewWidth:mX - conLeft - 174,reviewSelected:1},
+                (success:any)=>{
+                    console.log(success);
+                    dispatch(attachRolling({
+                        id: id,
+                        posX: mX - conLeft - 174,
+                        posY: mY -conTop - 48,
+                    }));     
+                },(fail:any)=>{
+                    console.log(fail);
+                })
+   
         }
         else{            
             // *************************
             // 이 곳에 기능을 넣어야 함
-            // *************************    
-            dispatch(removeRolling({
-                id:id,
-                posX: 0,
-                posY:0,
-            }));
-            
-            if(isAttached === 1){
-                elem.remove();
-            }
-            else{
-                outer.append(elem);
-                elem.style.position = "static";
-                elem.style.zIndex = "auto";
-            }    
+            // ************************* 
+            patchReview({completeMentoringId: id, reviewContent: "", reviewHeight:0, reviewWidth:0,reviewSelected:0},
+                (success:any)=>{
+                    console.log(success);   
+                    dispatch(removeRolling({
+                        id:id,
+                        posX: 0,
+                        posY:0,
+                    }));
+                },(fail:any)=>{
+                    console.log(fail);
+                })
+                if(isAttached === 1){
+                    elem.remove();
+                }
+                else{
+                    outer.append(elem);
+                    elem.style.position = "static";
+                    elem.style.zIndex = "auto";
+                }                
                 
             }
         if(rootDiv){

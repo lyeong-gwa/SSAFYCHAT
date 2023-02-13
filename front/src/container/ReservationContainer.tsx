@@ -6,62 +6,40 @@ import { useAppDispatch } from "../hooks/hooks"
 import { changeBanner } from "../store/userSlice"
 import { reservation } from "../api/mentoring";
 import { useEffect } from "react";
-
+import { useAppSelector } from "../hooks/hooks";
+import { getReservation } from "../store/mentoringSlice";
+import ReservedList from "../components/mentoring/ReservedList";
 function ReservationContainer(){
     const dispatch = useAppDispatch();
     dispatch(changeBanner("예약확인"));
     // 예약 리스트들 호출
     useEffect(()=>{
         console.log("reservation");
-        reservation((success : any)=>{console.log(success)},(fail : any)=>{console.log(fail)});
+        reservation((success : any)=>{
+            console.log(success);
+            dispatch(getReservation(success.data));
+        },(fail : any)=>{console.log(fail)});
     })
-    const cardList = [["김도원","네이버","백엔드 개발자","2023-01-01"],["김겨울","SMENT","가수","2023-01-01"],["3","SMENT","가수","2023-01-01"],["4","SMENT","가수","2023-01-01"],["5","SMENT","가수","2023-01-01"],["6","SMENT","가수","2023-01-01"]];
-    const reCardList = [
-        {
-            time:"2022.02.02 AM 09:10",
-            name:"김겨울",
-            belong: "SMENT",
-            job:"아이돌",
-            num: "7전8기",
-        },
-        {
-            time:"2022.02.02",
-            name:"2",
-            belong: "삼성SDS",
-            job:"아이돌",
-            num: "7전8기",
-        },{
-            time:"2022.02.02",
-            name:"3",
-            belong: "삼성SDS",
-            job:"아이돌",
-            num: "7전8기",
-        },{
-            time:"2022.02.02",
-            name:"4",
-            belong: "삼성SDS",
-            job:"아이돌",
-            num: "7전8기",
-        },{
-            time:"2022.02.02",
-            name:"5",
-            belong: "삼성SDS",
-            job:"아이돌",
-            num: "7전8기",
-        },{
-            time:"2022.02.02",
-            name:"6",
-            belong: "삼성SDS",
-            job:"아이돌",
-            num: "7전8기",
-        }
-    ]
+    const reservationList = useAppSelector(state => state.mentoring.reservationList);
+    let appliedList : any = [];  
+    let matchedList : any= reservationList.matchedList;
+    let canceledList : any = [];
+    for(let i = 0; i < reservationList.appliedList.length; ++i){
+        appliedList.push(["신청카드",reservationList.appliedList[i].company,reservationList.appliedList[i].job,new Date(reservationList.appliedList[i].times[0]),reservationList.appliedList[i].applyMentoringId]);
+    }
+    // for(let i = 0; i < reservationList.matchedList.length; ++i){
+    //     matchedList.push(reservationList.matchedList[i]);
+    // }
+    for(let i = 0; i < reservationList.canceledList.length; ++i){
+        canceledList.push(reservationList.canceledList[i].company,reservationList.canceledList[i].job,new Date(reservationList.canceledList[i].time));
+    }
+
     return (
         <div className="reservation_page_container">
             <div className="reservation_page_inner_container">
-                <CardList drag={dragCard} header={"신청 목록"} cardList = {cardList} isAbleDrag={true} container={"card_list_container"} isEnterable={false} hoverText={"리스트 바깥으로 드래그 앤 드롭하여 취소"}></CardList>
-                <ReservedCardList cardList={reCardList}></ReservedCardList>
-                <CardList drag={(event : any, tmp : string)=>{return;}}header={"취소 목록"} cardList = {cardList}  container={"card_list_container"}  isAbleDrag={false} isEnterable={false}></CardList>
+                <CardList drag={dragCard} header={"신청 목록"} cardList = {appliedList} isAbleDrag={true} container={"card_list_container"} isEnterable={false} hoverText={"리스트 바깥으로 드래그 앤 드롭하여 취소"}></CardList>
+                <ReservedCardList cardList={matchedList}></ReservedCardList>
+                <CardList drag={(event : any, tmp : string)=>{return;}}header={"취소 목록"} cardList = {canceledList}  container={"card_list_container"}  isAbleDrag={false} isEnterable={false}></CardList>
             </div>
         </div>
     )

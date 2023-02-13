@@ -4,9 +4,7 @@ import { useNavigate } from "react-router";
 import { useAppSelector } from "../hooks/hooks";
 import {chatMessage, chatLog} from "../api/chatting"
 import MentoringChat from "../widget/MentoringChat";
-import {useState} from "react";
-
-
+import { useState } from "react";
 
 function exit(navigate : any){
     navigate("/banner/mentoring");
@@ -18,7 +16,8 @@ function VideoConferenceContainer(props : any){
     const imgUrlEmoji = "/img/emoji.png";
     const imgUrlSend = "/img/send.png";
     const userinfo = useAppSelector(state => state.user.isLogin);
-    const [tmplog, setTmpLog] = useState<{ chat_id: number; user_id: number; message: string; Date: number; }[]>([]);
+    let tmplog : { chat_id: number; user_id: number; message: string; Date: number; }[] = []; 
+    const [logmsg,setLogmsg] = useState<{ chat_id: number; user_id: number; message: string; Date: number; }[]>([]);
     const navigate = useNavigate();
     let first = true;
     return(
@@ -94,17 +93,19 @@ function VideoConferenceContainer(props : any){
             <div className="video_conference_right">
                 {/* 채팅 내용을 보여줄 리스트 요소 */}
                 <div className="video_conference_chat_content_message">
-                    <MentoringChat tmplog={tmplog}></MentoringChat>
+                    <MentoringChat tmplog={logmsg}></MentoringChat>
                 </div>
                        
                 <div className="video_conference_chat_container">
                     {/* 채팅 입력 input */}
+                    
                     <div className="input_bar">
+                    <span id = "realtest">아니</span>
                         <div className="emoji_div">
                             <img src={imgUrlEmoji} alt="" className="emoji" />
                         </div>
                         
-                        <input type="text" name="msg" id="video_conference_chat_input" className="input_msg" />
+                        <input type="text" name="msg" id="video_conference_chat_input_test" className="input_msg" />
                         
                         <div className="send_div">
                             <img src={imgUrlSend} alt="" className="send" />
@@ -129,31 +130,39 @@ function VideoConferenceContainer(props : any){
         const cameraBtn = document.getElementById("camera") as HTMLVideoElement;
         const camerasSelect = document.getElementById("cameras") as HTMLSelectElement;
         const call = document.getElementById("call") as HTMLDivElement;
-        const chattinginput = document.getElementById("video_conference_chat_input") as HTMLInputElement;
-        chatLog(15,(chatlog:any)=>{
-            setTmpLog(chatlog.data.log);
+        const chattinginput = document.getElementById("video_conference_chat_input_test") as HTMLInputElement;
+        let myDataChannel : any; //데이터채널 1:1 
+        chatLog(mentoringid,(chatlog:any)=>{
+            tmplog = chatlog.data.log;
+            setLogmsg(tmplog);
+            console.log(tmplog);
             },(err:any)=>{
                 console.log(err);
             }
         );
-        chattinginput.addEventListener("keyup",function (event) {
-            if (event.keyCode === 13) {
-                const senddata = {"chat_id": mentoringid,"user_id":userid,"message":this.value,"Date": Date.now()};
-                this.value = "";
-        
+        let inputListen = function (event : any) {
+            if (event.keyCode === 13 && chattinginput.value != "") {
+                const senddata = {"chat_id": mentoringid,"user_id":userid,"message":chattinginput.value,"Date": Date.now()};
+                let realTest = document.getElementById("realtest") as HTMLSpanElement;
+                realTest.textContent=chattinginput.value;
+                chattinginput.value = "";
                 //몽고DB에 senddata + chat_id를 추가해서 전달
+                
                 chatMessage(
                     senddata,
                     (data:any)=>{
                         myDataChannel.send(JSON.stringify(senddata));
-                        setTmpLog([...tmplog,...[senddata]]);
+                        tmplog.push(senddata);
                         console.log(senddata);
                     },
                     (err:any)=>{console.log(err);}
                   );
             }
             
-        });
+        }
+
+        chattinginput.removeEventListener("keyup",inputListen);
+        chattinginput.addEventListener("keyup",inputListen);
         
         if(call != null){
             call.hidden = true;
@@ -163,7 +172,7 @@ function VideoConferenceContainer(props : any){
         let cameraOff = false;
         let roomName : any ;
         let myPeerConnection : any; //상호간의 연락을 위한
-        let myDataChannel : any; //데이터채널 1:1 
+        
         async function getCameras() {
             try {
                 const devices = await navigator.mediaDevices.enumerateDevices();//사용자의 미디어 디바이스 목록 가져온다.
@@ -291,7 +300,8 @@ function VideoConferenceContainer(props : any){
             //데이터채널 생성 최초생성자
             myDataChannel = myPeerConnection.createDataChannel("chat");
             myDataChannel.addEventListener("message", (event : any) =>{
-                    setTmpLog([...tmplog,...[JSON.parse(event.data)]]);
+                    tmplog.push(JSON.parse(event.data));
+                    console.log(JSON.parse(event.data));
                     console.log(tmplog);
                 }
             );
@@ -308,7 +318,8 @@ function VideoConferenceContainer(props : any){
             myPeerConnection.addEventListener("datachannel", (event : any) => {
                 myDataChannel = event.channel;
                 myDataChannel.addEventListener("message", (event : any) =>{
-                        setTmpLog([...tmplog,...[JSON.parse(event.data)]]);
+                        tmplog.push(JSON.parse(event.data));
+                        console.log(JSON.parse(event.data));
                         console.log(tmplog);
                     }
                 );

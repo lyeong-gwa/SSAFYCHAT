@@ -1,7 +1,7 @@
-import { createSlice, /*PayloadAction*/ } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction, /*PayloadAction*/ } from '@reduxjs/toolkit'
 import type { RootState } from './store'
 
-
+// 멘티입장
 interface AppliedInfo{
     applyMentoringId: number,
     menteeUid: number,
@@ -25,53 +25,72 @@ interface CanceledInfo{
     time: string
 }
 
+//멘토입장
+interface applyInfo{
+  applyMentoringId: number,
+  name: string,
+  studentNumber: string,
+  numberth: number,
+  email: string,
+  times: Array<string>,
+}
+
+interface matchInfo{
+  name:string,
+  studentNumber:string,
+  numberth:number,
+  email:string,
+  time:string,
+  mentoringId:number,
+}
+
+interface AppointmentState{
+  applys:Array<applyInfo>,
+  matches:Array<matchInfo>,
+}
+
 // Define a type for the slice state
-interface ReservedState {
-    reservedMentorings: Array<ReservedInfo>,
-    appliedMentorings: Array<AppliedInfo>,
-    canceledInfo: Array<CanceledInfo>,
+interface ReservationState {
+    matchedList: Array<ReservedInfo>,
+    appliedList: Array<AppliedInfo>,
+    canceledList: Array<CanceledInfo>,
+}
+
+interface MentoringState{
+  appointmentList:AppointmentState,
+  reservationList:ReservationState,
 }
 
 // Define the initial state using that type
-const initialState: ReservedState = {
-    reservedMentorings: [
-      {
-        date : "2023-21-31 AM 09:30",
-        name : "임시데이터",
-        cardinal : 7,
-        email : "api로하고삭제",
-        job : "제거할것",
-      }
-    ],
-    appliedMentorings:[
-
-    ],
-    canceledInfo:[
-
-    ],
+const initialState: MentoringState = {
+    appointmentList:{
+      applys:[],
+      matches:[],
+    },
+    reservationList:{
+      matchedList:[],
+      appliedList:[],
+      canceledList:[],
+    }
 }
 
 export const MentoringSlice = createSlice({
   name: 'mentoring',
   initialState,
   reducers: {
-    tempAddReserved: (state)=>{
-      const reservedInfo: ReservedInfo = {
-        date : "2020-02-12 09:19",
-        name : "김겨울",
-        cardinal : 7,
-        email : "kku@sment.com",
-        job : "백엔드",
-      }
-      state.reservedMentorings.push(reservedInfo);
+    getReservation: (state, action: PayloadAction<ReservationState>)=>{
+        state.reservationList.appliedList = action.payload.appliedList;
+        state.reservationList.canceledList = action.payload.canceledList;
+        state.reservationList.matchedList = action.payload.matchedList;
     },
-    getReservation: ()=>{
-        
-    },
+    getAppointment: (state, action: PayloadAction<AppointmentState>)=>{
+        state.appointmentList.applys = action.payload.applys;
+        state.appointmentList.matches = action.payload.matches;
+    }
   }
 })
 
-export const { tempAddReserved } = MentoringSlice.actions
+export const { getReservation, getAppointment } = MentoringSlice.actions
 
 // Other code such as selectors can use the imported `RootState` type
 export const selectCount = (state: RootState) => state.mentoring
