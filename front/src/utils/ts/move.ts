@@ -75,7 +75,10 @@ function dragCard(event : any, elemClassName : string, containerClassName : stri
                     // **********************
 
                     // resultFunc에 원하는 행동을 넣어서 실행
-                    resultFunc();
+                    let b = resultFunc();
+                    if(b){
+                        elem.remove();
+                    }
                 }
                 onDrag = false;
             }
@@ -107,7 +110,10 @@ function dragCard(event : any, elemClassName : string, containerClassName : stri
                     // **********************
 
                     // resultFunc에 원하는 행동을 넣어서 실행
-                    resultFunc();
+                    let b = resultFunc();
+                    if(b){
+                        elem.remove();
+                    }
                 }
                 onDrag = false;
             }

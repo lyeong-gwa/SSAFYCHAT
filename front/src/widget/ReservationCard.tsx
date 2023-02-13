@@ -45,11 +45,16 @@ function ReservationCard(props : any){
     const reservationList = useAppSelector(state => state.mentoring.reservationList);
     const appointmentList = useAppSelector(state => state.mentoring.appointmentList);
     if(props.isEnterable){
-        funcAfterDrag = ()=>{
+        funcAfterDrag = async ()=>{
             for(let i = 0; i < appointmentList.applys.length; ++i){
+                console.log("infoId "+ props.info[4]);
+                console.log("listId " + appointmentList.applys[i].applyMentoringId );
+                
                 if(appointmentList.applys[i].applyMentoringId === props.info[4]){
-                    setAppointmentApi({applyMentoringId:props.info[4],time:new Date(appointmentList.applys[i].times[0]).toISOString()},(success : any)=>{
+                    console.log(props.info[3]);
+                    setAppointmentApi({applyMentoringId:props.info[4],time:props.info[3]},(success : any)=>{
                         console.log(success);
+                        
                         appointmentList.matches.push({
                             name:appointmentList.applys[i].name,
                             studentNumber:appointmentList.applys[i].studentNumber,
@@ -60,8 +65,11 @@ function ReservationCard(props : any){
                         });
                         appointmentList.applys.splice(i,1);
                         dispatch(getAppointment(appointmentList));
+                        return true;
                     },(fail : any)=>{
                         console.log(fail);
+                        console.log(props.info[4]);
+                        return false;
                     });
                     // 이곳에 api호출
                 }
@@ -69,17 +77,18 @@ function ReservationCard(props : any){
         }
     }
     else{
-        funcAfterDrag = ()=>{
+        funcAfterDrag = async ()=>{
             for(let i = 0; i < reservationList.appliedList.length; ++i){
                 if(reservationList.appliedList[i].applyMentoringId === props.info[4]){
                     cancelReservation({applyMentoringId:props.info[4]},(success : any)=>{
-                        console.log(success)
+                        console.log(success);
+                        reservationList.appliedList.splice(i,1);
+                        dispatch(getReservation(reservationList));
+                        return true;
                     },(fail:any)=>{
                         console.log(fail)
+                        return false;
                     })
-                    reservationList.appliedList.splice(i,1);
-                    dispatch(getReservation(reservationList));
-                    return true;
                 }
             }
         }
