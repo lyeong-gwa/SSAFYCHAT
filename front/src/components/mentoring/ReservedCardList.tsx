@@ -10,15 +10,17 @@ function ReservedCardList(props : any){
 
 
     for(let i = startIdx; i < startIdx+4&&props.cardList.length; ++i){
-        let info = props.cardList[i];
-        list.push(
-            <div  key={i}>
-            <ReservedCard button={()=>{
-                navigate("/meeting");
-                alert('입장합니다.');
-            }} info={info}></ReservedCard>
-            </div>
-        );
+        if(props.cardList !== undefined&&props.cardList[i] !== undefined){
+            let info = props.cardList[i];
+            list.push(
+                <div  key={i}>
+                <ReservedCard button={()=>{
+                    navigate("/meeting");
+                    alert('입장합니다.');
+                }} info={info}></ReservedCard>
+                </div>
+            );
+        }
     }
 
 

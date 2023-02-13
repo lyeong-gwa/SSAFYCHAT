@@ -5,7 +5,7 @@ import DATE_TO_STRING from "../utils/ts/date_to_string";
 
 function ReservedCard(props : any){
     const[clickCancel, setClickCancel] = useState(false);
-
+    console.log(props.info);
     return(
         // 카드를 감싸는 outer
         <div className="reserved_card_outer">
