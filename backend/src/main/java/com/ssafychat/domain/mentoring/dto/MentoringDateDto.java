@@ -3,12 +3,12 @@ package com.ssafychat.domain.mentoring.dto;
 import lombok.Builder;
 import lombok.Data;
 
-import java.sql.Timestamp;
+import java.util.Date;
 
 
 @Data
 @Builder
 public class MentoringDateDto {
-    private Timestamp time;
+    private Date time;
     private int applyMentoringId;
 }

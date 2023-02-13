@@ -2,14 +2,14 @@ package com.ssafychat.domain.mentoring.dto;
 
 import lombok.*;
 
-import java.sql.Timestamp;
+import java.util.Date;
 
 @Data
 public class ApplyMentoringDto {
 
     private String job;
     private String company;
-    private Timestamp[] times;
+    private Date[] times;
 
 
 }
