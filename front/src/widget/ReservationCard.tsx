@@ -2,7 +2,7 @@ import "../styles/widget/reservation-card.css"
 import { useAppDispatch,useAppSelector } from "../hooks/hooks";
 import { getAppointment, getReservation } from "../store/mentoringSlice";
 import { cancelReservation } from "../api/mentoring";
-import { setAppointment } from "../api/mentoring";
+import { setAppointmentApi } from "../api/mentoring";
 import DATE_TO_STRING from "../utils/ts/date_to_string";
 function whatMyNick(nick: number){
     console.log(nick);
@@ -48,7 +48,7 @@ function ReservationCard(props : any){
         funcAfterDrag = ()=>{
             for(let i = 0; i < appointmentList.applys.length; ++i){
                 if(appointmentList.applys[i].applyMentoringId === props.info[4]){
-                    setAppointment(props.info[4],(success : any)=>{
+                    setAppointmentApi({applyMentoringId:props.info[4],time:appointmentList.applys[i].times[0]},(success : any)=>{
                         console.log(success);
                         appointmentList.matches.push({
                             name:appointmentList.applys[i].name,

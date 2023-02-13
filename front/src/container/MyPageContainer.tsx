@@ -5,9 +5,23 @@ import '../styles/container/mypage-container.css'
 import { useAppDispatch } from "../hooks/hooks"
 import { changeBanner } from "../store/userSlice"
 
+import { mentoringinfos } from '../api/user'
+
 function MyPageContainer(){
     const dispatch = useAppDispatch();
     dispatch(changeBanner("마이페이지"));
+
+    async function test() {
+        await mentoringinfos(
+            (data: any) => {
+                console.log(data.data);
+            },
+            (error: any) => {
+                console.log(error);
+            }
+        )
+    }
+    test();
     return (
         <div className="mypage_container">
             <div className='profile'>

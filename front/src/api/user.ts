@@ -18,4 +18,7 @@ async function userinfo(success: any, fail: any) {
     await api.get('/user/user-info').then(success).catch(fail);
 }
 
-export {login, logout, join, userinfo};
+async function mentoringinfos(success: any, fail: any) {
+    await api.get('/user/mentoring-infos').then(success).catch(fail);
+}
+export {login, logout, join, userinfo,mentoringinfos};

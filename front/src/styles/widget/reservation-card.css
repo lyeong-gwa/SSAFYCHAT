@@ -1,6 +1,6 @@
 /* 카드 바깥 */
 .card_outer{
-    width: 30%;
+    width: 25%;
     height: 220px;
     display: flex;
     flex-direction: column;
