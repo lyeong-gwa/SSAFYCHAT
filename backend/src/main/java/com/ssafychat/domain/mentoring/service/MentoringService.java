@@ -4,6 +4,7 @@ import com.ssafychat.domain.member.dto.PossibleMentoringDto;
 import com.ssafychat.domain.member.model.Member;
 import com.ssafychat.domain.mentoring.dto.*;
 import com.ssafychat.domain.mentoring.model.ApplyMentoring;
+import com.ssafychat.domain.mentoring.model.CompleteMentoring;
 import com.ssafychat.domain.mentoring.model.Mentoring;
 
 import java.util.Date;
@@ -27,7 +28,7 @@ public interface MentoringService {
 
     Member[] ranking();
 
-    MainInfoDto mainInfo();
+    MainInfoDto mainInfo(CompleteMentoring completeMentoring);
 
     void insertApplyMentoringAndMentoringDate(Member mentee, ApplyMentoringDto applyMentoringDto);
 
@@ -45,5 +46,7 @@ public interface MentoringService {
     List<CanceledMentoringListDto> getCancledMentoringList(int userId);
 
     void insertCompleteMentoring(Mentoring mentoring);
+
+    List<Integer> rankerCompleteCountList();
 
 }

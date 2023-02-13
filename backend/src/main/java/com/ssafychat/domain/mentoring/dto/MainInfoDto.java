@@ -4,6 +4,8 @@ import com.ssafychat.domain.member.model.Member;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 @Builder
 public class MainInfoDto {
@@ -12,4 +14,6 @@ public class MainInfoDto {
     private Long mentorCount;
     private Long menteeCount;
     private Member[] rankers;
+    private List<Integer> rankerCompleteCount;
+
 }

@@ -172,14 +172,26 @@ public class MentoringServiceImpl implements MentoringService {
         }
         return rankers;
     }
+    @Override
+    public List<Integer> rankerCompleteCountList(){
+
+        List<Integer> rankerIds = completeMentoringRepository.findRanking();
+        List<Integer> rankCount = new ArrayList<>(rankerIds.size());
+        for (int i : rankCount) {
+            rankCount.add(mentoringRepository.CompletedMentorCnt(rankerIds.get(i)));
+        }
+        return rankerIds;
+    }
+
 
     @Override
-    public MainInfoDto mainInfo() {
+    public MainInfoDto mainInfo(CompleteMentoring completeMentoring) {
         return MainInfoDto.builder()
                 .completeMentoringCount(completeMentoringRepository.completeMentoringCount())
                 .mentorCount(memberRepository.countByRole("role_mentor"))
                 .menteeCount(memberRepository.countByRole("role_mentee"))
                 .rankers(ranking())
+                .rankerCompleteCount(rankerCompleteCountList())
                 .build();
     }
 
