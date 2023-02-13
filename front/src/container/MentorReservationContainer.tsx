@@ -72,6 +72,8 @@ function MentorReservationContainer(){
                 // applyData.times = item.times;
                 applyList.push(item);
             });
+            console.log(11);
+            console.log(applyList);
             const matcheItems = result.map((item: matchInfo) => {
                 // matcheData.name = item.name;
                 // matcheData.studentNumber = item.studentNumber;
@@ -81,6 +83,8 @@ function MentorReservationContainer(){
                 // matcheData.mentoringId = item.mentoringId;
                 matchesList.push(item);
             })
+            console.log(22);
+            console.log(matchesList);
 
             const rdata: AppointmentState = {
                 applys: applyList,

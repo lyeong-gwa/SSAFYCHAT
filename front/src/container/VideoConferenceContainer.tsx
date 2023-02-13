@@ -5,6 +5,7 @@ import { useAppSelector } from "../hooks/hooks";
 import {chatMessage, chatLog} from "../api/chatting"
 import MentoringChat from "../widget/MentoringChat";
 import { useState } from "react";
+import { useEffect } from "react";
 
 function exit(navigate : any){
     navigate("/banner/mentoring");
@@ -12,22 +13,23 @@ function exit(navigate : any){
 
 
 function VideoConferenceContainer(props : any){
-    
+
     const imgUrlEmoji = "/img/emoji.png";
     const imgUrlSend = "/img/send.png";
     const userinfo = useAppSelector(state => state.user.isLogin);
+    console.log(userinfo);
     let tmplog : { chat_id: number; user_id: number; message: string; Date: number; }[] = []; 
     const [logmsg,setLogmsg] = useState<{ chat_id: number; user_id: number; message: string; Date: number; }[]>([]);
     const navigate = useNavigate();
-    let first = true;
+
+    useEffect(()=>{
+        init(userinfo);
+    },[]);
     return(
         // 회의 컨테이너 전체를 담는 컨테이너
-        <div id="call" className="video_conference_container" onMouseEnter={()=>{
-            if(first){
-                first = false;
-                init(userinfo);
-            }
-        }}>
+
+        
+        <div id="call" className="video_conference_container">
 
             {/* webRtc용 임시 입력창 */}
             <div className="vcTmp" id="welcome">
@@ -100,7 +102,6 @@ function VideoConferenceContainer(props : any){
                     {/* 채팅 입력 input */}
                     
                     <div className="input_bar">
-                    <span id = "realtest">아니</span>
                         <div className="emoji_div">
                             <img src={imgUrlEmoji} alt="" className="emoji" />
                         </div>
@@ -134,8 +135,7 @@ function VideoConferenceContainer(props : any){
         let myDataChannel : any; //데이터채널 1:1 
         chatLog(mentoringid,(chatlog:any)=>{
             tmplog = chatlog.data.log;
-            setLogmsg(tmplog);
-            console.log(tmplog);
+            setLogmsg(JSON.parse(JSON.stringify(tmplog)));
             },(err:any)=>{
                 console.log(err);
             }
@@ -143,8 +143,7 @@ function VideoConferenceContainer(props : any){
         let inputListen = function (event : any) {
             if (event.keyCode === 13 && chattinginput.value != "") {
                 const senddata = {"chat_id": mentoringid,"user_id":userid,"message":chattinginput.value,"Date": Date.now()};
-                let realTest = document.getElementById("realtest") as HTMLSpanElement;
-                realTest.textContent=chattinginput.value;
+                
                 chattinginput.value = "";
                 //몽고DB에 senddata + chat_id를 추가해서 전달
                 
@@ -153,10 +152,11 @@ function VideoConferenceContainer(props : any){
                     (data:any)=>{
                         myDataChannel.send(JSON.stringify(senddata));
                         tmplog.push(senddata);
-                        console.log(senddata);
+                        setLogmsg(JSON.parse(JSON.stringify(tmplog)));
                     },
                     (err:any)=>{console.log(err);}
                   );
+                  
             }
             
         }
@@ -301,8 +301,7 @@ function VideoConferenceContainer(props : any){
             myDataChannel = myPeerConnection.createDataChannel("chat");
             myDataChannel.addEventListener("message", (event : any) =>{
                     tmplog.push(JSON.parse(event.data));
-                    console.log(JSON.parse(event.data));
-                    console.log(tmplog);
+                    setLogmsg(JSON.parse(JSON.stringify(tmplog)));
                 }
             );
             console.log("made data channel");
@@ -319,8 +318,7 @@ function VideoConferenceContainer(props : any){
                 myDataChannel = event.channel;
                 myDataChannel.addEventListener("message", (event : any) =>{
                         tmplog.push(JSON.parse(event.data));
-                        console.log(JSON.parse(event.data));
-                        console.log(tmplog);
+                        setLogmsg(JSON.parse(JSON.stringify(tmplog)));
                     }
                 );
             });

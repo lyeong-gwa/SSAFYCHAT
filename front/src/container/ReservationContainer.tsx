@@ -21,21 +21,27 @@ function ReservationContainer(){
         },(fail : any)=>{console.log(fail)});
     })
     const reservationList = useAppSelector(state => state.mentoring.reservationList);
+
+    let app = useAppSelector(state => state.mentoring.reservationList.appliedList);
+    let can = useAppSelector(state => state.mentoring.reservationList.canceledList);
     let appliedList : any = [];  
-    let matchedList : any= reservationList.matchedList;
+    let matchedList : any = useAppSelector(state => state.mentoring.reservationList.matchedList);
     let canceledList : any = [];
-    for(let i = 0; i < reservationList.appliedList.length; ++i){
-        appliedList.push(["신청카드",reservationList.appliedList[i].company,reservationList.appliedList[i].job,new Date(reservationList.appliedList[i].times[0]),reservationList.appliedList[i].applyMentoringId]);
+
+    console.log(app);
+    console.log(can);
+    for(let i = 0; i < app.length; ++i){
+        appliedList.push(["신청카드",app[i].company,app[i].job,new Date(app[i].times[0]),app[i].applyMentoringId]);
     }
     // for(let i = 0; i < reservationList.matchedList.length; ++i){
     //     matchedList.push(reservationList.matchedList[i]);
     // }
-    for(let i = 0; i < reservationList.canceledList.length; ++i){
-        canceledList.push([reservationList.canceledList[i].company,reservationList.canceledList[i].job,new Date(reservationList.canceledList[i].time)]);
+    for(let i = 0; i < can.length; ++i){
+        canceledList.push([can[i].company,can[i].job,new Date(can[i].time)]);
     }
-    console.log(appliedList);
-    console.log(matchedList);
-    console.log(canceledList);
+    console.log("applied "+appliedList);
+    console.log("match " + matchedList);
+    console.log("cancel" + canceledList);
     return (
         <div className="reservation_page_container">
             <div className="reservation_page_inner_container">
