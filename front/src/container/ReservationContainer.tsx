@@ -24,8 +24,9 @@ function ReservationContainer(){
 
     let app: any = useAppSelector(state => state.mentoring.reservationList.appliedList);
     let can: any = useAppSelector(state => state.mentoring.reservationList.canceledList);
+    let mat: any = useAppSelector(state => state.mentoring.reservationList.matchedList);
     let appliedList : any = [];
-    let matchedList : any = useAppSelector(state => state.mentoring.reservationList.matchedList);
+    let matchedList : any = [];
     let canceledList : any = [];
 
     // console.log(app);
@@ -44,6 +45,11 @@ function ReservationContainer(){
     // }
     can.map((item: any) => {
             canceledList.push(["취소카드",item.company,item.job,new Date(item.time).toISOString(),item.cancelMentoringId]);
+    });
+
+    mat.map((item: any) => {
+        matchedList.push(item);
+        console.log(item);
     });
     // console.log("applied :"+appliedList);
     // console.log(+appliedList);

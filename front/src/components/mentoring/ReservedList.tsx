@@ -4,6 +4,33 @@ import { useAppSelector } from '../../hooks/hooks'
 import { useState } from "react";
 import CancelModal from "../modal/CancelModal";
 import DATE_TO_STRING from "../../utils/ts/date_to_string";
+
+function whatMyNick(nick: number){
+    console.log(nick);
+    switch (nick){
+        case 1:
+            return '1기';
+        case 2:
+            return '2기';
+        case 3:
+            return '3기';
+        case 4:
+            return '4기';
+        case 5:
+            return '5기로 극복';
+        case 6:
+            return '열정 핫식스';
+        case 7:
+            return '럭키세븐';
+        case 8:
+            return '7전8기';
+        case 9:
+            return '9뤠이트';
+        case 10:
+            return '10기';
+    }
+}
+
 function dragItem(event : any){
     let elem = event.target;
     if(elem.className === "reserved_list_enter_button"){
@@ -43,9 +70,9 @@ function ReservedListItem(props : any){
             dragItem(event);
         }}
         >
-            <td>{DATE_TO_STRING(props.reserved.date)}</td>
+            <td>{DATE_TO_STRING(props.reserved.time)}</td>
             <td>{props.reserved.name}</td>
-            <td>{props.reserved.cardinal}</td>
+            <td>{whatMyNick(props.reserved.numberth)}</td>
             <td>{props.reserved.email}</td>
             <td className="reserved_list_btn_container">
                 <div className="reserved_list_enter_button enter_meeting_button" onClick={(event)=>{
@@ -73,6 +100,7 @@ function ReservedList(props : any){
     const reservedList = useAppSelector((state)=>state.mentoring.appointmentList.matches);
     const list = [];
     for(let i = 0; i < reservedList.length; ++i){
+        console.log(reservedList[i]);
         list.push(<ReservedListItem key={i} reserved={reservedList[i]}  func={(event : any)=>{
             enterMeeting(event, navigate);
        }}></ReservedListItem> )

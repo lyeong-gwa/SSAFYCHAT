@@ -27,7 +27,6 @@ function studentNumberRegexr(data: string){
 }
 
 function Join(){
-    const navigate = useNavigate();
 
     async function joinApi(){
         if(userEmail!=='' && check_email && userPassword!==''&&
@@ -40,6 +39,9 @@ function Join(){
                 student_number : studentNumber,
                 job : userJob,
                 belong : userBelong
+            }
+            if(userBelong==='' || userBelong===' '){
+                userInfo.belong = "SSAFY";
             }
 
             await join(
@@ -74,11 +76,7 @@ function Join(){
         setPassword(data.target.value);
     }
     const handleStateBelong = (data: any) => {
-        if(userBelong===''){
-            setUserBelong("SSAFY");
-        }else{
-            setUserBelong(data.target.value);
-        }      
+        setUserBelong(data.target.value);
     }
     const handleStateStudentNumber = (data: any) => {
         setStudentNumber(data.target.value);
