@@ -22,8 +22,8 @@ function ReservationContainer(){
     })
     const reservationList = useAppSelector(state => state.mentoring.reservationList);
 
-    let app: any[] = useAppSelector(state => state.mentoring.reservationList.appliedList);
-    let can: any[] = useAppSelector(state => state.mentoring.reservationList.canceledList);
+    let app: any = useAppSelector(state => state.mentoring.reservationList.appliedList);
+    let can: any = useAppSelector(state => state.mentoring.reservationList.canceledList);
     let appliedList : any = [];
     let matchedList : any = useAppSelector(state => state.mentoring.reservationList.matchedList);
     let canceledList : any = [];
