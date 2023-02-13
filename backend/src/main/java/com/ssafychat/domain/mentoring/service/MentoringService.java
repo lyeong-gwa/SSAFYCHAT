@@ -26,7 +26,7 @@ public interface MentoringService {
     Mentoring deleteMentoring(int mentoringId);
     void insertCancelMentoring(int canceler, String reason, Mentoring mentoring);
 
-    Member[] ranking();
+    RankerDto[] ranking();
 
     MainInfoDto mainInfo(CompleteMentoring completeMentoring);
 
@@ -47,6 +47,6 @@ public interface MentoringService {
 
     void insertCompleteMentoring(Mentoring mentoring);
 
-    List<Integer> rankerCompleteCountList();
+//    List<Integer> rankerCompleteCountList();
 
 }

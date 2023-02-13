@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface CompleteMentoringRepository extends JpaRepository<CompleteMentoring, Integer> {
 
-    @Query(value = "select mentor_uid " +
+    @Query(value = "select mentor_uid, count(mentor_uid) " +
             "from complete_mentoring " +
             "where completed = 1 " +
             "and time " +
@@ -19,7 +19,7 @@ public interface CompleteMentoringRepository extends JpaRepository<CompleteMento
             "order by count(mentor_uid) desc " +
             "limit 3"
     , nativeQuery = true)
-    List<Integer> findRanking();
+    List<int[]> findRanking();
 
     @Query("select count(*) " +
             "from CompleteMentoring " +

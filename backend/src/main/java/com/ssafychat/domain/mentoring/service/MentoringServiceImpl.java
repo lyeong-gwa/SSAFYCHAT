@@ -163,26 +163,22 @@ public class MentoringServiceImpl implements MentoringService {
     }
 
     @Override
-    public Member[] ranking() {
+    public RankerDto[] ranking() {
 
-        List<Integer> rankerIds = completeMentoringRepository.findRanking();
-        Member[] rankers = new Member[rankerIds.size()];
+        List<int[]> rankerIds = completeMentoringRepository.findRanking();
+        RankerDto[] rankers = new RankerDto[rankerIds.size()];
         for (int i = 0; i < rankers.length; i++) {
-            rankers[i] = memberRepository.findByUserIdForRanker(rankerIds.get(i));
+            Member ranker = memberRepository.findByUserIdForRanker(rankerIds.get(i)[0]);
+            rankers[i] = RankerDto.builder()
+                    .name(ranker.getName())
+                    .company(ranker.getBelong())
+                    .job(ranker.getJob())
+                    .level(ranker.getTotalScore())
+                    .mentoringCnt(rankerIds.get(i)[1])
+                    .build();
         }
         return rankers;
     }
-    @Override
-    public List<Integer> rankerCompleteCountList(){
-
-        List<Integer> rankerIds = completeMentoringRepository.findRanking();
-        List<Integer> rankCount = new ArrayList<>(rankerIds.size());
-        for (int i : rankCount) {
-            rankCount.add(mentoringRepository.CompletedMentorCnt(rankerIds.get(i)));
-        }
-        return rankerIds;
-    }
-
 
     @Override
     public MainInfoDto mainInfo(CompleteMentoring completeMentoring) {
@@ -191,7 +187,6 @@ public class MentoringServiceImpl implements MentoringService {
                 .mentorCount(memberRepository.countByRole("role_mentor"))
                 .menteeCount(memberRepository.countByRole("role_mentee"))
                 .rankers(ranking())
-                .rankerCompleteCount(rankerCompleteCountList())
                 .build();
     }
 
@@ -284,7 +279,6 @@ public class MentoringServiceImpl implements MentoringService {
 
     @Override
     public List<MentoringListForMenteeDto> getMatchedMentoringList(int userId) {
-        //멘토 정보 가져오기 고려
         List<MentoringListForMenteeDto> matchedMentoringList =  new ArrayList<>();
         List<Mentoring> mentoringList = mentoringRepository.findByMentee_UserId(userId);
 
@@ -297,6 +291,7 @@ public class MentoringServiceImpl implements MentoringService {
                             .name(mentor.getName())
                             .job(mentoring.getJob())
                             .company(mentoring.getCompany())
+                            .numberth(Integer.parseInt(mentor.getStudentNumber().substring(0,2)))
                             .time(mentoring.getTime())
                             .build()
             );

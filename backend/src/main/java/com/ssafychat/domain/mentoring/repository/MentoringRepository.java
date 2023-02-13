@@ -4,7 +4,6 @@ import com.ssafychat.domain.member.model.Member;
 import com.ssafychat.domain.mentoring.model.Mentoring;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -24,6 +23,4 @@ public interface MentoringRepository extends JpaRepository<Mentoring, Integer> {
 
     List<Mentoring> findByMentee_UserId(int userId);
 
-    @Query(value = "select count(*) from complete_mentoring where mentor_uid = :mentor", nativeQuery = true)
-    int CompletedMentorCnt(int mentor);
 }

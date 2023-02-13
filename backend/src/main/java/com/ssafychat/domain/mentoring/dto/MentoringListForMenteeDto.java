@@ -16,5 +16,7 @@ public class MentoringListForMenteeDto {
 
     private String company;
 
+    int numberth;
+
     private Date time;
 }
