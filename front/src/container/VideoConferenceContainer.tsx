@@ -16,8 +16,7 @@ function VideoConferenceContainer(props : any){
 
     const imgUrlEmoji = "/img/emoji.png";
     const imgUrlSend = "/img/send.png";
-    const userinfo = useAppSelector(state => state.user.isLogin);
-    console.log(userinfo);
+    const userinfo = useAppSelector(state => state.user.userId);
     let tmplog : { chat_id: number; user_id: number; message: string; Date: number; }[] = []; 
     const [logmsg,setLogmsg] = useState<{ chat_id: number; user_id: number; message: string; Date: number; }[]>([]);
     const navigate = useNavigate();
@@ -124,7 +123,7 @@ function VideoConferenceContainer(props : any){
     function init(userinfo:any){
 
         const mentoringid= 20;
-        const userid = 1;
+        const userid = userinfo;
         const socket = io(process.env.REACT_APP_SOCKET as string,{path: "/socket.io",transports:["websocket"]});
         const myFace = document.getElementById("myFace") as HTMLMediaElement;
         const muteBtn = document.getElementById("mute") as HTMLButtonElement;
