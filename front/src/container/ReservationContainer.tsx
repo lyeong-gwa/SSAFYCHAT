@@ -19,7 +19,7 @@ function ReservationContainer(){
             console.log(success);
             dispatch(getReservation(success.data));
         },(fail : any)=>{console.log(fail)});
-    })
+    },[])
     const reservationList = useAppSelector(state => state.mentoring.reservationList);
 
     let app: any = useAppSelector(state => state.mentoring.reservationList.appliedList);

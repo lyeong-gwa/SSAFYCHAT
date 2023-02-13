@@ -48,7 +48,7 @@ function ReservedCard(props : any){
             </div>
             
             {clickCancel && (
-                <CancelModal closeModal={()=> setClickCancel(!clickCancel)}></CancelModal>
+                <CancelModal info={props.info} closeModal={()=> setClickCancel(!clickCancel)}></CancelModal>
             )}  
         </div>
     )

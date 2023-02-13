@@ -106,7 +106,11 @@ function ApplyingModal(props: any) {
 
   /** 선택한 시간을 배열에 담는 함수 */
   function putTime() {
-    date.setHours(parseInt(hour));
+    if(beforeOrAfter === "PM"){
+      date.setHours(parseInt(hour)+12);
+    }else{
+      date.setHours(parseInt(hour));
+    }
     date.setMinutes(parseInt(minute));
     /** Date 배열에 삽입 */
     pushTime([...selectedTimes, new Date(date)]);
