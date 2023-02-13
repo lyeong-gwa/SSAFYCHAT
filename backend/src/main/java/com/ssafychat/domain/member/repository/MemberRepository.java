@@ -13,12 +13,13 @@ public interface MemberRepository extends JpaRepository<Member, Integer> {
     Member findByEmail(String email);
     Member findByUserId(int userId);
     List<PossibleMentoringDto> findDistinctByJobAndBelong(String job, String belong);
-    List<PossibleMentoringDto> findDistinctByJob(String job);
-    List<PossibleMentoringDto> findDistinctByBelong(String belong);
+    List<PossibleMentoringDto> findDistinctByJobOrderByBelong(String job);
+    List<PossibleMentoringDto> findDistinctByBelongOrderByJob(String belong);
 
     @Query("select distinct new com.ssafychat.domain.member.dto.PossibleMentoringDto(job, belong) " +
             "from Member " +
-            "where belong not in (:ssafy, :blank)")
+            "where belong not in (:ssafy, :blank)" +
+            "order by belong, job")
     List<PossibleMentoringDto> getAllJobAndBelong(String ssafy, String blank);
 
     Long countByRole(String role);
