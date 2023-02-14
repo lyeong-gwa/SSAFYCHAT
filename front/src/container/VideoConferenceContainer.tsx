@@ -32,9 +32,6 @@ function VideoConferenceContainer(props : any){
             first = false;
             init(userinfo,mentoringId);
         }
-        return()=>{
-            first= true;
-        }
     },[mentoringId,userinfo]);
     return(
         // 회의 컨테이너 전체를 담는 컨테이너
