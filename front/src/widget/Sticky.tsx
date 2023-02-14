@@ -12,7 +12,7 @@ function Sticky(props: any){
             top : props.rolling.posY +"px"
         }}
          className="sticky_main" onClick={()=>{console.log(456)}} onMouseDown={
-            (event:any)=>{dragRoll(event,"sticky_main","dashboard_main", dispacth,patchReview, props.rolling.id, props.rolling.attached);}
+            (event:any)=>{dragRoll(event,"sticky_main","dashboard_main", dispacth, patchReview, props.rolling.id, props.rolling.attached);}
         }>
             <div className={props.rolling.color}>
                 <div className="text">

@@ -61,4 +61,9 @@ async function cancelAppointmentApi(info:{mentoringId:number,reason:string},
 }
 
 
+// 멘토링 종료
+async function completeMentoring(){
+
+}
+
 export {reservation,getAppointmentApi,setAppointmentApi,cancelReservation,cancelMenteeMentoring, cancelAppointmentApi};
