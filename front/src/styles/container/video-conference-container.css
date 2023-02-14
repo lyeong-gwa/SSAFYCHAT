@@ -84,6 +84,12 @@
     color: #ffffff;
 }
 
+.input_msg{
+    margin: 0 10px;
+    width: 400px;
+    height: 30px;
+}
+
 
 .video_conference_footer{
     display: flex;

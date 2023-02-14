@@ -28,17 +28,6 @@ function Messages(props: any){
     return(
         <div>
             <div className="content">
-                <div className="top_bar">
-                    <div className="other_user">
-                        <div className="avatar_"></div>
-                        <div className="name_contain">
-                            <div className="name">
-                                {/* <span className="user_name">{props.user_name}</span> */}
-                                <span className="user_name">김겨울</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 
                     
                 <div className="messages" id="messages">
