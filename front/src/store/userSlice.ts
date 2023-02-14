@@ -3,7 +3,6 @@ import type { RootState } from "./store";
 
 interface UserInfo{
     belong: string,
-    social: string,
     studentNumber: string,
     job: string,
     totalScore: number,
@@ -28,7 +27,6 @@ const initialState: UserState = {
     banner: "",
     userInfo: {
         belong: "",
-        social: "",
         studentNumber: "",
         job: "",
         totalScore: 0,

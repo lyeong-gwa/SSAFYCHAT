@@ -15,8 +15,9 @@ function ReservedCardList(props : any){
             list.push(
                 <div  key={i}>
                 <ReservedCard button={()=>{
-                    navigate("/meeting");
-                    alert('입장합니다.');
+                    if(window.confirm('입장하시겠습니까?')){
+                        navigate("/meeting");
+                    }
                 }} info={info}></ReservedCard>
                 </div>
             );

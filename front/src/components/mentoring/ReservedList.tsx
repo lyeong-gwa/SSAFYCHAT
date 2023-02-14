@@ -89,15 +89,16 @@ function ReservedListItem(props : any){
                 </div>
             </td>
             {clickCancel && (
-                <CancelModal info={props.info} closeModal={()=> setClickCancel(!clickCancel)}></CancelModal>
+                <CancelModal info={props.reserved} closeModal={()=> setClickCancel(!clickCancel)}></CancelModal>
             )}  
         </tr>
     )
 }
 
 function enterMeeting(event : any, navigate : any){
-    alert('입장합니다.');
-    navigate("/meeting");
+    if(window.confirm('입장 하시겠습니까?')){
+        navigate("/meeting");
+    }
 }
 
 function ReservedList(props : any){
