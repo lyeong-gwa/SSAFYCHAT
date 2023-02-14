@@ -31,7 +31,7 @@ public interface CompleteMentoringRepository extends JpaRepository<CompleteMento
     @Query(value = "select * " +
             "from complete_mentoring " +
             "where mentor_uid = :mentorUid " +
-            "and review_title is not null"
+            "and review_content is not null"
             ,nativeQuery = true)
     List<CompleteMentoring> getRollingPaper(int mentorUid);
 
