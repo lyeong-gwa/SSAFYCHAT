@@ -84,6 +84,7 @@ function VideoConferenceContainer(props : any){
                         <div className="video_conference_cancel" onClick={()=>{
                             completeMentoring(mentoringId,(success:any)=>{
                                 console.log(success);
+                                setClickCancel(true);
                             },(fail:any)=>{
                                 console.log(fail);
                                 alert("다시시도해주세요");

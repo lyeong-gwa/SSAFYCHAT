@@ -66,7 +66,7 @@ async function completeMentoring(id:{mentoringId:number},
     success:any,
     fail: any){
         api.defaults.headers["Authorization"] = "Bearer " + sessionStorage.getItem("access-token");
-        await api.post(`/mentoring/complete`,JSON.stringify(id))
+        await api.post(`/mentoring/complete`,JSON.stringify({mentoringId:id.mentoringId}))
         .then(success)
         .catch(fail);
     
