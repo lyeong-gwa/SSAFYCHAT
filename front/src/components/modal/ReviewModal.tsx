@@ -16,11 +16,11 @@ function ReviewModal(props : any){
     let [content,setContent] = useState('');
     console.log(content)
     return (
-        <div className="review_modal" onClick={closeModal}>
+        <div className="review_modal" >
             <div className="review_modal_body" onClick={(e) => e.stopPropagation()}>
                 <div className='review_modal_header'>
                     <div className='review_modal_header_text'>멘토링 리뷰</div>
-                    <button id="review_modal_close_btn" onClick={closeModal}>
+                    <button id="review_modal_close_btn" >
                     ✖
                     </button>
                 </div>
@@ -52,7 +52,7 @@ function ReviewModal(props : any){
                                 (success : any)=>{
                                         console.log(success);
                                         alert("소중한 리뷰 감사합니다.")                                        
-                                        // closeModal();
+                                        closeModal();
                                 },
                                 (fail : any)=>{
                                     console.log(fail);

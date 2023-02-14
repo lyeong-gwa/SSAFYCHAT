@@ -62,8 +62,14 @@ async function cancelAppointmentApi(info:{mentoringId:number,reason:string},
 
 
 // 멘토링 종료
-async function completeMentoring(){
-
+async function completeMentoring(id:{mentoringId:number},
+    success:any,
+    fail: any){
+        api.defaults.headers["Authorization"] = "Bearer " + sessionStorage.getItem("access-token");
+        await api.delete(`/mentoring/complete`,{data:JSON.stringify(id)})
+        .then(success)
+        .catch(fail);
+    
 }
 
-export {reservation,getAppointmentApi,setAppointmentApi,cancelReservation,cancelMenteeMentoring, cancelAppointmentApi};
+export {reservation,getAppointmentApi,setAppointmentApi,cancelReservation,cancelMenteeMentoring, cancelAppointmentApi, completeMentoring};

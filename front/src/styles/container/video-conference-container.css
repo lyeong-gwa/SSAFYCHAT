@@ -34,7 +34,7 @@
 
 .video_conference_mine_screen{
     /* width: calc(190px*1.5); */
-    height: Calc(100px*1.5);
+    height: Calc(100px*1.3);
     background: #1a1a1a;
     margin: auto;
 }
@@ -45,7 +45,7 @@
 }
 
 .video_conference_oppnent_screen{
-    height: calc(100px*6.7);
+    height: calc(100px*6);
     /* width: calc(190px*6.7); */
     background: #1a1a1a;
     margin: auto;

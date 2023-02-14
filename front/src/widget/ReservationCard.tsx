@@ -7,15 +7,6 @@ import DATE_TO_STRING from "../utils/ts/date_to_string";
 
 
 function ReservationCard(props : any){
-
-    // interface matchInfo{
-    //     name:string,
-    //     studentNumber:string,
-    //     numberth:number,
-    //     email:string,
-    //     time:string,
-    //     mentoringId:number,
-    //   }
     const dispatch = useAppDispatch();
     let funcAfterDrag : any;
     const reservationList = useAppSelector(state => state.mentoring.reservationList);

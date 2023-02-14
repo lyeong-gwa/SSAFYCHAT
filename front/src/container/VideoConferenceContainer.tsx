@@ -6,6 +6,8 @@ import {chatMessage, chatLog} from "../api/chatting"
 import MentoringChat from "../widget/MentoringChat";
 import { useState } from "react";
 import { useEffect } from "react";
+import { completeMentoring } from "../api/mentoring";
+import ReviewModal from "../components/modal/ReviewModal";
 
 function exit(navigate : any){
     navigate("/banner/mentoring");
@@ -20,6 +22,7 @@ function VideoConferenceContainer(props : any){
     let mentoringId : any = -1;
     mentoringId = useAppSelector(state=>state.mentoring.mentoringId);
     let tmplog : { chat_id: number; user_id: number; message: string; Date: number; }[] = []; 
+    const[clickCancel, setClickCancel] = useState(false);
     const [logmsg,setLogmsg] = useState<{ chat_id: number; user_id: number; message: string; Date: number; }[]>([]);
     const navigate = useNavigate();
     let first = true;
@@ -36,16 +39,7 @@ function VideoConferenceContainer(props : any){
         
         <div id="call" className="video_conference_container">
 
-            {/* webRtc용 임시 입력창 */}
-            <div className="vcTmp" id="welcome">
-                <form>
-                    <input placeholder="roomCode"></input><br></br>
-                    <button>입력</button>
-                </form>
-                    {/* <button id="mute">Mute</button>
-                    <button id="camera">Turn Camera Off</button>
-                    <select id="cameras"></select> */}
-            </div>
+
              {/* <div id="call"> 
                  <div id="myStream">
                     <video id="myFace" height="400" width="400" autoPlay playsInline></video>
@@ -88,7 +82,13 @@ function VideoConferenceContainer(props : any){
                         <select id="cameras"></select>
                         
                         <div className="video_conference_cancel" onClick={()=>{
-                            exit(navigate);
+                            completeMentoring(mentoringId,(success:any)=>{
+                                console.log(success);
+                                setClickCancel(true);
+                            },(fail:any)=>{
+                                console.log(fail);
+                                alert("다시시도해주세요");
+                            })
                         }}>
                             <img src="/img/cancel.png" alt="recording"></img>
                         </div>
@@ -119,10 +119,12 @@ function VideoConferenceContainer(props : any){
                     </div>
                 </div>
             </div>
-            <script>
-
-                
-            </script>
+            {clickCancel && (
+                <ReviewModal closeModal={()=> {
+                    setClickCancel(!clickCancel);
+                    exit(navigate); 
+                }}></ReviewModal>
+            )}  
         </div>
     )
 
