@@ -7,6 +7,7 @@ import com.ssafychat.domain.mentoring.model.ApplyMentoring;
 import com.ssafychat.domain.mentoring.model.CompleteMentoring;
 import com.ssafychat.domain.mentoring.model.Mentoring;
 import com.ssafychat.domain.mentoring.service.MentoringService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +23,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/mentoring")
 @CrossOrigin("*")
+@Slf4j
 public class MentoringController {
     @Autowired
     private MentoringService mentoringService;
@@ -218,7 +220,8 @@ public class MentoringController {
             response.put("message", "success");
         } catch (Exception e) {
             response.put("message", "fail");
+            log.error(e.getMessage());
         }
-        return new ResponseEntity<>(response, HttpStatus.OK);
+            return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
