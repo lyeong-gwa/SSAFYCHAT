@@ -13,6 +13,6 @@ public class ProfileDto {
     private String belong;
     private String job;
     private String email;
-    private int level;
-    private String student_number;
+    private int totalScore;
+    private String studentNumber;
 }

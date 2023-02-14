@@ -237,8 +237,8 @@ public class MemberServiceImpl implements MemberService {
                 .belong(member.getBelong())
                 .job(member.getJob())
                 .email(member.getEmail())
-                .level(member.getTotalScore())
-                .student_number(member.getStudentNumber())
+                .totalScore(member.getTotalScore())
+                .studentNumber(member.getStudentNumber())
                 .build();
 
         List<Mentoring> matchMentorings = new ArrayList<>();
@@ -260,8 +260,8 @@ public class MemberServiceImpl implements MemberService {
                                 .belong(mentor.getBelong())
                                 .job(mentor.getJob())
                                 .email(mentor.getEmail())
-                                .level(mentor.getTotalScore())
-                                .student_number(mentor.getStudentNumber())
+                                .totalScore(mentor.getTotalScore())
+                                .studentNumber(mentor.getStudentNumber())
                                 .build())
                         .time(match.getTime())
                         .build());
@@ -278,8 +278,8 @@ public class MemberServiceImpl implements MemberService {
                                 .belong(mentor.getBelong())
                                 .job(mentor.getJob())
                                 .email(mentor.getEmail())
-                                .level(mentor.getTotalScore())
-                                .student_number(mentor.getStudentNumber())
+                                .totalScore(mentor.getTotalScore())
+                                .studentNumber(mentor.getStudentNumber())
                                 .build())
                         .time(complete.getTime())
                         .build());
@@ -298,8 +298,8 @@ public class MemberServiceImpl implements MemberService {
                                 .belong(mentee.getBelong())
                                 .job(mentee.getJob())
                                 .email(mentee.getEmail())
-                                .level(mentee.getTotalScore())
-                                .student_number(mentee.getStudentNumber())
+                                .totalScore(mentee.getTotalScore())
+                                .studentNumber(mentee.getStudentNumber())
                                 .build())
                         .time(match.getTime())
                         .build());
@@ -316,8 +316,8 @@ public class MemberServiceImpl implements MemberService {
                                 .belong(mentee.getBelong())
                                 .job(mentee.getJob())
                                 .email(mentee.getEmail())
-                                .level(mentee.getTotalScore())
-                                .student_number(mentee.getStudentNumber())
+                                .totalScore(mentee.getTotalScore())
+                                .studentNumber(mentee.getStudentNumber())
                                 .build())
                         .time(complete.getTime())
                         .build());
