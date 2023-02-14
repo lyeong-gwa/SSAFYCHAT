@@ -59,7 +59,7 @@ function whatMyNick(nick: number){
 function MentorReservationContainer(){
     const dispatch = useAppDispatch();
     dispatch(changeBanner("멘토링 확인"));
-
+    let appointmentList = useAppSelector(state=>state.mentoring.appointmentList);
     const apply = useAppSelector(state => state.mentoring.appointmentList.applys);
     const match = useAppSelector(state => state.mentoring.appointmentList.matches);
     const applyData: applyInfo = {
@@ -106,7 +106,7 @@ function MentorReservationContainer(){
         (error: any) => {
             console.log(error);
         });
-    },[])
+    },[appointmentList])
     const cardList: any = [];
     apply.map((item: any) => {
         item.times.map((data: any) => {

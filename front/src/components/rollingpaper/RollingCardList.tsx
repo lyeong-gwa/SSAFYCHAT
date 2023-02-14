@@ -4,7 +4,7 @@ import Sticky from "../../widget/Sticky";
 function RollingCardList(props : any){
     const list : any = [];
     const cardList = useAppSelector(state=>state.rolling.rollings);
-    // console.log(cardList + "RC");
+    console.log(cardList + "RC");
     for(let i = 0; i < cardList.length; ++i){
         if(cardList[i].attached === 0){
             list.push(<Sticky rolling={cardList[i]} key={i} colorClass = {cardList[i].color} closeList={()=>props.closeList}></Sticky>);

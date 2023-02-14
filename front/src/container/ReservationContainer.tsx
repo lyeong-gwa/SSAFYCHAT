@@ -8,9 +8,9 @@ import { reservation } from "../api/mentoring";
 import { useEffect } from "react";
 import { useAppSelector } from "../hooks/hooks";
 import { getReservation } from "../store/mentoringSlice";
-import ReservedList from "../components/mentoring/ReservedList";
 function ReservationContainer(){
     const dispatch = useAppDispatch();
+    const reservationList = useAppSelector(state => state.mentoring.reservationList);
     dispatch(changeBanner("예약확인"));
     // 예약 리스트들 호출
     useEffect(()=>{
@@ -19,8 +19,7 @@ function ReservationContainer(){
             console.log(success);
             dispatch(getReservation(success.data));
         },(fail : any)=>{console.log(fail)});
-    },[])
-    const reservationList = useAppSelector(state => state.mentoring.reservationList);
+    },[reservationList])
 
     let app: any = useAppSelector(state => state.mentoring.reservationList.appliedList);
     let can: any = useAppSelector(state => state.mentoring.reservationList.canceledList);

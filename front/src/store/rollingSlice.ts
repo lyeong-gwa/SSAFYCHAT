@@ -20,6 +20,14 @@ interface RollingInfo{
     posY: number,
 }
 
+interface ReviewInfo{
+  completeMentoringId: number,
+  reviewContent: string,
+  reviewHeight: number,
+  reviewSelected: number,
+  reviewWidth: number,
+}
+
 // Define a type for the slice state
 interface RollingState {
     rollings: Array<RollingInfo>,
@@ -34,22 +42,7 @@ interface AttachingInfo{
 // Define the initial state using that type
 const initialState: RollingState = {
     rollings: [      
-      {
-        id: 0,
-        color: "sticky_red",
-        content: "저는 0번입니다! 길지 않은 멘토링 시간 동안, 좋은 정보들을 제공해주신 멘토님 감사드립니다. 이번 채용 공고에 지원해서 꼭 같은 부서에서 만날 수 있었으면 좋겠습니다. 연락드리겠습니다!",
-        attached: 1,
-        posX: 10,
-        posY: 10,
-    },
-    {
-      id: 1,
-      color: "sticky_red",
-      content: "저는 !번입니다! 길지 않은 멘토링 시간 동안, 좋은 정보들을 제공해주신 멘토님 감사드립니다. 이번 채용 공고에 지원해서 꼭 같은 부서에서 만날 수 있었으면 좋겠습니다. 연락드리겠습니다!",
-      attached: 0,
-      posX: 10,
-      posY: 10,
-    },
+
     ],
 }
 
@@ -57,11 +50,30 @@ export const RollingSlice = createSlice({
   name: 'rolling',
   initialState,
   reducers: {
-    getRollings:(state)=>{
-      
+    getRollings:(state, action: PayloadAction<Array<ReviewInfo>>)=>{
+    //   id: number,
+    // color: string,
+    // content: string,
+    // attached: number,
+    // posX: number,
+    // posY: number,
+        let tmpList = [];
+        const colorClassList =["sticky_purple","sticky_green","sticky_red","sticky_yellow","sticky_blue"];
+        for(let i = 0; i < action.payload.length; i++){
+          tmpList.push(
+            {
+              id:action.payload[i].completeMentoringId, 
+              color:colorClassList[i%4], 
+              content:action.payload[i].reviewContent, 
+              attached: action.payload[i].reviewSelected,
+              posX: action.payload[i].reviewWidth,
+              posY: action.payload[i].reviewHeight,
+            })
+        }
+        state.rollings = tmpList;
     },
     attachRolling:(state, action: PayloadAction<AttachingInfo>)=>{
-      for(let i = 0; i < state.rollings.length; ++i){
+      for(let i = 0; i < state.rollings.length; i++){
         if(state.rollings[i].id === action.payload.id){
             state.rollings[i].attached = 1;
             state.rollings[i].posX = action.payload.posX;
@@ -81,7 +93,7 @@ export const RollingSlice = createSlice({
   }
 })
 
-export const { attachRolling, removeRolling} = RollingSlice.actions
+export const { attachRolling, removeRolling, getRollings} = RollingSlice.actions
 
 // Other code such as selectors can use the imported `RootState` type
 export const selectCount = (state: RootState) => state.rolling

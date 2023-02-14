@@ -6,27 +6,33 @@ import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import { changeBanner } from "../../store/userSlice"
 import { getReview } from "../../api/review";
 import Sticky from "../../widget/Sticky";
+import { getRollings } from "../../store/rollingSlice";
 
-function getRollings(){
-    console.log("getRollings");
-    getReview((success : any)=>{
-        console.log(success)
+// function getRollings(){
+//     console.log("getRollings");
+//     getReview((success : any)=>{
+//         console.log(success)
         
-    },(fail : any)=>{
-        console.log(fail)
-    })
-}
+//     },(fail : any)=>{
+//         console.log(fail)
+//     })
+// }
 
 
 function RollingPaper() {
-    useEffect(()=>{
-        getRollings();
-    })
     const imgUrlStar = "/img/Star.png"
     const imgUrlclean = "/img/clean.png"
     const imgUrlsave = "/img/save.png"
     const dispatch = useAppDispatch();
     dispatch(changeBanner("롤링페이퍼"));
+    useEffect(()=>{
+        getReview((success : any)=>{
+            console.log(success)
+            dispatch(getRollings(success.data))
+        },(fail : any)=>{
+            console.log(fail)
+        })
+    })
 
     const[clickBtn, setClickBtn] = useState(false);
     const colorClassList =["sticky_purple","sticky_green","sticky_red","sticky_yellow","sticky_blue"];
@@ -34,7 +40,7 @@ function RollingPaper() {
     // let [attachedList, setAttachedList] = useState([<></>]);
     let attachedList = []
     const cardList = useAppSelector(state=>state.rolling.rollings);
-    // console.log(cardList + "RP");
+    console.log(cardList + "RP");
     let newList = [];
     for(let i = 0; i < cardList.length; i++){
         if(cardList[i].attached === 1){

@@ -104,8 +104,15 @@ function ApplyingModal(props: any) {
     }
   }
 
-  /** 선택한 시간을 배열에 담는 함수 */
+  /** 선택한 시간을 배열에 담는 함수 (추가 버튼 클릭) */
   function putTime() {
+    //최대 선택 개수 8개
+    if(selectedTimes.length == 8){
+      alert("더 이상 선택할 수 없습니다.")
+      return;
+    }
+
+    //24시 형태로 변경
     if(beforeOrAfter === "PM"){
       date.setHours(parseInt(hour)+12);
     }else{
@@ -118,10 +125,17 @@ function ApplyingModal(props: any) {
 
   /** 신청하는 api 호출*/
   function applyMentoring() {
+    //0개를 신청하지 못하게 return
+    if(selectedTimes.length == 0){
+      alert("시간을 선택해주세요.")
+      return;
+    }
+
     selectedTimes.map((time)=>{
       times.push(time.toISOString());
     });
 
+    //body 생성
     const applying = {
       job: mentoringInfo.job,
       company: mentoringInfo.belong,
