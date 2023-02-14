@@ -12,6 +12,7 @@ async function getReview(success : any, fail : any){
 // 리뷰 등록
 async function setReview(review:{completeMentoringId: number, reviewContent: string, score: number},
     success : any, fail : any){
+    console.log("review 신청 : " + review);
     api.defaults.headers["Authorization"] = "Bearer " + sessionStorage.getItem("access-token");
     await api.post(`/mentoring/review`, JSON.stringify({completeMentoringId: review.completeMentoringId, reviewContent: review.reviewContent, score: review.score}))
     .then(success)
