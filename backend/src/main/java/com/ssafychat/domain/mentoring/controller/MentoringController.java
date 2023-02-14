@@ -217,10 +217,12 @@ public class MentoringController {
         try {
             Mentoring mentoring = mentoringService.deleteMentoring(mentoringDto.getMentoringId());
             mentoringService.insertCompleteMentoring(mentoring);
+            System.out.println(mentoringDto);
             response.put("message", "success");
+
         } catch (Exception e) {
             response.put("message", "fail");
-            log.error(e.getMessage());
+            e.printStackTrace();
         }
             return new ResponseEntity<>(response, HttpStatus.OK);
     }
