@@ -11,19 +11,19 @@ function exit(navigate : any){
     navigate("/banner/mentoring");
 }
 
-
 function VideoConferenceContainer(props : any){
 
     const imgUrlEmoji = "/img/emoji.png";
     const imgUrlSend = "/img/send.png";
-    const userinfo = useAppSelector(state => state.user.userId);
+    const userinfo = useAppSelector(state => state.user);
+    const mentoringId = useAppSelector(state=>state.mentoring.mentoringId);
     let tmplog : { chat_id: number; user_id: number; message: string; Date: number; }[] = []; 
     const [logmsg,setLogmsg] = useState<{ chat_id: number; user_id: number; message: string; Date: number; }[]>([]);
     const navigate = useNavigate();
 
     useEffect(()=>{
-        init(userinfo);
-    },[]);
+        init(userinfo,mentoringId);
+    },[mentoringId,userinfo]);
     return(
         // 회의 컨테이너 전체를 담는 컨테이너
 
@@ -120,9 +120,9 @@ function VideoConferenceContainer(props : any){
         </div>
     )
 
-    function init(userinfo:any){
+    function init(userinfo:any, mentoringId : number){
 
-        const mentoringid= 20;
+        const mentoringid= mentoringId;
         const userid = userinfo;
         const socket = io(process.env.REACT_APP_SOCKET as string,{path: "/socket.io",transports:["websocket"]});
         const myFace = document.getElementById("myFace") as HTMLMediaElement;
@@ -284,14 +284,13 @@ function VideoConferenceContainer(props : any){
             makeConnection();
         }
         
-        async function handleWelcomeSubmit(event : any) {
-            event.preventDefault();
-            const input = welcomeForm.querySelector("input") as HTMLInputElement;
+        async function handleWelcomeSubmit() {
+            // event.preventDefault();
+            // const input = welcomeForm.querySelector("input") as HTMLInputElement;
             //socket.emit("join_room", input.value, startMedia); //answer실습위치에서 done삭제하였음
             await initCall();
-            socket.emit("join_room", input.value);
-            roomName = input.value;
-            input.value = "";
+            socket.emit("join_room", mentoringId);
+            roomName = mentoringId;
         }
         
         welcomeForm?.addEventListener("submit", handleWelcomeSubmit);
@@ -367,6 +366,7 @@ function VideoConferenceContainer(props : any){
                 peerFace.srcObject = data.stream;
             }
         }
+        handleWelcomeSubmit();
         }
 }
 
