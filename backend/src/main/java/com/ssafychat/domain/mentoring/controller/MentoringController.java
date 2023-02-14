@@ -187,10 +187,12 @@ public class MentoringController {
     @PostMapping("/review")
     public ResponseEntity<?> postReviewAndScore(@RequestBody ReviewAndScoreDto reviewAndScoreDto) {
         Map<String,String> response = new HashMap<>();
+        System.out.println(reviewAndScoreDto);
         try {
             mentoringService.addReviewAndScore(reviewAndScoreDto);
             response.put("message", "success");
         } catch (Exception e) {
+            e.printStackTrace();
             response.put("message", "fail");
         }
         return new ResponseEntity<>(response, HttpStatus.OK);
