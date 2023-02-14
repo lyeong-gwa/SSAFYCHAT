@@ -26,6 +26,8 @@ function VideoConferenceContainer(props : any){
     const [logmsg,setLogmsg] = useState<{ chat_id: number; user_id: number; message: string; Date: number; }[]>([]);
     const navigate = useNavigate();
     let first = true;
+    let myDataChannel : any; //데이터채널 1:1 
+
     useEffect(()=>{
         if( userinfo !== undefined && mentoringId !== -1 && first){
             console.log(12345 + " 나는 처음이야");
@@ -82,6 +84,8 @@ function VideoConferenceContainer(props : any){
                         <select id="cameras"></select>
                         
                         <div className="video_conference_cancel" onClick={()=>{
+                            myDataChannel.close();
+                            console.log("마칠때 멘토링 아이디 " +  mentoringId);
                             completeMentoring(mentoringId,(success:any)=>{
                                 console.log(success);
                                 setClickCancel(true);
@@ -139,7 +143,7 @@ function VideoConferenceContainer(props : any){
         const camerasSelect = document.getElementById("cameras") as HTMLSelectElement;
         const call = document.getElementById("call") as HTMLDivElement;
         const chattinginput = document.getElementById("video_conference_chat_input") as HTMLInputElement;
-        let myDataChannel : any; //데이터채널 1:1 
+        
         chatLog(mentoringid,(chatlog:any)=>{
             tmplog = chatlog.data.log;
             setLogmsg(JSON.parse(JSON.stringify(tmplog)));
