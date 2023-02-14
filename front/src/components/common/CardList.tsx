@@ -13,6 +13,7 @@ function CardList(props : any){
             console.log('i = ' + i);
             console.log(info);
             if(info !== undefined){
+                console.log("undefined인가 " + info);
                 console.log(info[0]);
                 console.log(info[1]);
                 console.log(info[2]);

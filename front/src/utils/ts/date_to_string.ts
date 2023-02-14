@@ -1,5 +1,9 @@
 // 2023-02-14T02:00:00.000+00:00
 function DATE_TO_STRING(date: string){
+    console.log("Date_TE_STRING date  : " + date)
+    if(date === undefined){
+        return;
+    }
     const result1: string = date.split('.')[0];
     const yyyy_mm_dd_hour_min_sec: string[] = result1.split(':');
     console.log(yyyy_mm_dd_hour_min_sec);
