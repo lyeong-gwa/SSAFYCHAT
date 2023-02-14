@@ -282,11 +282,7 @@ function VideoConferenceContainer(props : any){
         
         //-아래코드는 방과 관련한 코드--------------------------------------------
         
-        const welcome = document.getElementById("welcome") as HTMLDivElement;
-        const welcomeForm = welcome?.querySelector("form") as HTMLFormElement;
-        
         async function initCall() { //startMedia() -> initCall
-            welcome.hidden = true;
             call.hidden = false;
             await getMedia(null);//이제 여기서 미디어를 시작한다.
             makeConnection();
@@ -300,8 +296,6 @@ function VideoConferenceContainer(props : any){
             socket.emit("join_room", mentoringId);
             roomName = mentoringId;
         }
-        
-        welcomeForm?.addEventListener("submit", handleWelcomeSubmit);
         
         // Socket Code
         
