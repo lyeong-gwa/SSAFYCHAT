@@ -55,6 +55,7 @@
 
 
 .video_conference_right{
+    height: 820px;
     display: flex;
     flex-direction: column;
     justify-content:space-around;

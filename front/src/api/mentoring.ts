@@ -66,7 +66,7 @@ async function completeMentoring(id:{mentoringId:number},
     success:any,
     fail: any){
         api.defaults.headers["Authorization"] = "Bearer " + sessionStorage.getItem("access-token");
-        await api.delete(`/mentoring/complete`,{data:JSON.stringify(id)})
+        await api.post(`/mentoring/complete`,JSON.stringify(id))
         .then(success)
         .catch(fail);
     
