@@ -24,7 +24,7 @@
 
 .video_conference_left{
     display: grid;
-    grid-template-rows: 20% 75% 5%;
+    grid-template-rows: 15% 75% 15%;
 }
 
 .video_conference_mine{
