@@ -17,7 +17,7 @@
     width: 100%;
     height: auto;
     overflow-x: hidden;
-    background: #031059;
+    background: #0d0d0d;
     
     flex: none;
     flex-grow: 1;
@@ -224,7 +224,7 @@
     height: auto;
     min-height: 48px;
 
-    background: #FFFF27;
+    background: #FFF2b0;
     border-radius: 12px;
 
     flex: none;
@@ -312,7 +312,7 @@
     height: auto;
     min-height: 48px;
     
-    background: #78E378;
+    background: #ccff;
     border-radius: 12px;
 
     flex: none;
