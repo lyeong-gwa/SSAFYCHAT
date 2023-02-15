@@ -1,6 +1,8 @@
 import "../../styles/components/modal/review-modal.css"
 import { useState } from "react";
 import { setReview } from "../../api/review";
+import { useAppSelector } from "../../hooks/hooks";
+import { setMentoringId } from "../../store/mentoringSlice";
 
 // *********************************
 // 화상회의에 붙일 경우 버튼 클릭시 api 호출 부분
@@ -14,6 +16,7 @@ function ReviewModal(props : any){
 
     let [rate,setRate] = useState(3);
     let [content,setContent] = useState('');
+    let menId = useAppSelector(state=>state.mentoring.mentoringId);
     console.log(content)
     return (
         <div className="review_modal" >
@@ -43,9 +46,10 @@ function ReviewModal(props : any){
                         <div className='review_modal_submit_button' onClick={()=>{
                             if(content.length !== 0){
                                 // 화상회의에 컴포넌트를 붙이게 되면 사용할 함수
-                                setReview({
+                                setReview(     
+                                    {
                                     // 멘토링 아이디 받아서 써야함
-                                    completeMentoringId: 0,
+                                    completeMentoringId: menId,
                                     reviewContent:content,
                                     score:rate,
                                 },
