@@ -66,7 +66,7 @@ function MyPageContainer(){
         <div className="mypage_container">
             <div className='profile'>
                 <div className='my_image'>
-                    <img className='image' src={require('../assets/smith.png')} alt="profile"></img>
+                    <img className='image' src={require('../assets/cat.jpg')} alt="profile"></img>
                 </div>
                 <div className='my_info'>
                     <Profile></Profile>

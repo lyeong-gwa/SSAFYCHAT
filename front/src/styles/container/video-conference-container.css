@@ -20,6 +20,10 @@
     background: #0d0d0d;
     display: grid;
     grid-template-columns: 70% 30%;
+
+    padding-left: 0px;
+    padding-right: 0px;
+    line-height: 0px;
 }
 
 .video_conference_left{
