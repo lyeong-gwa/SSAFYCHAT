@@ -34,3 +34,12 @@ table {
   th {
   background-color: #ddd;
   }
+
+  .my_reserved_mentoring_table{
+    height: 200px;
+    overflow: auto;
+  }
+  .my_complete_mentoring_table{
+    height: 200px;
+    overflow: auto;
+  }

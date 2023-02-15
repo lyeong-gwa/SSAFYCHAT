@@ -1,4 +1,5 @@
 import "../styles/widget/mentoring-chat.css"
+import { useAppSelector } from "../hooks/hooks";
 function formatDate(inputdate : any){
     const date = new Date(inputdate);
     const formattedDate = date.toISOString().substring(11,16);
@@ -6,9 +7,10 @@ function formatDate(inputdate : any){
 }
 
 function Chat(props: any){
-    const who_msg = props.chat.user_id === 1 ? "my_msg" : "other_msg";
-    const who_message = props.chat.user_id === 1 ? "my_message" : "o_message";
-    const who_time = props.chat.user_id === 1 ? "my_time" : "o_time";
+    let id = useAppSelector(state=>state.user.userId)
+    const who_msg = props.chat.user_id === id ? "my_msg" : "other_msg";
+    const who_message = props.chat.user_id === id ? "my_message" : "o_message";
+    const who_time = props.chat.user_id === id ? "my_time" : "o_time";
     return(
         <div className={who_msg}>
                     <div className={who_message}>
@@ -26,7 +28,7 @@ function Messages(props: any){
     const imgUrlSend = "/img/send.png";
     let checkdate = Array();
     return(
-        <div>
+        <div className="chat_content_container">
             <div className="content">
                 
                     

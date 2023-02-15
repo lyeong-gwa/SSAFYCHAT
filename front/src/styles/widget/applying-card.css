@@ -17,6 +17,11 @@
     cursor: pointer;
 }
 
+.belongImage{
+    width: 160px;
+    height: 40px;
+}
+
 .applying_card_text{
     font-family: 'Do Hyeon';
     font-style: normal;

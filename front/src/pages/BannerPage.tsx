@@ -13,7 +13,7 @@ function BannerPage (){
     return(
         <div>
             <Header></Header>
-            <Banner name={useAppSelector(state => state.user.banner)} imgName="banner1"></Banner>
+            <Banner name={useAppSelector(state => state.user.banner)} imgName="banner6"></Banner>
             <Routes>
                 <Route path="/apply" element={<ApplyingContainer></ApplyingContainer>}></Route>
                 <Route path="/mypage" element={<MyPageContainer></MyPageContainer>}></Route>

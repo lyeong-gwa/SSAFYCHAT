@@ -91,6 +91,12 @@ wsServer.on("connection", (socket) => {
     socket.on("ice", (ice, roomName) => {
         socket.to(roomName).emit("ice", ice);
       });
+    
+    //close
+    socket.on("close_room", (roomName) => {
+        console.log("close_room event");
+        socket.to(roomName).emit("close_room");
+    });
 });
 
 httpServer.listen(8000,handleListen);

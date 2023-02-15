@@ -9,9 +9,9 @@ function MentoringList(props: any) {
   }
   return (
     <div className="mentoring_list_component">
-      <div>
-        <span className="mentoring_list__table_header">멘토링 확정</span>
-          <table>
+        <span className="mentoring_list__table_header ">멘토링 확정</span>
+      <div className="my_reserved_mentoring_table">
+          <table >
             <thead>
               <tr>
               <th>No.</th>
@@ -22,7 +22,7 @@ function MentoringList(props: any) {
                 <th>기업</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody >
             {props.matchMentorings.map((mentoring : any) => (
               <tr key={mentoring.mentoringId}>
                 <td>{mentoring.mentoringId}</td>
@@ -37,8 +37,8 @@ function MentoringList(props: any) {
           </table>
         </div>
 
-        <div>
         <span className="mentoring_list__table_header">멘토링 완료</span>
+        <div className="my_complete_mentoring_table">
           <table>
             <thead>
               <tr>

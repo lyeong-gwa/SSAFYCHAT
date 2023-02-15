@@ -17,9 +17,16 @@ function replace_am_pm(hour: string){
     let result: string = "";
     if(result1 > 12){
         const tmp = (result1 - 12).toString();
+        if(result1 > 21){
+            result = " PM " + tmp;
+        }
         result = " PM 0" + tmp;
-    }else{
+    }
+    else{
         const tmp = result1.toString();
+        if(result1 > 9){
+            result = " AM " + tmp;
+        }
         result = " AM 0" + tmp;
     }
 

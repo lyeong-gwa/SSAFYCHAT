@@ -8,6 +8,7 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { completeMentoring } from "../api/mentoring";
 import ReviewModal from "../components/modal/ReviewModal";
+import { userInfo } from "os";
 
 function exit(navigate : any){
     navigate("/banner/mentoring");
@@ -38,17 +39,7 @@ function VideoConferenceContainer(props : any){
     },[mentoringId,userinfo]);
     return(
         // 회의 컨테이너 전체를 담는 컨테이너
-
-        
         <div id="call" className="video_conference_container">
-
-
-             {/* <div id="call"> 
-                 <div id="myStream">
-                    <video id="myFace" height="400" width="400" autoPlay playsInline></video>
-                     <video id="peerFace" height="400" width="400" autoPlay playsInline></video> 
-                 </div> 
-             </div>  */}
 
             {/* 비디오 화면과 버튼들을 담을 왼쪽 컨테이너 */}
             <div id="myStream" className="video_conference_left" >
@@ -95,12 +86,11 @@ function VideoConferenceContainer(props : any){
             <div className="video_conference_right">
                 {/* 채팅 내용을 보여줄 리스트 요소 */}
                 <div className="video_conference_chat_content_message">
-                    <MentoringChat tmplog={logmsg}></MentoringChat>
+                    <MentoringChat userId={userinfo.userId} tmplog={logmsg}></MentoringChat>
                 </div>
                        
                 <div className="video_conference_chat_container">
                     {/* 채팅 입력 input */}
-                    
                     <div className="input_bar">
                         <div className="emoji_div">
                             <img src={imgUrlEmoji} alt="" className="emoji" />
@@ -136,7 +126,7 @@ function VideoConferenceContainer(props : any){
         const call = document.getElementById("call") as HTMLDivElement;
         const chattinginput = document.getElementById("video_conference_chat_input") as HTMLInputElement;
         const videoconferencecanceldiv = document.getElementById("video_conference_cancel") as HTMLDivElement;
-        let myDataChannel : RTCDataChannel; //데이터채널 1:1 
+        
         chatLog(mentoringid,(chatlog:any)=>{
             tmplog = chatlog.data.log;
             setLogmsg(JSON.parse(JSON.stringify(tmplog)));
@@ -179,7 +169,8 @@ function VideoConferenceContainer(props : any){
         let cameraOff = false;
         let roomName : any ;
         let myPeerConnection : any; //상호간의 연락을 위한
-        
+        let myDataChannel : any; //데이터채널 1:1 
+
         async function getCameras() {
             try {
                 const devices = await navigator.mediaDevices.enumerateDevices();//사용자의 미디어 디바이스 목록 가져온다.
@@ -209,14 +200,7 @@ function VideoConferenceContainer(props : any){
                 video: { deviceId: { exact: deviceId } },
             };
             try {
-                // 카메라 예제에서 사용
-                // myStream = await navigator.mediaDevices.getUserMedia({
-                //     audio: true,
-                //     video: true,
-                // });
-        
-                //
-        
+
                 myStream = await navigator.mediaDevices.getUserMedia(
                     deviceId ? cameraConstraints : initialConstrains
                 );
@@ -261,17 +245,7 @@ function VideoConferenceContainer(props : any){
                 }
             }
         }
-        async function handleCloseBtn(){
-            //socket = undefined;
-            console.log("마칠때 멘토링 아이디 " +  mentoringid);
-            completeMentoring({mentoringId},(success:any)=>{
-                console.log(success);
-                setClickCancel(true);
-            },(fail:any)=>{
-                console.log(fail);
-                alert("다시시도해주세요");
-            })
-        }
+        
 
         async function handleCameraChange() {
             await getMedia(camerasSelect.value);
@@ -282,6 +256,27 @@ function VideoConferenceContainer(props : any){
                     .find((sender : any) => sender.track.kind === "video");
                 videoSender.replaceTrack(videoTrack);
             }
+        }
+        async function handleCloseBtn(){
+            socket.emit("close_room",mentoringId);
+            myStream.getTracks().forEach((track: any) => {
+                track.stop();
+            });
+            myPeerConnection.close();
+            myDataChannel.close();
+            console.log("마칠때 멘토링 아이디 " +  mentoringid);
+            
+            if(userR === 'role_mentee'){
+                await completeMentoring({mentoringId},(success:any)=>{
+                    console.log(success);
+                    
+                },(fail:any)=>{
+                    console.log(fail);
+                    alert("다시시도해주세요");
+                })
+                setClickCancel(!clickCancel);
+            } 
+            
         }
         //getMedia(); 이제 ui에서 불러오므로 생략
         muteBtn.addEventListener("click", handleMuteClick);
@@ -297,25 +292,15 @@ function VideoConferenceContainer(props : any){
         }
         
         async function handleWelcomeSubmit() {
-            // event.preventDefault();
-            // const input = welcomeForm.querySelector("input") as HTMLInputElement;
-            //socket.emit("join_room", input.value, startMedia); //answer실습위치에서 done삭제하였음
             await initCall();
             socket.emit("join_room", mentoringId);
             roomName = mentoringId;
         }
         
         // Socket Code
-        
         socket.on("welcome", async () => {
             //데이터채널 생성 최초생성자
             myDataChannel = myPeerConnection.createDataChannel("chat");
-            myDataChannel.onclose = handleCloseBtn;
-            myPeerConnection.ondatachannel = (event : any) => {
-                myDataChannel = event.channel;
-                myDataChannel.onclose = handleCloseBtn;
-              };
-
             myDataChannel.addEventListener("message", (event : any) =>{
                     tmplog.push(JSON.parse(event.data));
                     setLogmsg(JSON.parse(JSON.stringify(tmplog)));
@@ -340,7 +325,6 @@ function VideoConferenceContainer(props : any){
                 );
             });
         
-        
             console.log("received the offer");
             myPeerConnection.setRemoteDescription(offer);
             const answer = await myPeerConnection.createAnswer();
@@ -358,7 +342,14 @@ function VideoConferenceContainer(props : any){
             console.log("received candidate");
             myPeerConnection.addIceCandidate(ice);
         });
-        
+        socket.on("close_room",()=>{
+            console.log("close_room");
+            myStream.getTracks().forEach((track: any) => {
+                track.stop();
+            });
+            myPeerConnection.close();
+            myDataChannel.close();
+        });
         // RTC Code
         
         function makeConnection() {
