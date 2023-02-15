@@ -306,7 +306,7 @@ public class MemberServiceImpl implements MemberService {
             }
             completeMentorings = completeMentoringRepository.findByMentor(member);
             for (CompleteMentoring complete : completeMentorings) {
-                Member mentee = memberRepository.findByUserId(complete.getCompleteMentoringId());
+                Member mentee = memberRepository.findByUserId(complete.getMentee().getUserId());
                 completes.add(MyPageCompleteDto.builder()
                         .completeMentoringId(complete.getMentee().getUserId())
                         .mentor(profile)
