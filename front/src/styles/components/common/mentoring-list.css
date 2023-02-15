@@ -20,26 +20,11 @@
   color: #031059;
 }
 
-table {
-  width: 100%;
-  border-collapse: collapse;
-  }
-  
-  th, td {
-  padding: 8px;
-  text-align: left;
-  border-bottom: 1px solid #ddd;
-  }
-  
-  th {
-  background-color: #ddd;
-  }
-
-  .my_reserved_mentoring_table{
-    height: 200px;
-    overflow: auto;
-  }
-  .my_complete_mentoring_table{
-    height: 200px;
-    overflow: auto;
-  }
+.my_reserved_mentoring_table{
+  height: 200px;
+  overflow: auto;
+}
+.my_complete_mentoring_table{
+  height: 200px;
+  overflow: auto;
+}

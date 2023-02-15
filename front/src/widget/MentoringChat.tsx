@@ -1,16 +1,25 @@
 import "../styles/widget/mentoring-chat.css"
 import { useAppSelector } from "../hooks/hooks";
+import { useEffect } from "react";
 function formatDate(inputdate : any){
-    const date = new Date(inputdate);
+    const date = new Date(inputdate + 1000 * 60 * 60 * 9);
     const formattedDate = date.toISOString().substring(11,16);
     return formattedDate;
 }
 
 function Chat(props: any){
-    let id = useAppSelector(state=>state.user.userId)
-    const who_msg = props.chat.user_id === id ? "my_msg" : "other_msg";
-    const who_message = props.chat.user_id === id ? "my_message" : "o_message";
-    const who_time = props.chat.user_id === id ? "my_time" : "o_time";
+    let id = -1;
+    id = parseInt(useAppSelector(state=>state.user.userId));
+    let u = useAppSelector(state=>state.user)
+    console.log(props.chat);
+    console.log(u);
+    const who_msg = props.chat.user_id.email === u.email ? "my_msg" : "other_msg";
+    const who_message = props.chat.user_id.email === u.email ? "my_message" : "o_message";
+    const who_time = props.chat.user_id.email === u.email ? "my_time" : "o_time";
+
+    useEffect(()=>{
+        console.log(id);
+    },[id])
     return(
         <div className={who_msg}>
                     <div className={who_message}>

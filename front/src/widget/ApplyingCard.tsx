@@ -10,6 +10,7 @@ function ApplyingCard (props: any){
             case "당근마켓": setImage(require('../assets/DaangnMarket_logo.png')); break;
             case "라인": setImage(require('../assets/LINE_Corporation_Logo.png')); break;
             case "카카오": setImage(require('../assets/kakao_logo.png')); break;
+            case "삼성전자": setImage(require('../assets/samsung_logo.png')); break;
             default: setImage(require('../assets/SSAFY_CHAT.png'));
         }
     },[])

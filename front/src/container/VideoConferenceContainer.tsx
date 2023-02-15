@@ -153,7 +153,7 @@ function VideoConferenceContainer(props : any){
                   );
                   const msgdiv = document.getElementById("messages") as HTMLDivElement;
                   console.log("msgdiv",msgdiv);
-                  msgdiv.scrollTop = 0;
+                  msgdiv.scrollTo(0,1000);
             }
             
         }
@@ -275,8 +275,9 @@ function VideoConferenceContainer(props : any){
                     alert("다시시도해주세요");
                 })
                 setClickCancel(!clickCancel);
-            } 
-            
+            } else {
+                navigate("/banner/mentoring");
+            }
         }
         //getMedia(); 이제 ui에서 불러오므로 생략
         muteBtn.addEventListener("click", handleMuteClick);

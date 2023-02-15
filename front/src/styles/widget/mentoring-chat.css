@@ -1,6 +1,11 @@
 .chat_content_container{
-    height: 830px;
+    height: 680px;
+    border-radius: 15px;
     overflow-y: scroll;
+}
+
+.chat_content_container::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera*/
 }
 
 .content{

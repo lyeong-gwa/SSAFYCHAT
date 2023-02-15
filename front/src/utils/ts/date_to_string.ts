@@ -4,6 +4,10 @@ function DATE_TO_STRING(date: string){
     if(date === undefined){
         return;
     }
+    let d = new Date(date);
+    d.setHours(d.getHours() + 9);
+    console.log("d : "+d);
+    date = d.toISOString();
     const result1: string = date.split('.')[0];
     const yyyy_mm_dd_hour_min_sec: string[] = result1.split(':');
     console.log(yyyy_mm_dd_hour_min_sec);
@@ -20,16 +24,19 @@ function replace_am_pm(hour: string){
         if(result1 > 21){
             result = " PM " + tmp;
         }
-        result = " PM 0" + tmp;
+        else{
+            result = " PM 0" + tmp;
+        }
     }
     else{
         const tmp = result1.toString();
         if(result1 > 9){
             result = " AM " + tmp;
         }
-        result = " AM 0" + tmp;
+        else{
+            result = " AM 0" + tmp;
+        }
     }
-
     return result;
 }
 
