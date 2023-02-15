@@ -151,9 +151,6 @@ function VideoConferenceContainer(props : any){
                     },
                     (err:any)=>{console.log(err);}
                   );
-                  const msgdiv = document.getElementById("messages") as HTMLDivElement;
-                  console.log("msgdiv",msgdiv);
-                  msgdiv.scrollTo(0,1000);
             }
             
         }

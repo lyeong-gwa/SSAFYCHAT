@@ -36,12 +36,17 @@ function Messages(props: any){
     const imgUrlEmoji = "/img/emoji.png";
     const imgUrlSend = "/img/send.png";
     let checkdate = Array();
+
+    useEffect(()=>{
+        const chatcontentdiv = document.getElementById("chat_content_container") as HTMLDivElement;
+        chatcontentdiv.scrollTop = chatcontentdiv.scrollHeight;
+    },[props.tmplog]);
     return(
-        <div className="chat_content_container">
+        <div className="chat_content_container" id="chat_content_container">
             <div className="content">
                 
                     
-                <div className="messages" id="messages">
+                <div className="messages">
                     {props.tmplog.map((chat: any, index: number) => {
                         const day = new Date(chat.Date).toISOString().substring(0,10);
                         if(!checkdate.includes(day)){
