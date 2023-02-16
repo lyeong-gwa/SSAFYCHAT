@@ -241,11 +241,15 @@ public class MentoringServiceImpl implements MentoringService {
     }
 
     @Override
+    @Transactional
     public void addReviewAndScore(ReviewAndScoreDto reviewAndScoreDto) {
         CompleteMentoring completeMentoring = completeMentoringRepository.findByCompleteMentoringId(reviewAndScoreDto.getCompleteMentoringId());
         completeMentoring.setReviewContent(reviewAndScoreDto.getReviewContent());
         completeMentoring.setScore(reviewAndScoreDto.getScore());
         completeMentoringRepository.save(completeMentoring);
+        Member mentor = memberRepository.findByUserId(completeMentoring.getMentor().getUserId());
+        mentor.setTotalScore(mentor.getTotalScore() + reviewAndScoreDto.getScore());
+        memberRepository.save(mentor);
     }
 
     @Override
