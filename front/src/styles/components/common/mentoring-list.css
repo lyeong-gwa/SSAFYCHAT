@@ -1,0 +1,30 @@
+.mentoring_list_component {
+  position: relative;
+  display: grid;
+  width: 500px;
+  height: 500px;
+  margin-left: 100px;
+}
+
+.mentoring_list__table_header {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 25px;
+  line-height: 125%;
+  height: 25px;
+  /* or 31px */
+
+  align-items: center;
+  letter-spacing: 0.02em;
+
+  color: #031059;
+}
+
+.my_reserved_mentoring_table{
+  height: 200px;
+  overflow: auto;
+}
+.my_complete_mentoring_table{
+  height: 200px;
+  overflow: auto;
+}

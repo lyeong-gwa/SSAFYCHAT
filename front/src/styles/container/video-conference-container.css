@@ -1,0 +1,150 @@
+.vcTmp{
+    position: absolute;
+    z-index: 1000;
+}
+
+.tmpButton{
+    border: solid 2px #ffffff;
+    position: absolute;
+    z-index: 500;
+    color: #ffffff;
+}
+
+.tmpButton:hover{
+    cursor:pointer;
+}
+
+.video_conference_container{
+    width: 100vw;
+    height: Calc(100vh - 140px);
+    background: #0d0d0d;
+    display: grid;
+    grid-template-columns: 70% 30%;
+
+    padding-left: 0px;
+    padding-right: 0px;
+    line-height: 0px;
+}
+
+.video_conference_left{
+    height: 820px;
+    display: grid;
+    grid-template-rows: 15% 75% 15%;
+}
+
+.video_conference_mine{
+    display: flex;
+    justify-content: center;
+}
+
+.video_conference_mine_screen{
+    /* width: calc(190px*1.5); */
+    height: Calc(100px*1.3);
+    background: #1a1a1a;
+    margin: auto;
+}
+
+.video_conference_oppnent{
+    display: flex;
+    justify-content: center;
+}
+
+.video_conference_oppnent_screen{
+    height: calc(600px);
+    /* width: calc(190px*6.7); */
+    background: #1a1a1a;
+    margin: auto;
+}
+
+
+
+.video_conference_right{
+    height: 820px;
+    display: flex;
+    flex-direction: column;
+    justify-content:space-around;
+}
+
+.video_conference_chat_content_message{
+    margin:auto;
+    width: 90%;
+    height: 100%;
+    border-radius: 10px;
+    background: #0d0d0d;
+}
+
+.video_conference_chat_container{
+    width: 100%;
+    height: 150px;
+    display: flex;
+    justify-content: center;
+}
+
+.video_conference_chat_input{    
+    width: 90%;
+    height: 80%;
+    background: #1a1a1a;
+    color: #ffffff;
+}
+
+.input_msg{
+    margin: 0 10px;
+    width: 400px;
+    height: 30px;
+}
+
+
+.video_conference_footer{
+    display: flex;
+    justify-content: center;
+    color: #ffffff;
+    line-height: 40px;
+}
+
+.video_conference_button_container{
+    width: 50%;
+    height: 40px;
+    display: flex;
+    justify-content: space-around;
+}
+
+.video_conference_button{    
+    width: 20%;
+    height: 40px;
+    border: solid 1px #a6a6a6;
+    border-radius: 40px;
+
+    display: flex;
+    justify-content: space-around;
+
+    -webkit-user-select:none;
+    -moz-user-select:none;
+    -ms-user-select:none;
+    user-select:none
+}
+
+.video_conference_button:hover{
+    background: #363636;
+}
+
+.video_conference_button > img{
+    margin: auto;
+}
+
+.video_conference_cancel{
+    background: #DB1F2E;
+    width: 40px;
+    height: 40px;
+    border: solid 1px #a6a6a6;
+    border-radius: 40px;
+    display: flex;
+    justify-content: center;
+}
+
+.video_conference_cancel:hover{
+    background: #db1f2fbc;
+}
+
+.video_conference_cancel > img{
+    margin: auto;
+}

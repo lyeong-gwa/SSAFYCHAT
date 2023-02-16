@@ -1,0 +1,103 @@
+/* 카드 바깥 */
+.reserved_card_outer{
+    width: 30%;
+    height: 460px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+/* 카드 본체 */
+.reserved_card{
+    width: 244px;
+    height: 340px;
+    margin: 10px;
+    background-color: #ffffff;
+    border: solid black 1px;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 일자 */
+.reserved_card_header{
+    height: 20%;
+    font-size: 22px;
+    margin-left: 10px;
+}
+/* 내용 컨테이너 */
+.reserved_card_content_container{
+    height: 15%;
+    font-size: 16px;
+    margin-left: 10px;
+    line-height: 60px;
+}
+/* 버튼 컨테이너 */
+.reserved_card_button_container{
+    height: 20%;
+
+    display: flex;
+    flex-direction: column;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 버튼 */
+.reserved_card_button{
+    height: 60%;
+    width: 80%;
+
+    color:#FFFFFF;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+
+    line-height: 40px;
+    
+
+    background-color: #031059;
+    
+    box-shadow: 2px 2px 3px gray;
+    cursor: pointer;
+}
+.reserved_card_button:hover{
+    box-shadow: 0px 0px white;
+}
+
+/* 내용 */
+.reserved_card_text{
+    height: 60%;
+    color:#FFFFFF;
+    
+
+    background-color: #031059;
+}
+.reserved_card_header{
+    display: flex;
+    flex-direction: column;
+}
+
+.reserved_rt{
+    font-size: 14px;
+    height: 20px;
+    margin-top: 10px;
+    margin-right: 10px;
+    line-height: 40px;
+
+    display: flex;
+    justify-content:space-between;
+}
+.cancle_btn:hover{
+    cursor: pointer;
+}
+.reserved_card_time{
+    height: 40px;
+}
+
+
+
+.text_img{
+
+}

@@ -1,0 +1,12 @@
+.mentor_reservation_page_container{
+    display: flex;
+    margin: 100px 0;
+    width: 100%;
+}
+
+.mentor_reservation_page_inner_container{
+    display: flex;
+    flex-direction: column;
+    /* justify-content: space-around; */
+    margin:0 auto;
+}
